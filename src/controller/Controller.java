@@ -35,9 +35,8 @@ public class Controller {
                 chef = chefDAO.getChefByEmailAndPassword(email, password);
                 if (chef != null) {
                 	loginFrame.dispose();
-//                    HomeFrame home = new HomeFrame(Controller.this, chef);
-//                    home.setVisible(true);
-                	System.out.println("Login effettuato con successo!");
+                    HomepageFrame homepage = new HomepageFrame(Controller.this, chef);
+                    homepage.setVisible(true);
                 } else {
                 	loginFrame.credenzialiErrate();
                 }
