@@ -19,6 +19,7 @@ public class HomepageFrame extends JFrame {
     private JComboBox<String> categoryFilter;
     private JTable courseTable;
     private Chef chef;
+    private InfoCorsoFrame viewInfoCorso;
     private boolean checkDoubleClick = false;
     
     /*-----------------------------------------------------------------------------------------*/
@@ -225,9 +226,8 @@ public class HomepageFrame extends JFrame {
                         int idCorso = Integer.parseInt((String) courseTable.getModel().getValueAt(row, 0));
                         for (int i = 0; i < chef.getCorso().size(); i++) {
                             if (chef.getCorso().get(i).getID() == idCorso) {
-//                                viewInfoCorso = new ViewInfoCorso(controller, chef, chef.getCorso().get(i));
-//                                viewInfoCorso.setVisible(true);
-                            	System.out.println("Corso selezionato: " + chef.getCorso().get(i).getNome());
+                                viewInfoCorso = new InfoCorsoFrame(controller, chef, chef.getCorso().get(i));
+                                viewInfoCorso.setVisible(true);
                                 HomepageFrame.this.setVisible(false);
                                 return;
                             }
