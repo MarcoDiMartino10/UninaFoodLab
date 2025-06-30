@@ -1,0 +1,217 @@
+package gui;
+
+import javax.swing.*;
+
+import controller.*;
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class LoginFrame extends JFrame {
+	
+	// Attributi
+	private static final long serialVersionUID = 1L;
+    private JTextField campoEmail;
+    private JPasswordField campoPassword;
+    private JButton bottoneLogin;
+
+/*-----------------------------------------------------------------------------------------*/    
+    
+    // Costruttore
+    public LoginFrame(Controller controller) {
+        
+    	// Finestra
+    	super("Accesso a UninaFoodLab");
+        setSize(550, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Logo.png")));
+        setMinimumSize(new Dimension(550, 500));
+        
+        // Pannello di sfondo
+        JPanel pannelloSfondo = new JPanel() {
+        	private static final long serialVersionUID = 1L;
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image sfondo = new ImageIcon(getClass().getResource("/SfondoLogin.jpg")).getImage();
+                g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        pannelloSfondo.setLayout(new GridBagLayout());
+        getContentPane().add(pannelloSfondo);
+
+        // Pannello principale
+        JPanel pannelloLogin = new JPanel(new GridBagLayout());
+        pannelloLogin.setPreferredSize(new Dimension(450, 400));
+        pannelloLogin.setBackground(new Color(255, 255, 255, 200));
+        pannelloLogin.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        pannelloSfondo.add(pannelloLogin);
+
+        // Titolo
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel scrittaTitolo = new JLabel("UninaFoodLab", SwingConstants.CENTER);
+        scrittaTitolo.setFont(new Font("Arial", Font.BOLD, 30));
+        scrittaTitolo.setForeground(new Color(0, 102, 204));
+        pannelloLogin.add(scrittaTitolo, gbc);
+
+        // Logo
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        ImageIcon logo = new ImageIcon("resources/Logo.png");
+        Image originalLogo = logo.getImage();
+        int larghezza = originalLogo.getWidth(null);
+        int altezza = originalLogo.getHeight(null);
+        double rapporto = (double) larghezza / altezza;
+        int newLarghezza = 100;
+        int newAltezza = (int) (newLarghezza / rapporto);
+        Image newLogo = originalLogo.getScaledInstance(newLarghezza, newAltezza, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(newLogo));
+        pannelloLogin.add(logoLabel, gbc);
+
+        // Scritta Email
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+
+        JLabel scrittaEmail = new JLabel("Email:");
+        scrittaEmail.setFont(new Font("Arial", Font.PLAIN, 14));
+        pannelloLogin.add(scrittaEmail, gbc);
+
+        // Campo Email
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+
+        campoEmail = new JTextField(20);
+        campoEmail.setFont(new Font("Arial", Font.PLAIN, 14));
+        campoEmail.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        campoEmail.addActionListener(e -> campoPassword.requestFocusInWindow());
+        pannelloLogin.add(campoEmail, gbc);
+
+        // Scritta Password
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.EAST;
+
+        JLabel scrittaPassword = new JLabel("Password:");
+        scrittaPassword.setFont(new Font("Arial", Font.PLAIN, 14));
+        pannelloLogin.add(scrittaPassword, gbc);
+
+        // Campo Password
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+
+        campoPassword = new JPasswordField(20);
+        campoPassword.setFont(new Font("Arial", Font.PLAIN, 14));
+        campoPassword.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        campoPassword.addActionListener(e -> bottoneLogin.doClick());
+        pannelloLogin.add(campoPassword, gbc);
+
+        // Bottone Login
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        bottoneLogin = new JButton("Login");
+        bottoneLogin.setFont(new Font("Arial", Font.BOLD, 14));
+        bottoneLogin.setBackground(new Color(0, 102, 204));
+        bottoneLogin.setForeground(Color.WHITE);
+        bottoneLogin.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        bottoneLogin.setFocusPainted(false);
+        pannelloLogin.add(bottoneLogin, gbc);
+        
+        // Cursore mano quando si passa sopra il bottone
+        bottoneLogin.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                bottoneLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                bottoneLogin.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+    }
+    
+    /*-----------------------------------------------------------------------------------------*/
+    
+    // Listener bottone Login
+    public void premiLogin(ActionListener listener) {
+        bottoneLogin.addActionListener(listener);
+    }
+    
+    // Metodi per ottenere i valori inseriti
+    public String getEmail() {
+        return campoEmail.getText();
+    }
+    public String getPassword() {
+        return new String(campoPassword.getPassword());
+    }
+    
+    // Pagina di dialogo per le credenziali errate
+    public void credenzialiErrate() {
+    	campoEmail.requestFocusInWindow();
+    	
+        JDialog dialog = new JDialog(this, "Errore", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(300, 120);
+        dialog.setLocationRelativeTo(this);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setUndecorated(true);
+        dialog.getRootPane().setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        JPanel panel = new JPanel(new BorderLayout(10, 10)); 
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel messageLabel = new JLabel("Email o password errati.", SwingConstants.CENTER);
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JButton okButton = new JButton("RIPROVA");
+
+        okButton.setFont(new Font("Arial", Font.BOLD, 12)); 
+        okButton.setBackground(new Color(0, 102, 204)); 
+        okButton.setForeground(Color.WHITE);
+        okButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); 
+        okButton.setFocusPainted(false);
+        okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        okButton.addActionListener(e -> dialog.dispose());
+        dialog.getRootPane().setDefaultButton(okButton);
+
+        panel.add(messageLabel, BorderLayout.CENTER);
+        panel.add(okButton, BorderLayout.SOUTH);
+
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
+
+}

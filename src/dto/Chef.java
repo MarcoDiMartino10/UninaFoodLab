@@ -1,0 +1,78 @@
+package dto;
+
+import java.util.*;
+
+public class Chef {
+	
+	// Attributi
+	private int ID;
+	private String nome;
+	private String cognome;
+	private String email;
+	private String password;
+	private String numero_tel;
+	private LinkedList<Corso> corsi = new LinkedList<Corso>();
+	
+	// Costruttore
+	public Chef(int ID, String nome, String cognome, String email, String password, String numero_tel, LinkedList<Corso> corsi) {
+        this.ID = ID;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.password = password;
+        this.numero_tel = numero_tel;
+        this.corsi = corsi;
+    }
+	
+	// Getters
+    public int getID() {
+        return ID;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public String getCognome() {
+        return cognome;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getNumeroTel() {
+        return numero_tel;
+    }    
+    public LinkedList<Corso> getCorso() {
+		return corsi;
+	}
+
+    // Setters
+    public void setID(int ID) {
+		this.ID = ID;
+	} 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setNumeroTel(String numero_tel) {
+        this.numero_tel = numero_tel;
+    }    
+    public void setCorsi(LinkedList<Corso> corsi) {
+		this.corsi = corsi;
+	}
+    
+    // toString
+    @Override
+    public String toString() {
+        return nome + " " + cognome;
+    }
+}

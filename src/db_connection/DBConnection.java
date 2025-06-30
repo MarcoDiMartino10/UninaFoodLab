@@ -1,4 +1,4 @@
-package DB_Connection;
+package db_connection;
 
 import java.io.*;
 import java.sql.*;
