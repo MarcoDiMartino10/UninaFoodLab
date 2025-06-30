@@ -6,4 +6,5 @@ import javax.swing.border.EmptyBorder;
 
 public class LoginFrame extends JFrame {
 	//Inserimento di credenziali 2
+	//Prova
 }
