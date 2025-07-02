@@ -233,40 +233,35 @@ public class AggiungiCorsoDialog extends JDialog {
 
             // Controllo nome corso
             if (nomeCorso.isEmpty()) {
-                //JOptionPane.showMessageDialog(this, "Il campo nome corso non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
-                //nomeField.requestFocus();
-            	dialogErrore("Il campo nome corso non può essere vuoto.");
+                JOptionPane.showMessageDialog(this, "Il campo nome corso non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                nomeField.requestFocus();
                 return;
             }
 
             // Controllo categoria
             if (categoria.isEmpty()) {
-                //JOptionPane.showMessageDialog(this, "Il campo categoria non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
-                //categoriaField.requestFocus();
-            	dialogErrore("Il campo categoria non può essere vuoto.");
+                JOptionPane.showMessageDialog(this, "Il campo categoria non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                categoriaField.requestFocus();
                 return;
             }
 
             // Controllo data inizio
             Date selectedDate = (Date) datePicker.getModel().getValue();
             if (selectedDate == null) {
-                //JOptionPane.showMessageDialog(this, "Seleziona una data di inizio valida.", "Errore", JOptionPane.ERROR_MESSAGE);
-            	dialogErrore("Seleziona una data di inizio valida.");
+                JOptionPane.showMessageDialog(this, "Seleziona una data di inizio valida.", "Errore", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             LocalDate dataInizio = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             if (dataInizio.isBefore(LocalDate.now())) {
-                //JOptionPane.showMessageDialog(this, "La data di inizio non può essere precedente a oggi.", "Errore", JOptionPane.ERROR_MESSAGE);
-            	dialogErrore("La data di inizio non può essere precedente a oggi.");
+                JOptionPane.showMessageDialog(this, "La data di inizio non può essere precedente a oggi.", "Errore", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Controllo frequenza
             if (frequenza.isEmpty()) {
-                //JOptionPane.showMessageDialog(this, "Il campo frequenza non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
-                //frequenzaField.requestFocus();
-            	dialogErrore("Il campo frequenza non può essere vuoto.");
+                JOptionPane.showMessageDialog(this, "Il campo frequenza non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                frequenzaField.requestFocus();
                 return;
             }
 
@@ -278,9 +273,8 @@ public class AggiungiCorsoDialog extends JDialog {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                //JOptionPane.showMessageDialog(this, "Inserisci un valore numerico valido per il costo.", "Errore", JOptionPane.ERROR_MESSAGE);
-                //costoField.requestFocus();
-                dialogErrore("Inserisci un valore numerico valido per il costo.");
+                JOptionPane.showMessageDialog(this, "Inserisci un valore numerico valido per il costo.", "Errore", JOptionPane.ERROR_MESSAGE);
+                costoField.requestFocus();
                 return;
             }
 
@@ -289,11 +283,12 @@ public class AggiungiCorsoDialog extends JDialog {
                 numSessioni = Integer.parseInt(numSessioniStr);
                 if (numSessioni <= 0) throw new NumberFormatException();
             } catch (NumberFormatException ex) {
-                //JOptionPane.showMessageDialog(this, "Inserisci un numero intero positivo per il numero di sessioni.", "Errore", JOptionPane.ERROR_MESSAGE);
-                //numsessioniField.requestFocus();
-            	dialogErrore("Inserisci un numero intero positivo per il numero di sessioni.");
+                JOptionPane.showMessageDialog(this, "Inserisci un numero intero positivo per il numero di sessioni.", "Errore", JOptionPane.ERROR_MESSAGE);
+                numsessioniField.requestFocus();
                 return;
             }
+            
+            controller.aggiungiCorso(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
         });
 
         setContentPane(mainPanel);
@@ -333,46 +328,6 @@ public class AggiungiCorsoDialog extends JDialog {
             }
             return "";
         }
-    }
-    
-    // Metodo per mostrare un messaggio di errore
-    public void dialogErrore(String messaggio_errore) {
-        nomeField.requestFocusInWindow();
-
-        JDialog dialog = new JDialog(this, "Errore", Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(400, 130);
-        dialog.setLocationRelativeTo(this);
-        dialog.setUndecorated(true);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        dialog.getRootPane().setBorder(BorderFactory.createLineBorder(new Color(200, 0, 0), 2));
-
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
-        JLabel messageLabel = new JLabel("<html><center>" + messaggio_errore + "</center></html>", SwingConstants.CENTER);
-        messageLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        messageLabel.setForeground(new Color(200, 0, 0)); // rosso scuro
-
-        JButton okButton = new JButton("RIPROVA");
-        okButton.setFont(new Font("Arial", Font.BOLD, 13));
-        okButton.setBackground(new Color(0, 102, 204));
-        okButton.setForeground(Color.WHITE);
-        okButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        okButton.setFocusPainted(false);
-        okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        okButton.addActionListener(_ -> dialog.dispose());
-        dialog.getRootPane().setDefaultButton(okButton);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.add(okButton);
-
-        panel.add(messageLabel, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-
-        dialog.setContentPane(panel);
-        dialog.setVisible(true);
     }
 
 }

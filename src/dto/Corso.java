@@ -18,16 +18,27 @@ public class Corso {
 	LinkedList<Sessione> sessioni = new LinkedList<Sessione>();
 	
 	// Costruttore
-	public Corso(int ID, String Nome, String Categoria, LocalDate Data_inizio, String Frequenza, BigDecimal Costo, int ID_Chef, LinkedList<Sessione> sessioni) {
+	public Corso(int ID, String Nome, String Categoria, LocalDate Data_inizio, String Frequenza, BigDecimal Costo, int numeroSessioni, int ID_Chef, LinkedList<Sessione> sessioni) {
 		this.ID = ID;
 		this.Nome = Nome;
 		this.Categoria = Categoria;
 		this.Data_inizio = Data_inizio;
 		this.Frequenza = Frequenza;
 		this.Costo = Costo;
+		this.Numero_sessioni = numeroSessioni;
 		this.ID_Chef = ID_Chef;
 		this.sessioni = sessioni;
-		this.Numero_sessioni = sessioni.size();
+	}
+	
+	public Corso(int ID, String Nome, String Categoria, LocalDate Data_inizio, String Frequenza, BigDecimal Costo, int numeroSessioni, int ID_Chef) {
+		this.ID = ID;
+		this.Nome = Nome;
+		this.Categoria = Categoria;
+		this.Data_inizio = Data_inizio;
+		this.Frequenza = Frequenza;
+		this.Costo = Costo;
+		this.Numero_sessioni = numeroSessioni;
+		this.ID_Chef = ID_Chef;
 	}
 	
 	// Getters
@@ -83,6 +94,9 @@ public class Corso {
 	}
 	public void setSessioni(LinkedList<Sessione> sessioni) {
 		this.sessioni = sessioni;
+	}
+	public void setNumero_sessioni(int numeroSessioni) {
+		this.Numero_sessioni = numeroSessioni;
 	}
 	
 	// toString

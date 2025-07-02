@@ -1,6 +1,8 @@
 package controller;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.LinkedList;
 
 import dao.*;
@@ -95,6 +97,12 @@ public class Controller {
 		aggiungiCorsoDialog.dispose();
 	}
     
+    public void aggiornaHomepageFrame() {
+		homepageFrame.dispose();
+		homepageFrame = new HomepageFrame(this);
+		homepageFrame.setVisible(true);
+	}
+    
     /*------------------------------------------- Metodi per ottenere i dati per le interfacce grafiche ----------------------------------------------*/
     
     public Chef getChef() {
@@ -164,6 +172,15 @@ public class Controller {
 		aggiornaRicetteFrame();
     }
     
+    public void aggiungiCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
+		CorsoDAO corsoDAO = new CorsoDAO(conn);
+		int idCorso = corsoDAO.ultimoIdCorso();
+		corsoDAO.saveCorso(chef.getID(), nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, idCorso);
+		aggiungiCorsoAlloChef(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, idCorso);
+		aggiungiCorsoDialog.dispose();
+		aggiornaHomepageFrame();
+	}
+    
     /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
     
     public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
@@ -181,6 +198,11 @@ public class Controller {
 			}
 		}
 	}
+    
+    public void aggiungiCorsoAlloChef(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni, int IdCorso) {
+    	Corso corso = new Corso(IdCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID());
+    	chef.getCorso().add(corso);
+    }
     
     /*----------------------------------------- main ------------------------------------------------*/
    

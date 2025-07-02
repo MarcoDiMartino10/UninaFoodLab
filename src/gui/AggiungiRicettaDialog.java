@@ -276,7 +276,6 @@ public class AggiungiRicettaDialog extends JDialog {
                         return;
                     }
                 } else {
-//                    quantità = new BigDecimal("0");
                 	quantità = null;
                     unità = "q.b.";
                 }
