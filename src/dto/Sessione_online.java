@@ -8,8 +8,8 @@ public class Sessione_online extends Sessione{
 	private String link;
 	
 	// Costruttore
-	public Sessione_online(String link, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso) {
-		super(orario_inizio, orario_fine, id_Corso);
+	public Sessione_online(String link, int ID, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso) {
+		super(ID,orario_inizio, orario_fine, id_Corso);
 		this.link = link;
 	}
 	

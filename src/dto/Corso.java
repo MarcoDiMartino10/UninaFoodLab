@@ -12,6 +12,7 @@ public class Corso {
 	private String Categoria;
 	private LocalDate Data_inizio;
 	private String Frequenza;
+	private int Numero_sessioni;
 	private BigDecimal Costo;
 	private int ID_Chef;
 	LinkedList<Sessione> sessioni = new LinkedList<Sessione>();
@@ -26,6 +27,7 @@ public class Corso {
 		this.Costo = Costo;
 		this.ID_Chef = ID_Chef;
 		this.sessioni = sessioni;
+		this.Numero_sessioni = sessioni.size();
 	}
 	
 	// Getters
@@ -52,6 +54,9 @@ public class Corso {
 	}
 	public LinkedList<Sessione> getSessioni() {
 		return sessioni;
+	}
+	public int getNumero_sessioni() {
+		return Numero_sessioni;
 	}
 	
 	// Setters

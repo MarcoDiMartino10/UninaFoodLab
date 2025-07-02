@@ -21,7 +21,7 @@ public class CorsoDAO {
     public LinkedList<Corso> getCorsiByChefId(int idChef) {
     	LinkedList<Corso> corsi = new LinkedList<Corso>();
         String sql = """
-            SELECT id, nome, argomento, data_inizio, frequenza, costo
+            SELECT id, nome, categoria, data_inizio, frequenza, costo
             FROM Corso
             WHERE id_chef = ?
         """;
@@ -31,7 +31,7 @@ public class CorsoDAO {
             try (ResultSet rs = ps.executeQuery()) {
             	while (rs.next()) {
             		int id = rs.getInt("id");
-            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("argomento"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), idChef, sessioneDAO.getSessioniByCorsoId(id));
+            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), idChef, sessioneDAO.getSessioniByCorsoId(id));
             	    corsi.add(corso);
             	}
             	return corsi;

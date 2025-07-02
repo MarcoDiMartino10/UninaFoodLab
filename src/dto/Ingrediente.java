@@ -9,6 +9,7 @@ public class Ingrediente {
 	private String nome;
 	private BigDecimal quantità;
 	private String unità_di_misura;
+	private int ID_ricetta;
 	
 	// Costruttore
 	public Ingrediente(int ID, String nome) {
@@ -16,11 +17,12 @@ public class Ingrediente {
 		this.nome = nome;
 	}
 	
-	public Ingrediente(int ID, String nome, BigDecimal quantità, String unità_di_misura) {
+	public Ingrediente(int ID, String nome, BigDecimal quantità, String unità_di_misura, int ID_ricetta) {
 		this.ID = ID;
 		this.nome = nome;
 		this.quantità = quantità;
 		this.unità_di_misura = unità_di_misura;
+		this.ID_ricetta = ID_ricetta;
 	}
 	
 	// Getters
@@ -36,6 +38,9 @@ public class Ingrediente {
 	public String getUnità_di_misura() {
 		return unità_di_misura;
 	}
+	public int getID_ricetta() {
+		return ID_ricetta;
+	}
 	
 	// Setters
 	public void setID(int ID) {
@@ -49,6 +54,9 @@ public class Ingrediente {
 	}
 	public void setUnità_di_misura(String unità_di_misura) {
 		this.unità_di_misura = unità_di_misura;
+	}
+	public void setID_ricetta(int ID_ricetta) {
+		this.ID_ricetta = ID_ricetta;
 	}
 	
 	// toString

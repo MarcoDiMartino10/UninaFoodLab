@@ -10,16 +10,18 @@ public class Chef {
 	private String cognome;
 	private String email;
 	private String password;
+	private String biografia;
 	private String numero_tel;
 	private LinkedList<Corso> corsi = new LinkedList<Corso>();
 	
 	// Costruttore
-	public Chef(int ID, String nome, String cognome, String email, String password, String numero_tel, LinkedList<Corso> corsi) {
+	public Chef(int ID, String nome, String cognome, String email, String password, String biografia, String numero_tel, LinkedList<Corso> corsi) {
         this.ID = ID;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
+        this.biografia = biografia;
         this.numero_tel = numero_tel;
         this.corsi = corsi;
     }
@@ -40,6 +42,9 @@ public class Chef {
     public String getPassword() {
         return password;
     }
+    public String getBiografia() {
+		return biografia;
+	}
     public String getNumeroTel() {
         return numero_tel;
     }    
@@ -63,6 +68,9 @@ public class Chef {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setBiografia(String biografia) {
+		this.biografia = biografia;
+	}
     public void setNumeroTel(String numero_tel) {
         this.numero_tel = numero_tel;
     }    

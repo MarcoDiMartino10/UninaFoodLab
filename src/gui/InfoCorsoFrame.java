@@ -105,7 +105,7 @@ public class InfoCorsoFrame extends JFrame {
             {"Data Inizio", corso.getData_inizio().toString()},
             {"Frequenza", corso.getFrequenza()},
             {"Costo", (corso.getCosto() == null ? 0 : corso.getCosto()) + " €"},
-            {"Numero Sessioni", String.valueOf(corso.getSessioni().size())}
+            {"Numero Sessioni", String.valueOf(corso.getNumero_sessioni())},
         };
         for (int i = 0; i < infoData.length; i++) {
             JLabel titleLabel = new JLabel(infoData[i][0] + ":");

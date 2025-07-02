@@ -19,10 +19,9 @@ public class ChefDAO {
     // Metodi
     public Chef getChefByEmailAndPassword(String email, String password) {
         String sql = """
-            SELECT c.id, u.nome, u.cognome, u.email, u.password, u.numero_tel
-            FROM Utente u
-            JOIN Chef c ON u.email = c.email
-            WHERE u.email = ? AND u.password = ?
+            SELECT c.id, c.nome, c.cognome, c.email, c.password, c.biografia, c.numero_tel
+            FROM Chef c
+            WHERE c.email = ? AND c.password = ?
         """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -31,7 +30,7 @@ public class ChefDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int id = rs.getInt("id");
-                    Chef chef = new Chef(id, rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password"), rs.getString("numero_tel"), corsoDAO.getCorsiByChefId(id));
+                    Chef chef = new Chef(id, rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password"), rs.getString("biografia"), rs.getString("numero_tel"), corsoDAO.getCorsiByChefId(id));
                     return chef;
                 }
             }
