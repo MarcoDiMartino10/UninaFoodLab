@@ -128,7 +128,6 @@ public class RicetteFrame extends JFrame {
         aggiungiRicettaButton.addActionListener(_ -> {
         	controller.apriAggiungiRicettaFrame();
         });
-        setVisible(true);
     }
     
     /*-----------------------------------------------------------------------------------------*/

@@ -3,14 +3,12 @@ package controller;
 import java.sql.*;
 import java.util.LinkedList;
 
-import javax.swing.UIManager;
-
-import dao.ChefDAO;
-import dao.IngredienteDAO;
-import dao.RicettaDAO;
+import dao.*;
 import db_connection.*;
 import gui.*;
 import dto.*;
+
+import javax.swing.UIManager;
 
 public class Controller {
 	
@@ -33,50 +31,13 @@ public class Controller {
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-//    	loginFrame = new LoginFrame(this);
+    	loginFrame = new LoginFrame(this);
+    	loginFrame.setVisible(true);
         chefDAO = new ChefDAO(conn);
-//        loginFrame.setVisible(true);
-        test();
+        //test();
     }
     
-    /*-----------------------------------------------------------------------------------------*/
-
-    // Metodi dei Frame
-    public void login() {
-      String email = loginFrame.getEmail();
-      String password = loginFrame.getPassword();
-      chef = chefDAO.getChefByEmailAndPassword(email, password);
-      if (chef != null) {
-      	loginFrame.dispose();
-          homepageFrame = new HomepageFrame(Controller.this);
-          homepageFrame.setVisible(true);
-      } else {
-      	loginFrame.credenzialiErrate();
-      }
-    }
-    
-    public void aggiungiRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	RicettaDAO ricettaDAO = new RicettaDAO(conn);
-		ricettaDAO.inserisciRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
-		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
-		aggiornaRicetteFrame();
-    }
-    
-    public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-		for (Corso corso1 : chef.getCorso()) {
-			if (corso1.getNome().equals(corso.getNome())) {
-				for (Sessione sessione : corso1.getSessioni()) {
-					if (sessione instanceof Sessione_in_presenza) {
-	                    Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
-	                    if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
-	                        sessioneInPresenza.getRicette().add(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
-	                        return;
-	                    }
-	                }
-				}
-			}
-		}
-	}
+    /*------------------------------------------ Metodi per aprire o chiudere le finestre -----------------------------------------------*/
      
     public void logout() {
     	homepageFrame.dispose();
@@ -130,9 +91,12 @@ public class Controller {
     	aggiungiCorsoDialog.setVisible(true);
     }
     
-    /*-----------------------------------------------------------------------------------------*/
+    public void chiudiAggiungiCorsoDialog() {
+		aggiungiCorsoDialog.dispose();
+	}
     
-    // Metodi per ottenere i dati
+    /*------------------------------------------- Metodi per ottenere i dati per le interfacce grafiche ----------------------------------------------*/
+    
     public Chef getChef() {
 		return chef;
 	}
@@ -168,7 +132,20 @@ public class Controller {
         }
     }
     
-    /*-----------------------------------------------------------------------------------------*/
+    /*------------------------------------------- Metodi di accesso al database ----------------------------------------------*/
+    
+    public void login() {
+        String email = loginFrame.getEmail();
+        String password = loginFrame.getPassword();
+        chef = chefDAO.getChefByEmailAndPassword(email, password);
+        if (chef != null) {
+        	loginFrame.dispose();
+            homepageFrame = new HomepageFrame(Controller.this);
+            homepageFrame.setVisible(true);
+        } else {
+        	loginFrame.credenzialiErrate();
+        }
+      }
     
     public int nuovoIdRicetta() {
 		RicettaDAO ricettaDAO = new RicettaDAO(conn);
@@ -180,14 +157,40 @@ public class Controller {
     	return ingredienteDAO.ultimoIdIngrediente();
     }
     
-    /*-----------------------------------------------------------------------------------------*/
+    public void aggiungiRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    	RicettaDAO ricettaDAO = new RicettaDAO(conn);
+		ricettaDAO.inserisciRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
+		aggiornaRicetteFrame();
+    }
+    
+    /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
+    
+    public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+		for (Corso corso1 : chef.getCorso()) {
+			if (corso1.getNome().equals(corso.getNome())) {
+				for (Sessione sessione : corso1.getSessioni()) {
+					if (sessione instanceof Sessione_in_presenza) {
+	                    Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
+	                    if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
+	                        sessioneInPresenza.getRicette().add(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
+	                        return;
+	                    }
+	                }
+				}
+			}
+		}
+	}
+    
+    /*----------------------------------------- main ------------------------------------------------*/
    
     public void test() {
     	String email = "anna.verdi@gmail.com";
         String password = "Verdi89@";
         chef = chefDAO.getChefByEmailAndPassword(email, password);
-//        this.corso = chef.getCorso().get(0);
+//      this.corso = chef.getCorso().get(0);
         homepageFrame = new HomepageFrame(this);
+        homepageFrame.setVisible(true);
     }
     
 	public static void perMac() {

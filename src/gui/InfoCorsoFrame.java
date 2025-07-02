@@ -183,7 +183,6 @@ public class InfoCorsoFrame extends JFrame {
 
         
         apriSessione(null);
-        setVisible(true);
     }
     
     /*-----------------------------------------------------------------------------------------*/

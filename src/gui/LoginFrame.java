@@ -175,41 +175,45 @@ public class LoginFrame extends JFrame {
         return new String(campoPassword.getPassword());
     }
     
-    // Pagina di dialogo per le credenziali errate
+    // Metodo per mostrare un messaggio di errore in caso di credenziali errate
     public void credenzialiErrate() {
-    	campoEmail.requestFocusInWindow();
-    	
+        campoEmail.requestFocusInWindow();
+
         JDialog dialog = new JDialog(this, "Errore", Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(300, 120);
+        dialog.setSize(350, 130);
         dialog.setLocationRelativeTo(this);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.setUndecorated(true);
-        dialog.getRootPane().setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.getRootPane().setBorder(BorderFactory.createLineBorder(new Color(200, 0, 0), 2));
 
-        JPanel panel = new JPanel(new BorderLayout(10, 10)); 
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        JLabel messageLabel = new JLabel("Email o password errati.", SwingConstants.CENTER);
-        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        JLabel messageLabel = new JLabel("<html><center>Email o password errati.</center></html>", SwingConstants.CENTER);
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        messageLabel.setForeground(new Color(200, 0, 0)); // rosso scuro
 
         JButton okButton = new JButton("RIPROVA");
-
-        okButton.setFont(new Font("Arial", Font.BOLD, 12)); 
-        okButton.setBackground(new Color(0, 102, 204)); 
+        okButton.setFont(new Font("Arial", Font.BOLD, 13));
+        okButton.setBackground(new Color(0, 102, 204));
         okButton.setForeground(Color.WHITE);
-        okButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); 
+        okButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         okButton.setFocusPainted(false);
         okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         okButton.addActionListener(_ -> dialog.dispose());
         dialog.getRootPane().setDefaultButton(okButton);
 
-        panel.add(messageLabel, BorderLayout.CENTER);
-        panel.add(okButton, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.add(okButton);
 
-        dialog.add(panel);
+        panel.add(messageLabel, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setContentPane(panel);
         dialog.setVisible(true);
     }
+
 
 }

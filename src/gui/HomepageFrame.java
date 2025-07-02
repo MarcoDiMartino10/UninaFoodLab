@@ -166,8 +166,6 @@ public class HomepageFrame extends JFrame {
         buttonPanel.add(reportButton);
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
     
     /*-----------------------------------------------------------------------------------------*/

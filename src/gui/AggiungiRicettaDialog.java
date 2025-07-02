@@ -20,8 +20,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	
 	// Costruttore
 	public AggiungiRicettaDialog(Controller controller) {
-		super();
-		setTitle("Aggiungi Ricetta");
+		super((RicetteFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(520, 280);
         setLocationRelativeTo(this);
@@ -297,7 +296,6 @@ public class AggiungiRicettaDialog extends JDialog {
 
 
         getContentPane().add(mainPanel);
-        setVisible(true);
     }
 	
 	/*-----------------------------------------------------------------------------------------*/
