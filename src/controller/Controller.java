@@ -1,4 +1,4 @@
-package controller; //ciao
+package controller;
 
 import java.sql.*;
 import java.util.LinkedList;
