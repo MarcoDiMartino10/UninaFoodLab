@@ -14,7 +14,7 @@ public class LoginFrame extends JFrame {
     private JTextField campoEmail;
     private JPasswordField campoPassword;
     private JButton bottoneLogin;
-
+    
 /*-----------------------------------------------------------------------------------------*/    
     
     // Costruttore
@@ -160,14 +160,12 @@ public class LoginFrame extends JFrame {
                 bottoneLogin.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
+        
+        // Listener per il bottone Login
+        bottoneLogin.addActionListener(e -> controller.login());
     }
     
     /*-----------------------------------------------------------------------------------------*/
-    
-    // Listener bottone Login
-    public void premiLogin(ActionListener listener) {
-        bottoneLogin.addActionListener(listener);
-    }
     
     // Metodi per ottenere i valori inseriti
     public String getEmail() {

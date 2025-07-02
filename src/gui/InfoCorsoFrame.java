@@ -68,8 +68,9 @@ public class InfoCorsoFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-	                SwingUtilities.getWindowAncestor(Back).dispose();
-	                new HomepageFrame(controller, chef);
+//	                SwingUtilities.getWindowAncestor(Back).dispose();
+//	                new HomepageFrame(controller, chef);
+            		controller.chiudiInfoCorso();
             	}
             }
 

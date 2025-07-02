@@ -12,37 +12,51 @@ public class Controller {
 	
 	// Attributi
     Connection conn;
-    private LoginFrame loginFrame;
     private Chef chef;
     private ChefDAO chefDAO;
+    private LoginFrame loginFrame;
+    private HomepageFrame homepageFrame;
+    private InfoCorsoFrame infoCorsoFrame;
 
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
     	 loginFrame = new LoginFrame(this);
          chefDAO = new ChefDAO(conn);
-    	 loginFrame.premiLogin(login());
     	 loginFrame.setVisible(true);
     }
 
     // Metodi
-    private ActionListener login() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = loginFrame.getEmail();
-                String password = loginFrame.getPassword();
-                chef = chefDAO.getChefByEmailAndPassword(email, password);
-                if (chef != null) {
-                	loginFrame.dispose();
-                    HomepageFrame homepage = new HomepageFrame(Controller.this, chef);
-                    homepage.setVisible(true);
-                } else {
-                	loginFrame.credenzialiErrate();
-                }
-            }
-        };
+    public void login() {
+      String email = loginFrame.getEmail();
+      String password = loginFrame.getPassword();
+      chef = chefDAO.getChefByEmailAndPassword(email, password);
+      if (chef != null) {
+      	loginFrame.dispose();
+          homepageFrame = new HomepageFrame(Controller.this, chef);
+          homepageFrame.setVisible(true);
+      } else {
+      	loginFrame.credenzialiErrate();
+      }
     }
+     
+    public void logout() {
+    	homepageFrame.dispose();
+    	loginFrame = new LoginFrame(this);
+    	loginFrame.setVisible(true);
+	}
+    
+    public void apriInfoCorso(Corso corso) {
+      infoCorsoFrame = new InfoCorsoFrame(this, chef, corso);
+      infoCorsoFrame.setVisible(true);
+      homepageFrame.setVisible(false);
+    }
+    
+    public void chiudiInfoCorso() {
+	  infoCorsoFrame.dispose();
+	  homepageFrame = new HomepageFrame(Controller.this, chef);
+	  homepageFrame.setVisible(true);
+	}
     
    
     // Main

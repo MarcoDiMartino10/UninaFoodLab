@@ -70,8 +70,7 @@ public class HomepageFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-	                SwingUtilities.getWindowAncestor(Logout).dispose();
-	                new Controller(DBConnection.getDBConnection().getConnection());
+            		controller.logout();
             	}
             }
         });
@@ -226,9 +225,7 @@ public class HomepageFrame extends JFrame {
                         int idCorso = Integer.parseInt((String) courseTable.getModel().getValueAt(row, 0));
                         for (int i = 0; i < chef.getCorso().size(); i++) {
                             if (chef.getCorso().get(i).getID() == idCorso) {
-                                viewInfoCorso = new InfoCorsoFrame(controller, chef, chef.getCorso().get(i));
-                                viewInfoCorso.setVisible(true);
-                                HomepageFrame.this.setVisible(false);
+                            	controller.apriInfoCorso(chef.getCorso().get(i));
                                 return;
                             }
                         }
