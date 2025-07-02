@@ -22,7 +22,7 @@ public class Sessione_onlineDAO {
 	public LinkedList<Sessione_online> getSessioniOnline(int idCorso) {
 		LinkedList<Sessione_online> sessioni = new LinkedList<Sessione_online>();
 		String sql = """
-	            SELECT link, ID, orario_inizio, orario_fine
+	            SELECT link, orario_inizio, orario_fine
 	            FROM sessione_online
 	            WHERE id_corso = ?
 	        """;
@@ -30,7 +30,7 @@ public class Sessione_onlineDAO {
             ps.setInt(1, idCorso);
             try (ResultSet rs = ps.executeQuery()) {
             	while (rs.next()) {
-            	    sessioni.add(new Sessione_online(rs.getString("link"), rs.getInt("ID"), rs.getTimestamp("orario_inizio"), rs.getTimestamp("orario_fine"), idCorso));
+            	    sessioni.add(new Sessione_online(rs.getString("link"), rs.getTimestamp("orario_inizio"), rs.getTimestamp("orario_fine"), idCorso));
             	}
             }
         } catch (SQLException e) {

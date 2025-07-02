@@ -12,21 +12,17 @@ public class InfoCorsoFrame extends JFrame {
 	// Attributi
 	private static final long serialVersionUID = 1L;
 	private Controller controller;
-	private Corso corso;
-	private Chef chef;
 	private JTable courseTable;
 	private boolean checkDoubleClick = false;
 	
     /*-----------------------------------------------------------------------------------------*/
 
 	// Costruttore
-    public InfoCorsoFrame(Controller controller, Chef chef, Corso corso) {
+    public InfoCorsoFrame(Controller controller) {
     	
     	// Finestra
         super("Informazioni corso - UninaFoodLab");
         this.controller = controller;
-        this.corso = corso;
-        this.chef = chef;
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,6 +47,7 @@ public class InfoCorsoFrame extends JFrame {
         headerPanel.add(logoLabel, BorderLayout.WEST);
 
         // Titolo header
+        Corso corso = controller.getCorso();
         String nomeCorso = "Informazioni " + corso.getNome() + "       ";
         JLabel corsoLabel = new JLabel(nomeCorso, SwingConstants.CENTER);
         corsoLabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -68,8 +65,6 @@ public class InfoCorsoFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-//	                SwingUtilities.getWindowAncestor(Back).dispose();
-//	                new HomepageFrame(controller, chef);
             		controller.chiudiInfoCorso();
             	}
             }
@@ -143,7 +138,7 @@ public class InfoCorsoFrame extends JFrame {
         String[][] data = new String[corso.getSessioni().size()][4];
         for (int i = 0; i < corso.getSessioni().size(); i++) {
             if (corso.getSessioni().get(i) instanceof Sessione_online) {
-                data[i] = new String[]{"ONLINE", corso.getSessioni().get(i).getLink(), corso.getSessioni().get(i).getOrario_inizio(), corso.getSessioni().get(i).getOrario_fine()};
+                data[i] = new String[]{"ONLINE" , corso.getSessioni().get(i).getLink(), corso.getSessioni().get(i).getOrario_inizio(), corso.getSessioni().get(i).getOrario_fine()};
             } else {
                 data[i] = new String[]{"IN PRESENZA", corso.getSessioni().get(i).getLuogo(), corso.getSessioni().get(i).getOrario_inizio(), corso.getSessioni().get(i).getOrario_fine()};
             }
@@ -158,7 +153,7 @@ public class InfoCorsoFrame extends JFrame {
         courseTable.setFont(new Font("Arial", Font.PLAIN, 14));
         courseTable.setRowHeight(30);
         courseTable.getTableHeader().setReorderingAllowed(false);
-        courseTable.getTableHeader().setResizingAllowed(true);
+        courseTable.getTableHeader().setResizingAllowed(false);
         courseTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         
         JScrollPane scrollPane = new JScrollPane(courseTable);
@@ -193,32 +188,23 @@ public class InfoCorsoFrame extends JFrame {
     
     /*-----------------------------------------------------------------------------------------*/
     
- // Apri la sessione selezionata al click
+    // Metodo per aprire la sessione in presenza selezionata
     public void apriSessione(ActionListener listener) {
         courseTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e) && !checkDoubleClick) {
-                	checkDoubleClick = true;
-                    int row = courseTable.rowAtPoint(e.getPoint()); 
+                    checkDoubleClick = true;
+                    int row = courseTable.rowAtPoint(e.getPoint());
                     if (row >= 0) {
-                    	String luogoCorso = (String) courseTable.getModel().getValueAt(row, 1);
-                    	String orarioInizioCorso = (String) courseTable.getModel().getValueAt(row, 2);
-                        for (int i = 0; i < corso.getSessioni().size(); i++) {
-                        	if (corso.getSessioni().get(i) instanceof Sessione_in_presenza) {
-	                            if ((corso.getSessioni().get(i).getLuogo()).equals(luogoCorso) && corso.getSessioni().get(i).getOrario_inizio().equals(orarioInizioCorso)) {
-	                            	//viewRicette = new ViewRicette(controller, chef, corso, (Sessione_in_presenza)corso.getSessioni().get(i));
-	                            	//viewRicette.setVisible(true);
-	                            	System.out.println("Sessione in presenza selezionata: " + corso.getSessioni().get(i).getLuogo() + " " + corso.getSessioni().get(i).getOrario_inizio());
-	                                InfoCorsoFrame.this.setVisible(false);
-	                                return;
-                            }
-                            }
-                        }
+                        String luogo = (String) courseTable.getModel().getValueAt(row, 1);
+                        String orarioInizio = (String) courseTable.getModel().getValueAt(row, 2);
+                        controller.sessioneSelezionata(luogo, orarioInizio);
                     }
                     checkDoubleClick = false;
                 }
             }
         });
     }
+    
 }

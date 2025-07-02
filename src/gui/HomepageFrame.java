@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.util.LinkedList;
 
 import controller.*;
-import db_connection.*;
 import dto.*;
 
 public class HomepageFrame extends JFrame {
@@ -18,17 +17,14 @@ public class HomepageFrame extends JFrame {
     private JButton reportButton;
     private JComboBox<String> categoryFilter;
     private JTable courseTable;
-    private Chef chef;
-    private InfoCorsoFrame viewInfoCorso;
     private boolean checkDoubleClick = false;
     
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
-    public HomepageFrame(Controller controller, Chef chef) {
+    public HomepageFrame(Controller controller) {
         super("Homepage - UninaFoodLab");
         this.controller = controller;
-        this.chef = chef;
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,6 +49,7 @@ public class HomepageFrame extends JFrame {
         headerPanel.add(logoLabel, BorderLayout.WEST);
         
         // Titolo al centro
+        Chef chef = controller.getChef();
         String testoTitolo = "Benvenuto Chef " + chef.getNome() + " " + chef.getCognome() + "           ";
         JLabel titleLabel = new JLabel(testoTitolo, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -117,7 +114,7 @@ public class HomepageFrame extends JFrame {
         categoryFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                filtraCorsiPerCategoria(chef, (String) categoryFilter.getSelectedItem());
+                filtraCorsiPerCategoria((String) categoryFilter.getSelectedItem());
             }
         });
         setHandCursor(categoryFilter);
@@ -188,16 +185,9 @@ public class HomepageFrame extends JFrame {
         reportButton.addActionListener(listener);
     }
     
-    // Filtro dei corsi in base alla categoria selezionata
-    private void filtraCorsiPerCategoria(Chef chef, String categoria) {
-        LinkedList<Corso> corsiFiltrati = new LinkedList<>();
-
-        for (int i = 0; i < chef.getCorso().size(); i++) {
-            Corso corso = chef.getCorso().get(i);
-            if (categoria.equals("Tutti") || corso.getCategoria().equals(categoria)) {
-                corsiFiltrati.add(corso);
-            }
-        }
+    // Filtra i corsi in base alla categoria selezionata
+    private void filtraCorsiPerCategoria(String categoria) {
+        LinkedList<Corso> corsiFiltrati = controller.getCorsiFiltratiPerCategoria(categoria);
 
         String[][] data = new String[corsiFiltrati.size()][4];
         for (int i = 0; i < corsiFiltrati.size(); i++) {
@@ -223,9 +213,9 @@ public class HomepageFrame extends JFrame {
                     int row = courseTable.rowAtPoint(e.getPoint()); 
                     if (row >= 0) {
                         int idCorso = Integer.parseInt((String) courseTable.getModel().getValueAt(row, 0));
-                        for (int i = 0; i < chef.getCorso().size(); i++) {
-                            if (chef.getCorso().get(i).getID() == idCorso) {
-                            	controller.apriInfoCorso(chef.getCorso().get(i));
+                        for (int i = 0; i < controller.getChef().getCorso().size(); i++) {
+                            if (controller.getChef().getCorso().get(i).getID() == idCorso) {
+                            	controller.apriInfoCorso(controller.getChef().getCorso().get(i));
                                 return;
                             }
                         }

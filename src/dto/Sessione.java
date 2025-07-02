@@ -6,23 +6,18 @@ import java.text.SimpleDateFormat;
 public class Sessione {
 	
 	// Attributi
-	private int ID;
 	private Timestamp orario_inizio;
 	private Timestamp orario_fine;
 	private int id_Corso;
 	
 	// Costruttore
-	public Sessione(int ID, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso) {
-		this.ID = ID;
+	public Sessione(Timestamp orario_inizio, Timestamp orario_fine, int id_Corso) {
 		this.orario_inizio = orario_inizio;
 		this.orario_fine = orario_fine;
 		this.id_Corso = id_Corso;
 	}
 	
 	// Getters
-	public int getID() {
-		return ID;
-	}
 	public String getOrario_inizio() {
 		SimpleDateFormat newFormato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return newFormato.format(orario_inizio);
@@ -39,9 +34,6 @@ public class Sessione {
 	}
 	
 	// Setters
-	public void setID(int ID) {
-		this.ID = ID;
-	}
 	public void setOrario_inizio(Timestamp orario_inizio) {
 		this.orario_inizio = orario_inizio;
 	}

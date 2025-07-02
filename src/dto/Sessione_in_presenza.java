@@ -11,8 +11,8 @@ public class Sessione_in_presenza extends Sessione {
 	private LinkedList<Ricetta> ricette = new LinkedList<Ricetta>();
 
 	// Costruttore
-	public Sessione_in_presenza(String luogo, int max_posti, int ID, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso, LinkedList<Ricetta> ricette) {
-		super(ID,orario_inizio, orario_fine, id_Corso);
+	public Sessione_in_presenza(String luogo, int max_posti, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso, LinkedList<Ricetta> ricette) {
+		super(orario_inizio, orario_fine, id_Corso);
 		this.luogo = luogo;
 		this.max_posti = max_posti;
 		this.ricette = ricette;

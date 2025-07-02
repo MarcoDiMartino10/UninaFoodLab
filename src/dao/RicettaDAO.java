@@ -18,17 +18,18 @@ public class RicettaDAO {
 	}
 	
 	// Metodi
-	public LinkedList<Ricetta> getRicettabyLuogoAndData(int ID) {
+	public LinkedList<Ricetta> getRicettabyLuogoAndData(String luogo, Timestamp orario_inizio) {
     	LinkedList<Ricetta> ricette = new LinkedList<Ricetta>();
     	String sql = """
     			SELECT r.id, r.Nome
     		    FROM Ricetta r
     		    JOIN Preparazione p ON r.ID = p.ID_ricetta
-    		    WHERE r.ID = ?
+    		    WHERE p.Luogo = ? AND p.Orario_inizio = ?
     		""";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, ID);
+            ps.setString(1, luogo);
+            ps.setTimestamp(2, orario_inizio);
             try (ResultSet rs = ps.executeQuery()) {
             	while (rs.next()) {
             		int id = rs.getInt("id");
