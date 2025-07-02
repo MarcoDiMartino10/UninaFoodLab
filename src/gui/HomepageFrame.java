@@ -155,6 +155,10 @@ public class HomepageFrame extends JFrame {
         nuovoCorsoButton = new JButton("Aggiungi Corso");
         styleButton(nuovoCorsoButton);
         buttonPanel.add(nuovoCorsoButton);
+        setHandCursor(nuovoCorsoButton);
+        nuovoCorsoButton.addActionListener(_ -> {
+        	controller.apriAggiungiCorsoDialog();
+        });
         
         // Bottone Visualizza Report
         reportButton = new JButton("Visualizza Report");

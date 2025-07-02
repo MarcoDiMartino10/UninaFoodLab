@@ -3,6 +3,8 @@ package controller;
 import java.sql.*;
 import java.util.LinkedList;
 
+import javax.swing.UIManager;
+
 import dao.ChefDAO;
 import dao.IngredienteDAO;
 import dao.RicettaDAO;
@@ -25,14 +27,15 @@ public class Controller {
     private HomepageFrame homepageFrame;
     private InfoCorsoFrame infoCorsoFrame;
     private RicetteFrame ricetteFrame;
-    private AggiungiRicettaFrame aggiungiRicettaFrame;
+    private AggiungiRicettaDialog aggiungiRicettaDialog;
+    private AggiungiCorsoDialog aggiungiCorsoDialog;
 
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-    	//loginFrame = new LoginFrame(this);
+//    	loginFrame = new LoginFrame(this);
         chefDAO = new ChefDAO(conn);
-        //loginFrame.setVisible(true);
+//        loginFrame.setVisible(true);
         test();
     }
     
@@ -108,12 +111,12 @@ public class Controller {
     }
     
     public void apriAggiungiRicettaFrame() {
-    	aggiungiRicettaFrame = new AggiungiRicettaFrame(this);
-		aggiungiRicettaFrame.setVisible(true);
+    	aggiungiRicettaDialog = new AggiungiRicettaDialog(this);
+		aggiungiRicettaDialog.setVisible(true);
 	}
     
     public void chiudiAggiungiRicettaFrame() {
-    	aggiungiRicettaFrame.dispose();
+    	aggiungiRicettaDialog.dispose();
     }
     
     public void aggiornaRicetteFrame() {
@@ -121,6 +124,11 @@ public class Controller {
 		ricetteFrame = new RicetteFrame(this);
 		ricetteFrame.setVisible(true);
 	}
+    
+    public void apriAggiungiCorsoDialog() {
+    	aggiungiCorsoDialog = new AggiungiCorsoDialog(this);
+    	aggiungiCorsoDialog.setVisible(true);
+    }
     
     /*-----------------------------------------------------------------------------------------*/
     
@@ -178,13 +186,23 @@ public class Controller {
     	String email = "anna.verdi@gmail.com";
         String password = "Verdi89@";
         chef = chefDAO.getChefByEmailAndPassword(email, password);
-        this.corso = chef.getCorso().get(0);
-        infoCorsoFrame = new InfoCorsoFrame(this);
+//        this.corso = chef.getCorso().get(0);
+        homepageFrame = new HomepageFrame(this);
     }
+    
+	public static void perMac() {
+		try {
+		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+	}
+	
     
     
     // Main
 	public static void main(String[] args) {
+		perMac();
 		DBConnection dbConnection = DBConnection.getDBConnection();
         Connection conn = dbConnection.getConnection();
         if (conn != null) {

@@ -8,7 +8,7 @@ import javax.swing.*;
 import controller.*;
 import dto.*;
 
-public class AggiungiRicettaFrame extends JDialog {
+public class AggiungiRicettaDialog extends JDialog {
 	
 	// Attributi
 	private static final long serialVersionUID = 1L;
@@ -19,7 +19,7 @@ public class AggiungiRicettaFrame extends JDialog {
 	/*-----------------------------------------------------------------------------------------*/
 	
 	// Costruttore
-	public AggiungiRicettaFrame(Controller controller) {
+	public AggiungiRicettaDialog(Controller controller) {
 		super();
 		setTitle("Aggiungi Ricetta");
         this.controller = controller;
@@ -277,7 +277,8 @@ public class AggiungiRicettaFrame extends JDialog {
                         return;
                     }
                 } else {
-                    quantità = new BigDecimal("0");
+//                    quantità = new BigDecimal("0");
+                	quantità = null;
                     unità = "q.b.";
                 }
 
