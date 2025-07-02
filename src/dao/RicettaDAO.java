@@ -2,7 +2,6 @@ package dao;
 
 import java.sql.*;
 import java.util.LinkedList;
-import java.math.BigDecimal;
 
 import dto.*;
 
