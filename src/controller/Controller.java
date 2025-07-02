@@ -3,6 +3,8 @@ package controller;
 import java.sql.*;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import dao.ChefDAO;
 import dao.IngredienteDAO;
 import dao.RicettaDAO;
@@ -195,5 +197,4 @@ public class Controller {
         }
         new Controller(conn);
 	}
-
 }
