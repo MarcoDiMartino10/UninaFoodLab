@@ -175,8 +175,9 @@ public class Controller {
     public void aggiungiCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
 		CorsoDAO corsoDAO = new CorsoDAO(conn);
 		int idCorso = corsoDAO.ultimoIdCorso();
-		corsoDAO.saveCorso(chef.getID(), nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, idCorso);
-		aggiungiCorsoAlloChef(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, idCorso);
+		Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID());
+		corsoDAO.saveCorso(corso);
+		aggiungiCorsoAlloChef(corso);
 		aggiungiCorsoDialog.dispose();
 		aggiornaHomepageFrame();
 	}
@@ -199,8 +200,7 @@ public class Controller {
 		}
 	}
     
-    public void aggiungiCorsoAlloChef(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni, int IdCorso) {
-    	Corso corso = new Corso(IdCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID());
+    public void aggiungiCorsoAlloChef(Corso corso) {
     	chef.getCorso().add(corso);
     }
     

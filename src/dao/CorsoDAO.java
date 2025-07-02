@@ -1,8 +1,6 @@
 package dao;
 
-import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.*;
 import java.sql.Date;
 
@@ -45,17 +43,17 @@ public class CorsoDAO {
         return null;
     }
     
-    public boolean saveCorso(int Id_chef, String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni, int idCorso) {
+    public boolean saveCorso(Corso corso) {
     	String sql = "INSERT INTO Corso (Id, Nome, Categoria, Data_inizio, Frequenza, Costo, Numero_sessioni, Id_chef) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setInt(1, idCorso);
-			ps.setString(2, nomeCorso);
-			ps.setString(3, categoria);
-			ps.setDate(4, Date.valueOf(dataInizio));
-			ps.setString(5, frequenza);
-			ps.setBigDecimal(6, costo);
-			ps.setInt(7, numSessioni);
-			ps.setInt(8, Id_chef);
+			ps.setInt(1, corso.getID());
+			ps.setString(2, corso.getNome());
+			ps.setString(3, corso.getCategoria());
+			ps.setDate(4, Date.valueOf(corso.getData_inizio()));
+			ps.setString(5, corso.getFrequenza());
+			ps.setBigDecimal(6, corso.getCosto());
+			ps.setInt(7, corso.getNumero_sessioni());
+			ps.setInt(8, corso.getID_Chef());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
