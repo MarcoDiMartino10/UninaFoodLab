@@ -60,7 +60,7 @@ public class RicetteFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-            		controller.chiudiRicetteFrame(controller.getCorso());
+            		controller.chiudiRicetteFrame();
             	}
             }
         });
@@ -125,11 +125,9 @@ public class RicetteFrame extends JFrame {
         buttonPanel.add(aggiungiRicettaButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         setHandCursor(aggiungiRicettaButton);
-//        aggiungiRicettaButton.addActionListener(e -> {
-//            new ViewAggiungiRicetta(corso, controller, sessione);
-//            dispose();
-//            new RicetteFrame(controller, chef, corso, sessione);
-//        });
+        aggiungiRicettaButton.addActionListener(_ -> {
+        	controller.apriAggiungiRicettaFrame();
+        });
         setVisible(true);
     }
     

@@ -103,7 +103,7 @@ public class LoginFrame extends JFrame {
             BorderFactory.createLineBorder(new Color(200, 200, 200)),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
-        campoEmail.addActionListener(e -> campoPassword.requestFocusInWindow());
+        campoEmail.addActionListener(_ -> campoPassword.requestFocusInWindow());
         pannelloLogin.add(campoEmail, gbc);
 
         // Scritta Password
@@ -129,7 +129,7 @@ public class LoginFrame extends JFrame {
             BorderFactory.createLineBorder(new Color(200, 200, 200)),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
-        campoPassword.addActionListener(e -> bottoneLogin.doClick());
+        campoPassword.addActionListener(_ -> bottoneLogin.doClick());
         pannelloLogin.add(campoPassword, gbc);
 
         // Bottone Login
@@ -162,7 +162,7 @@ public class LoginFrame extends JFrame {
         });
         
         // Listener per il bottone Login
-        bottoneLogin.addActionListener(e -> controller.login());
+        bottoneLogin.addActionListener(_ -> controller.login());
     }
     
     /*-----------------------------------------------------------------------------------------*/
@@ -202,7 +202,7 @@ public class LoginFrame extends JFrame {
         okButton.setFocusPainted(false);
         okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        okButton.addActionListener(e -> dialog.dispose());
+        okButton.addActionListener(_ -> dialog.dispose());
         dialog.getRootPane().setDefaultButton(okButton);
 
         panel.add(messageLabel, BorderLayout.CENTER);

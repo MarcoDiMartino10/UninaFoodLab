@@ -43,5 +43,63 @@ public class RicettaDAO {
         }
         return null;
     }
+	
+	public boolean inserisciRicetta(String luogo, Timestamp orario_inizio, String nome, LinkedList<Ingrediente> ingredienti) {
+	    try {
+	        conn.setAutoCommit(false);
+	        int id_ricetta = ingredienti.get(0).getID_ricetta();
+
+	        String sqlRicetta = "INSERT INTO Ricetta (ID, Nome) VALUES (?, ?)";
+	        try (PreparedStatement ps = conn.prepareStatement(sqlRicetta)) {
+	            ps.setInt(1, id_ricetta);
+	            ps.setString(2, nome);
+	            ps.executeUpdate();
+	        }
+
+	        String sqlPreparazione = "INSERT INTO Preparazione (ID_ricetta, Luogo, Orario_inizio) VALUES (?, ?, ?)";
+	        try (PreparedStatement ps = conn.prepareStatement(sqlPreparazione)) {
+	            ps.setInt(1, id_ricetta);
+	            ps.setString(2, luogo);
+	            ps.setTimestamp(3, orario_inizio);
+	            ps.executeUpdate();
+	        }
+
+	        ingredienteDAO.inserisciIngredienti(ingredienti, id_ricetta);
+
+	        conn.commit();
+	        return true;
+
+	    } catch (SQLException e) {
+	        try {
+	            conn.rollback();
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            conn.setAutoCommit(true);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return false;
+	}
+	
+	public int ultimoIdRicetta() {
+		String sql = "SELECT MAX(id) AS max_id FROM ricetta";
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+            	int maxID = 1;
+        		if (rs.next()) {
+        		    maxID = rs.getInt("max_id") + 1;
+        		}
+            	return maxID;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		return -1;
+	}
 
 }

@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.LinkedList;
 
 import dao.ChefDAO;
+import dao.IngredienteDAO;
+import dao.RicettaDAO;
 import db_connection.*;
 import gui.*;
 import dto.*;
@@ -23,6 +25,7 @@ public class Controller {
     private HomepageFrame homepageFrame;
     private InfoCorsoFrame infoCorsoFrame;
     private RicetteFrame ricetteFrame;
+    private AggiungiRicettaFrame aggiungiRicettaFrame;
 
     //Costruttore
     public Controller(Connection conn) {
@@ -48,6 +51,29 @@ public class Controller {
       	loginFrame.credenzialiErrate();
       }
     }
+    
+    public void aggiungiRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    	RicettaDAO ricettaDAO = new RicettaDAO(conn);
+		ricettaDAO.inserisciRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
+		aggiornaRicetteFrame();
+    }
+    
+    public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+		for (Corso corso1 : chef.getCorso()) {
+			if (corso1.getNome().equals(corso.getNome())) {
+				for (Sessione sessione : corso1.getSessioni()) {
+					if (sessione instanceof Sessione_in_presenza) {
+	                    Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
+	                    if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
+	                        sessioneInPresenza.getRicette().add(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
+	                        return;
+	                    }
+	                }
+				}
+			}
+		}
+	}
      
     public void logout() {
     	homepageFrame.dispose();
@@ -64,7 +90,7 @@ public class Controller {
     
     public void chiudiInfoCorso() {
 	  infoCorsoFrame.dispose();
-	  homepageFrame = new HomepageFrame(Controller.this);
+	  homepageFrame = new HomepageFrame(this);
 	  homepageFrame.setVisible(true);
 	}
     
@@ -75,11 +101,26 @@ public class Controller {
     	infoCorsoFrame.setVisible(false);
     }
     
-    public void chiudiRicetteFrame(Corso corso) {
+    public void chiudiRicetteFrame() {
     	ricetteFrame.dispose();
     	infoCorsoFrame = new InfoCorsoFrame(this);
     	infoCorsoFrame.setVisible(true);
     }
+    
+    public void apriAggiungiRicettaFrame() {
+    	aggiungiRicettaFrame = new AggiungiRicettaFrame(this);
+		aggiungiRicettaFrame.setVisible(true);
+	}
+    
+    public void chiudiAggiungiRicettaFrame() {
+    	aggiungiRicettaFrame.dispose();
+    }
+    
+    public void aggiornaRicetteFrame() {
+		ricetteFrame.dispose();
+		ricetteFrame = new RicetteFrame(this);
+		ricetteFrame.setVisible(true);
+	}
     
     /*-----------------------------------------------------------------------------------------*/
     
@@ -117,6 +158,18 @@ public class Controller {
                 return;
             }
         }
+    }
+    
+    /*-----------------------------------------------------------------------------------------*/
+    
+    public int nuovoIdRicetta() {
+		RicettaDAO ricettaDAO = new RicettaDAO(conn);
+		return ricettaDAO.ultimoIdRicetta();
+	}
+    
+    public int nuovoIdIngrediente() {
+    	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
+    	return ingredienteDAO.ultimoIdIngrediente();
     }
     
     /*-----------------------------------------------------------------------------------------*/
