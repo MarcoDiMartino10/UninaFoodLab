@@ -2,18 +2,19 @@ package dao;
 
 import java.sql.*;
 
+import controller.Controller;
 import dto.*;
 
 public class ChefDAO {
     
 	// Attributi
 	private Connection conn;
-	private CorsoDAO corsoDAO;
+	private Controller controller;
 	
 	// Costruttore
-    public ChefDAO(Connection conn) {
+    public ChefDAO(Connection conn, Controller controller) {
         this.conn = conn;
-        corsoDAO = new CorsoDAO(conn);
+        this.controller = controller;
     }
     
     // Metodi
@@ -30,7 +31,7 @@ public class ChefDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int id = rs.getInt("id");
-                    Chef chef = new Chef(id, rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password"), rs.getString("biografia"), rs.getString("numero_tel"), corsoDAO.getCorsiByChefId(id));
+                    Chef chef = new Chef(id, rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password"), rs.getString("biografia"), rs.getString("numero_tel"), controller.getCorsiToDatabase(id));
                     return chef;
                 }
             }

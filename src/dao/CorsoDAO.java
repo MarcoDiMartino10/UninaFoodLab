@@ -2,6 +2,9 @@ package dao;
 
 import java.sql.*;
 import java.util.*;
+
+import controller.Controller;
+
 import java.sql.Date;
 
 import dto.*;
@@ -10,12 +13,15 @@ public class CorsoDAO {
     
 	// Attributi
 	private Connection conn;
-	private SessioneDAO sessioneDAO;
+	private Controller controller;
+	
+	// Attributi statici
+	public static final String TABLE_NAME = "Corso";
 
 	// Costruttore
-    public CorsoDAO(Connection conn) {
+    public CorsoDAO(Connection conn, Controller controller) {
         this.conn = conn;
-        this.sessioneDAO = new SessioneDAO(conn);
+        this.controller = controller;
     }
     
     // Metodi
@@ -32,7 +38,7 @@ public class CorsoDAO {
             try (ResultSet rs = ps.executeQuery()) {
             	while (rs.next()) {
             		int id = rs.getInt("id");
-            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, sessioneDAO.getSessioniByCorsoId(id));
+            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, controller.getSessioniOnlineToDatabase(id));
             	    corsi.add(corso);
             	}
             	return corsi;

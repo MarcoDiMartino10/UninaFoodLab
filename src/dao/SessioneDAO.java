@@ -1,4 +1,4 @@
-package dao;
+/*package dao;
 
 import java.sql.*;
 import java.util.*;
@@ -23,4 +23,4 @@ public class SessioneDAO {
 		sessioni.addAll(sessioneInPresenzaDAO.getSessioniPresenza(idCorso));
 		return sessioni;
 	}
-}
+}*/

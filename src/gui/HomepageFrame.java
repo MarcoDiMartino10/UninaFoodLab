@@ -92,7 +92,8 @@ public class HomepageFrame extends JFrame {
         LinkedList<String> categoriaUnica = new LinkedList<>();
         for (int i = 0; i < chef.getCorso().size(); i++) {
             String categoria = chef.getCorso().get(i).getCategoria();
-            if (!categoriaUnica.contains(categoria)) {
+            if (!categoriaUnica.contains(categoria.toLowerCase())) {
+				categoria = categoria.toLowerCase();
             	categoriaUnica.add(categoria);
             }
         }

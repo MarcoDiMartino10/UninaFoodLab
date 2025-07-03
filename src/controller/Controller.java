@@ -36,10 +36,10 @@ public class Controller {
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-    	loginFrame = new LoginFrame(this);
-    	loginFrame.setVisible(true);
-        chefDAO = new ChefDAO(conn);
-//        test();
+    	//loginFrame = new LoginFrame(this);
+    	//loginFrame.setVisible(true);
+        chefDAO = new ChefDAO(conn, this);
+        test();
     }
     
     /*------------------------------------------ Metodi per aprire o chiudere le finestre -----------------------------------------------*/
@@ -161,13 +161,13 @@ public class Controller {
     	return sessione_in_presenza;
     }
     
-    // Metodo per ottenere i corsi dello chef
+    // Metodo per ottenere le categorie dei corsi
     public LinkedList<Corso> getCorsiFiltratiPerCategoria(String categoria) {
         LinkedList<Corso> corsiFiltrati = new LinkedList<>();
         LinkedList<Corso> corsi = chef.getCorso();
         for (int i = 0; i < corsi.size(); i++) {
             Corso corso = corsi.get(i);
-            if (categoria.equals("Tutti") || corso.getCategoria().equals(categoria)) {
+            if (categoria.equals("Tutti") || corso.getCategoria().toLowerCase().equals(categoria.toLowerCase())) {
                 corsiFiltrati.add(corso);
             }
         }
@@ -200,7 +200,7 @@ public class Controller {
       }
     
     public int nuovoIdRicetta() {
-		RicettaDAO ricettaDAO = new RicettaDAO(conn);
+		RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
 		return ricettaDAO.ultimoIdRicetta();
 	}
     
@@ -210,14 +210,14 @@ public class Controller {
     }
     
     public void aggiungiRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	RicettaDAO ricettaDAO = new RicettaDAO(conn);
-		ricettaDAO.inserisciRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    	RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
+		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
 		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
 		aggiornaRicetteFrame();
     }
     
     public void aggiungiCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
-		CorsoDAO corsoDAO = new CorsoDAO(conn);
+		CorsoDAO corsoDAO = new CorsoDAO(conn, this);
 		int idCorso = corsoDAO.ultimoIdCorso();
 		Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID());
 		corsoDAO.saveCorso(corso);
@@ -242,10 +242,43 @@ public class Controller {
     }
     
     public void aggiungiSessioneRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
+    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn, this);
     	sessione_in_presenzaDAO.saveSessioneAndRicetta(sessione_in_presenza, nomeRicetta, ingredienti);
     	aggiungiSessioneAlCorso(sessione_in_presenza);
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
+    }
+    
+    public LinkedList<Corso> getCorsiToDatabase(int id) {
+    	CorsoDAO corsoDAO = new CorsoDAO(conn, this);
+    	return corsoDAO.getCorsiByChefId(id);
+    }
+    
+    public LinkedList<Sessione> getSessioniOnlineToDatabase(int id) {
+    	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
+    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn, this);
+    	LinkedList<Sessione> sessioni = new LinkedList<Sessione>(sessione_onlineDAO.getSessioniOnline(id));
+		sessioni.addAll(sessione_in_presenzaDAO.getSessioniPresenza(id));
+		return sessioni;
+    }
+    
+    public LinkedList<Ricetta> getRicetteToDatabase(String luogo, Timestamp orarioInizio) {
+		RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
+		return ricettaDAO.getRicettabyLuogoAndData(luogo, orarioInizio);
+	}
+    
+    public LinkedList<Ingrediente> getIngredientiToDatabase(int id) {
+		IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
+		return ingredienteDAO.getIngredienteByRicettaId(id);
+	}
+    
+    public boolean setRicetteToDatabase(Sessione_in_presenza sessione_in_presenza, String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    	RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
+		return ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    }
+    
+    public boolean setIngredienteToDatabase(LinkedList<Ingrediente> ingredienti, int idRicetta) {
+    	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
+    	return ingredienteDAO.saveIngredienti(ingredienti, idRicetta);
     }
     
     /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
@@ -272,7 +305,16 @@ public class Controller {
     
     private void aggiungiSessioneAlCorso(Sessione sessione) {
     	corso.getSessioni().add(sessione);
+    	if (corso.getSessioni().size() > corso.getNumero_sessioni()) {
+			corso.setNumero_sessioni(corso.getSessioni().size());
+		}
 	}
+    
+    
+    
+    /*------------------------------------------ Metodi per accedere alle DAO -----------------------------------------------*/
+    
+    
     
     /*----------------------------------------- main ------------------------------------------------*/
    
@@ -292,8 +334,6 @@ public class Controller {
 		    e.printStackTrace();
 		}
 	}
-	
-    
     
     // Main
 	public static void main(String[] args) {

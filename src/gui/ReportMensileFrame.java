@@ -20,10 +20,9 @@ public class ReportMensileFrame extends JFrame {
 
     public ReportMensileFrame(Controller controller) {
         super("Report Mensile - UninaFoodLab");
-        setSize(1300, 900);
+        setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(800, 600));
         setResizable(false);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Logo.png")));
 
@@ -96,7 +95,7 @@ public class ReportMensileFrame extends JFrame {
         int[] corsiPerCategoria;
 
         for (Corso corso : chef.getCorso()) {
-            String categoria = corso.getCategoria();
+            String categoria = corso.getCategoria().toLowerCase();
             if (!categorie.contains(categoria)) categorie.add(categoria);
         }
 
@@ -104,7 +103,7 @@ public class ReportMensileFrame extends JFrame {
 
         for (Corso corso : chef.getCorso()) {
             for (int i = 0; i < categorie.size(); i++) {
-                if (corso.getCategoria().equals(categorie.get(i))) {
+                if (corso.getCategoria().toLowerCase().equals(categorie.get(i).toLowerCase())) {
                     corsiPerCategoria[i]++;
                 }
             }
@@ -163,6 +162,7 @@ public class ReportMensileFrame extends JFrame {
         pieDataset.setValue("In Presenza", sessioniInPresenza);
         JFreeChart pieChart = ChartFactory.createPieChart("Distribuzione Sessioni", pieDataset, true, true, false);
         ChartPanel pieChartPanel = new ChartPanel(pieChart);
+        pieChartPanel.setPopupMenu(null);
         chartsPanel.add(wrapChartInPanel(pieChartPanel, "Distribuzione Sessioni"));
 
         // GRAFICO 2
@@ -173,10 +173,11 @@ public class ReportMensileFrame extends JFrame {
         JFreeChart categoryChart = ChartFactory.createBarChart("Corsi per Categoria", "Categoria", "Numero Corsi",
                 categoryDataset, PlotOrientation.VERTICAL, false, true, false);
         ChartPanel categoryChartPanel = new ChartPanel(categoryChart);
+        categoryChartPanel.setPopupMenu(null);
         chartsPanel.add(wrapChartInPanel(categoryChartPanel, "Corsi per Categoria"));
         CategoryPlot catPlot = categoryChart.getCategoryPlot();
         BarRenderer catRenderer = (BarRenderer) catPlot.getRenderer();
-        catRenderer.setMaximumBarWidth(0.1); // da 0.0 a 1.0 (più piccolo = più stretto)
+        catRenderer.setMaximumBarWidth(0.05);
 
 
         // GRAFICO 3
@@ -184,13 +185,13 @@ public class ReportMensileFrame extends JFrame {
         recipeDataset.addValue(minRicette, "Ricette", "Minimo");
         recipeDataset.addValue(mediaRicette, "Ricette", "Media");
         recipeDataset.addValue(maxRicette, "Ricette", "Massimo");
-        JFreeChart recipeChart = ChartFactory.createBarChart("Statistiche Ricette", "Metrica", "Numero Ricette",
-                recipeDataset, PlotOrientation.VERTICAL, false, true, false);
+        JFreeChart recipeChart = ChartFactory.createBarChart("Statistiche Ricette", "Metrica", "Numero Ricette", recipeDataset, PlotOrientation.VERTICAL, false, true, false);
         ChartPanel recipeChartPanel = new ChartPanel(recipeChart);
         chartsPanel.add(wrapChartInPanel(recipeChartPanel, "Statistiche Ricette"));
+        recipeChartPanel.setPopupMenu(null);
         CategoryPlot recipePlot = recipeChart.getCategoryPlot();
         BarRenderer recipeRenderer = (BarRenderer) recipePlot.getRenderer();
-        recipeRenderer.setMaximumBarWidth(0.1); // oppure 0.05 per barre molto sottili
+        recipeRenderer.setMaximumBarWidth(0.05);
 
 
         // ScrollPane

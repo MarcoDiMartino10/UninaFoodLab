@@ -3,18 +3,19 @@ package dao;
 import java.sql.*;
 import java.util.*;
 
+import controller.Controller;
 import dto.*;
 
 public class Sessione_in_presenzaDAO {
 	
 	// Attributi
 	private Connection conn;
-	private RicettaDAO ricettaDAO;
+	private Controller controller;
 	
 	// Costruttore
-	public Sessione_in_presenzaDAO(Connection conn) {
+	public Sessione_in_presenzaDAO(Connection conn, Controller controller) {
 		this.conn = conn;
-		this.ricettaDAO = new RicettaDAO(conn);
+		this.controller = controller;
 	}
 	
 	// Metodi
@@ -31,7 +32,7 @@ public class Sessione_in_presenzaDAO {
                 while (rs.next()) {
                 	String luogo = rs.getString("luogo");
                 	Timestamp orarioInizio = rs.getTimestamp("orario_inizio");
-                	sessioni.add(new Sessione_in_presenza(luogo, rs.getInt("max_posti"), orarioInizio, rs.getTimestamp("orario_fine"), idCorso, ricettaDAO.getRicettabyLuogoAndData(luogo, orarioInizio)));
+                	sessioni.add(new Sessione_in_presenza(luogo, rs.getInt("max_posti"), orarioInizio, rs.getTimestamp("orario_fine"), idCorso, controller.getRicetteToDatabase(luogo, orarioInizio)));
                 }
             }
         } catch (SQLException e) {
@@ -61,8 +62,7 @@ public class Sessione_in_presenzaDAO {
 	
 	public boolean saveSessioneAndRicetta(Sessione_in_presenza sessione_in_presenza, String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
 		boolean a = saveSessione(sessione_in_presenza);
-		ricettaDAO = new RicettaDAO(conn);
-		boolean b = ricettaDAO.inserisciRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+		boolean b = controller.setRicetteToDatabase(sessione_in_presenza, nomeRicetta, ingredienti);
 		return a && b;
 	}
 	

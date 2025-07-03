@@ -39,7 +39,7 @@ public class IngredienteDAO {
         return null;
     }
 	
-	public void inserisciIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) throws SQLException {
+	public boolean saveIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) {
 	    StringBuilder sql = new StringBuilder("INSERT INTO Ingrediente (ID, Nome, Quantità, Unità_di_misura, ID_ricetta) VALUES ");
 	    for (int i = 0; i < ingredienti.size(); i++) {
 	        sql.append("(?, ?, ?, ?, ?)");
@@ -49,6 +49,7 @@ public class IngredienteDAO {
 	            sql.append(";");
 	        }
 	    }
+
 	    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 	        int paramIndex = 1;
 	        for (Ingrediente ingr : ingredienti) {
@@ -59,6 +60,10 @@ public class IngredienteDAO {
 	            ps.setInt(paramIndex++, idRicetta);
 	        }
 	        ps.executeUpdate();
+	        return true;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
 	    }
 	}
 	

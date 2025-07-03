@@ -3,18 +3,19 @@ package dao;
 import java.sql.*;
 import java.util.LinkedList;
 
+import controller.Controller;
 import dto.*;
 
 public class RicettaDAO {
 	
 	// Attributi
 	private Connection conn;
-	private IngredienteDAO ingredienteDAO;
+	private Controller controller;
 	
 	// Costruttore
-	public RicettaDAO(Connection conn) {
+	public RicettaDAO(Connection conn, Controller controller) {
 		this.conn = conn;
-		this.ingredienteDAO = new IngredienteDAO(conn);
+		this.controller = controller;
 	}
 	
 	// Metodi
@@ -33,7 +34,7 @@ public class RicettaDAO {
             try (ResultSet rs = ps.executeQuery()) {
             	while (rs.next()) {
             		int id = rs.getInt("id");
-            	    Ricetta ricetta = new Ricetta(id, rs.getString("nome"), ingredienteDAO.getIngredienteByRicettaId(id));
+            	    Ricetta ricetta = new Ricetta(id, rs.getString("nome"), controller.getIngredientiToDatabase(id));
             	    ricette.add(ricetta);
             	}
             	return ricette;
@@ -44,7 +45,7 @@ public class RicettaDAO {
         return null;
     }
 	
-	public boolean inserisciRicetta(String luogo, Timestamp orario_inizio, String nome, LinkedList<Ingrediente> ingredienti) {
+	public boolean saveRicetta(String luogo, Timestamp orario_inizio, String nome, LinkedList<Ingrediente> ingredienti) {
 	    try {
 	        conn.setAutoCommit(false);
 	        int id_ricetta = ingredienti.get(0).getID_ricetta();
@@ -64,7 +65,7 @@ public class RicettaDAO {
 	            ps.executeUpdate();
 	        }
 
-	        ingredienteDAO.inserisciIngredienti(ingredienti, id_ricetta);
+	        controller.setIngredienteToDatabase(ingredienti, id_ricetta);
 
 	        conn.commit();
 	        return true;

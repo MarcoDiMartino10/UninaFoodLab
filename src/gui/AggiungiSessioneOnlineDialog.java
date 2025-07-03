@@ -203,6 +203,17 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
                 orarioFineSpinner.requestFocus();
                 return;
             }
+            
+            if (fine.getTime() - inizio.getTime() < 15 * 60 * 1000) {
+				JOptionPane.showMessageDialog(this, "La sessione online deve durare almeno 15 minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
+				orarioFineSpinner.requestFocus();
+				return;
+			}
+            if (fine.getTime() - inizio.getTime() > 5 * 60 * 60 * 1000) {
+            	JOptionPane.showMessageDialog(this, "La sessione online non può durare più di 5 ore.", "Errore", JOptionPane.ERROR_MESSAGE);
+            	orarioFineSpinner.requestFocus();
+            	return;
+            }
 
             
             controller.aggiungiSessioneOnline(link, inizio, fine);
