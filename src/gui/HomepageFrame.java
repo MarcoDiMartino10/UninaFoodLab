@@ -164,6 +164,10 @@ public class HomepageFrame extends JFrame {
         reportButton = new JButton("Visualizza Report");
         styleButton(reportButton);
         buttonPanel.add(reportButton);
+        setHandCursor(reportButton);
+        reportButton.addActionListener(_ -> {
+			controller.apriReportMensileFrame();
+		});
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }

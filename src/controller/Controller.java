@@ -3,6 +3,7 @@ package controller;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.LinkedList;
 
 import dao.*;
@@ -31,6 +32,7 @@ public class Controller {
     private AggiungiCorsoDialog aggiungiCorsoDialog;
     private AggiungiSessioneOnlineDialog aggiungiSessioneOnlineDialog;
     private AggiungiSessioneInPresenzaDialog aggiungiSessioneInPresenzaDialog;
+    private ReportMensileFrame reportMensileFrame;
 
     //Costruttore
     public Controller(Connection conn) {
@@ -133,6 +135,18 @@ public class Controller {
     	aggiungiRicettaDialog = new AggiungiRicettaDialog(this, true);
 		aggiungiRicettaDialog.setVisible(true);
 	}
+    
+    public void apriReportMensileFrame() {
+		reportMensileFrame = new ReportMensileFrame(this);
+		reportMensileFrame.setVisible(true);
+		homepageFrame.setVisible(false);
+	}
+    
+    public void chiudiReportMensileFrame() {
+    	reportMensileFrame.dispose();
+    	homepageFrame = new HomepageFrame(this);
+    	homepageFrame.setVisible(true);
+    }
     
     /*------------------------------------------- Metodi per ottenere i dati per le interfacce grafiche ----------------------------------------------*/
     
