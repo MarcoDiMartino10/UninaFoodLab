@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import java.awt.*;
 import java.sql.Timestamp;
-import java.time.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -16,12 +15,8 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     Controller controller;
 
-    private JTextField linkField;
-//    private JTextField orario_inizioField;
-//    private JTextField orario_fineField;
-
     public AggiungiSessioneOnlineDialog(Controller controller) {
-    	super((InfoCorsoFrame) null, "Aggiungi Sessione", true);
+    	super((InfoCorsoFrame) null, "Aggiungi Sessione Online", true);
         this.controller = controller;
         setSize(550, 300);
         setLocationRelativeTo(this);
@@ -61,7 +56,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
         // Link
         JLabel linkLabel = new JLabel("Link:");
         linkLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        linkField = new JTextField(20);
+        JTextField linkField = new JTextField(20);
         linkField.setFont(new Font("Arial", Font.PLAIN, 14));
         linkField.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),

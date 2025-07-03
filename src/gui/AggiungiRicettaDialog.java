@@ -19,7 +19,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	/*-----------------------------------------------------------------------------------------*/
 	
 	// Costruttore
-	public AggiungiRicettaDialog(Controller controller) {
+	public AggiungiRicettaDialog(Controller controller, boolean flag) {
 		super((RicetteFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(520, 280);
@@ -289,7 +289,11 @@ public class AggiungiRicettaDialog extends JDialog {
                 ingredienti.add(ingrediente);
             }
 
-            controller.aggiungiRicetta(nomeRicetta, ingredienti);
+            if (flag == false) controller.aggiungiRicetta(nomeRicetta, ingredienti);
+            else {
+            	controller.aggiungiSessioneRicetta(nomeRicetta, ingredienti);
+            	controller.chiudiAggiungiSessioneInPresenzaDialog();
+            }
             dispose();
         });
 

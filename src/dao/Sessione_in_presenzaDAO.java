@@ -40,4 +40,30 @@ public class Sessione_in_presenzaDAO {
 		return sessioni;
 	}
 	
+	public boolean saveSessione(Sessione_in_presenza sessione) {
+		String sql = """
+	            INSERT INTO sessione_in_presenza (luogo, orario_inizio, orario_fine, max_posti, id_corso)
+	            VALUES (?, ?, ?, ?, ?)
+	        """;
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, sessione.getLuogo());
+			ps.setTimestamp(2, sessione.getOrario_inizio_timestamp());
+			ps.setTimestamp(3, sessione.getOrario_fine_timestamp());
+			ps.setInt(4, sessione.getMax_posti());
+			ps.setInt(5, sessione.getId_Corso());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean saveSessioneAndRicetta(Sessione_in_presenza sessione_in_presenza, String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+		boolean a = saveSessione(sessione_in_presenza);
+		ricettaDAO = new RicettaDAO(conn);
+		boolean b = ricettaDAO.inserisciRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+		return a && b;
+	}
+	
 }

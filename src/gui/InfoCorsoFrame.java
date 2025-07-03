@@ -191,13 +191,13 @@ public class InfoCorsoFrame extends JFrame {
         // Bottone Aggiungi Sessione Online
         JButton addOnlineButton = new JButton("Aggiungi Sessione Online");
         styleButton(addOnlineButton);
-        addOnlineButton.addActionListener(e -> controller.apriAggiungiSessioneOnlineDialog());
+        addOnlineButton.addActionListener(_ -> controller.apriAggiungiSessioneOnlineDialog());
         buttonPanel.add(addOnlineButton);
 
         // Bottone Aggiungi Sessione In Presenza
         JButton addInPresenzaButton = new JButton("Aggiungi Sessione In Presenza");
         styleButton(addInPresenzaButton);
-        addInPresenzaButton.addActionListener(e -> /*controller.aggiungiSessioneInPresenza()*/ System.out.println("Aggiungi Sessione In Presenza"));
+        addInPresenzaButton.addActionListener(_ -> controller.apriAggiungiSessioneInPresenzaDialog());
         buttonPanel.add(addInPresenzaButton);
 
         // Aggiungi pannello bottoni al mainPanel
