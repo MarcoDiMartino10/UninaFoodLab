@@ -3,7 +3,6 @@ package controller;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.LinkedList;
 
 import dao.*;
@@ -37,10 +36,10 @@ public class Controller {
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-//    	loginFrame = new LoginFrame(this);
-//    	loginFrame.setVisible(true);
+    	loginFrame = new LoginFrame(this);
+    	loginFrame.setVisible(true);
         chefDAO = new ChefDAO(conn);
-        test();
+//        test();
     }
     
     /*------------------------------------------ Metodi per aprire o chiudere le finestre -----------------------------------------------*/
