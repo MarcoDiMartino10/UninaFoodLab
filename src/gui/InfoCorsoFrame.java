@@ -83,7 +83,7 @@ public class InfoCorsoFrame extends JFrame {
         String[][] infoData = {
                 {"Nome", corso.getNome()},
                 {"Categoria", corso.getCategoria()},
-                {"Data Inizio", corso.getData_inizio().toString()},
+                {"Data Inizio", corso.getData_inizio_formato()},
                 {"Frequenza", corso.getFrequenza()},
                 {"Costo", (corso.getCosto() == null ? 0 : corso.getCosto()) + " €"},
                 {"Numero Sessioni", String.valueOf(corso.getNumero_sessioni())},

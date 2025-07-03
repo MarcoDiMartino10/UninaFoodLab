@@ -125,7 +125,7 @@ public class HomepageFrame extends JFrame {
         String[][] data = new String[chef.getCorso().size()][4];
         int i = 0;
 	    while (i < chef.getCorso().size()) {
-	         data[i] = new String[]{String.valueOf(chef.getCorso().get(i).getID()), chef.getCorso().get(i).getNome(), chef.getCorso().get(i).getCategoria(), chef.getCorso().get(i).getData_inizio().toString()};
+	         data[i] = new String[]{String.valueOf(chef.getCorso().get(i).getID()), chef.getCorso().get(i).getNome(), chef.getCorso().get(i).getCategoria(), chef.getCorso().get(i).getData_inizio_formato()};
 	         i++;
 	     }
         courseTable = new JTable(data, columnNames) {

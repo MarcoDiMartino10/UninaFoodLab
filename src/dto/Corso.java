@@ -54,6 +54,9 @@ public class Corso {
 	public LocalDate getData_inizio() {
 		return Data_inizio;
 	}
+	public String getData_inizio_formato() {
+		return Data_inizio.getDayOfMonth() + "/" + Data_inizio.getMonthValue() + "/" + Data_inizio.getYear();
+	}
 	public String getFrequenza() {
 		return Frequenza;
 	}

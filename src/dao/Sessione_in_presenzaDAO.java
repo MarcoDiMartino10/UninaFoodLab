@@ -60,10 +60,4 @@ public class Sessione_in_presenzaDAO {
 		return false;
 	}
 	
-	public boolean saveSessioneAndRicetta(Sessione_in_presenza sessione_in_presenza, String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-		boolean a = saveSessione(sessione_in_presenza);
-		boolean b = controller.setRicetteToDatabase(sessione_in_presenza, nomeRicetta, ingredienti);
-		return a && b;
-	}
-	
 }

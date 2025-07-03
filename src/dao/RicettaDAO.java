@@ -65,8 +65,6 @@ public class RicettaDAO {
 	            ps.executeUpdate();
 	        }
 
-	        controller.setIngredienteToDatabase(ingredienti, id_ricetta);
-
 	        conn.commit();
 	        return true;
 

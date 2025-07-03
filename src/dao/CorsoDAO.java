@@ -38,7 +38,7 @@ public class CorsoDAO {
             try (ResultSet rs = ps.executeQuery()) {
             	while (rs.next()) {
             		int id = rs.getInt("id");
-            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, controller.getSessioniOnlineToDatabase(id));
+            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, controller.getSessioniToDatabase(id));
             	    corsi.add(corso);
             	}
             	return corsi;
