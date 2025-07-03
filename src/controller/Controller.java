@@ -9,6 +9,7 @@ import dao.*;
 import db_connection.*;
 import gui.*;
 import dto.*;
+import exception.*;
 
 import javax.swing.UIManager;
 
@@ -36,13 +37,27 @@ public class Controller {
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-    	//loginFrame = new LoginFrame(this);
-    	//loginFrame.setVisible(true);
-        chefDAO = new ChefDAO(conn, this);
-        test();
+    	loginFrame = new LoginFrame(this);
+    	loginFrame.setVisible(true);
+        chefDAO = new ChefDAO(conn);
+        //test();
     }
     
     /*------------------------------------------ Metodi per per il passaggio tra le finestre -----------------------------------------------*/
+    
+ // Metodo per effettuare il login
+    public void login() {
+        String email = loginFrame.getEmail();
+        String password = loginFrame.getPassword();
+        chef = getAllChefToDatabase(email, password);
+        if (chef != null) {
+        	loginFrame.dispose();
+            homepageFrame = new HomepageFrame(Controller.this);
+            homepageFrame.setVisible(true);
+        } else {
+        	loginFrame.credenzialiErrate();
+        }
+    }
     
     // Chiudi homepage e riapri login
     public void logout() {
@@ -81,7 +96,7 @@ public class Controller {
     	infoCorsoFrame.setVisible(true);
     }
     
-    // Apri aggiungiRicettaFrame
+    // Apri aggiungiRicettaDialog
     public void apriAggiungiRicettaFrame() {
     	aggiungiRicettaDialog = new AggiungiRicettaDialog(this, false);
 		aggiungiRicettaDialog.setVisible(true);
@@ -208,43 +223,43 @@ public class Controller {
     
     /*------------------------------------------- Metodi di accesso al database ----------------------------------------------*/
     
-    // Metodo per effettuare il login
-    public void login() {
-        String email = loginFrame.getEmail();
-        String password = loginFrame.getPassword();
-        chef = chefDAO.getChefByEmailAndPassword(email, password);
-        if (chef != null) {
-        	loginFrame.dispose();
-            homepageFrame = new HomepageFrame(Controller.this);
-            homepageFrame.setVisible(true);
-        } else {
-        	loginFrame.credenzialiErrate();
-        }
-    }
-    
     // Metodo per ottenere il nuovo ID di ricetta
     public int nuovoIdRicetta() {
-		RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
-		return ricettaDAO.ultimoIdRicetta();
+		RicettaDAO ricettaDAO = new RicettaDAO(conn);
+		try {
+			return ricettaDAO.nuovoIdRicetta();
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
 	}
     
     // Metodo per ottenere il nuovo ID di ingrediente
     public int nuovoIdIngrediente() {
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
-    	return ingredienteDAO.ultimoIdIngrediente();
+    	try {
+    		return ingredienteDAO.nuovoIdIngrediente();
+    	} catch (SQLException e) {
+    		throw new DatabaseException(e);
+    	}
     }
     
     // Metodo per aggiungere una nuova ricetta
     public void aggiungiRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
-		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    	RicettaDAO ricettaDAO = new RicettaDAO(conn);
+    	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
+    	try {
+    		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
+    	} catch (SQLException e) {
+    		throw new DatabaseException(e);
+    	}
 		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
 		aggiornaRicetteFrame();
     }
     
     // Metodo per aggiungere un nuovo corso
     public void aggiungiCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
-		CorsoDAO corsoDAO = new CorsoDAO(conn, this);
+		CorsoDAO corsoDAO = new CorsoDAO(conn);
 		int idCorso = corsoDAO.ultimoIdCorso();
 		Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID());
 		corsoDAO.saveCorso(corso);
@@ -257,7 +272,11 @@ public class Controller {
     public void aggiungiSessioneOnline(String link, Timestamp inizio, Timestamp fine) {
     	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
 		Sessione_online sessione = new Sessione_online(link, inizio, fine, corso.getID());
-		sessione_onlineDAO.saveSessione(sessione);
+		try {
+			sessione_onlineDAO.saveSessione(sessione);
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
 		aggiungiSessioneAlCorso(sessione);
 		aggiungiSessioneOnlineDialog.dispose();
 		aggiornaInfoCorsoFrame();
@@ -272,47 +291,110 @@ public class Controller {
     
     // Metodo per aggiungere una sessione in presenza con ricetta e ingredienti
     public void aggiungiSessioneRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn, this);
-    	RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
+    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
+    	RicettaDAO ricettaDAO = new RicettaDAO(conn);
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
-    	sessione_in_presenzaDAO.saveSessione(sessione_in_presenza);
-    	ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
-    	ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
+    	try {
+    		sessione_in_presenzaDAO.saveSessione(sessione_in_presenza);
+    		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
+    	} catch (SQLException e) {
+    		throw new DatabaseException(e);
+    	}
     	aggiungiSessioneAlCorso(sessione_in_presenza);
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
     }
     
+    public Chef getAllChefToDatabase(String email, String password) {
+        try {
+            Chef nuovoChef = chefDAO.getChef(email, password);
+            if (nuovoChef != null) {
+                nuovoChef.setCorso(getCorsiToDatabase(nuovoChef.getID()));
+                for (Corso corso : nuovoChef.getCorso()) {
+                    corso.setSessioni(getSessioniToDatabase(corso.getID()));
+                    for (Sessione sessione : corso.getSessioni()) {
+                        if (sessione instanceof Sessione_in_presenza) {
+                            Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
+
+                            sessioneInPresenza.setRicette(
+                                getRicetteToDatabase(
+                                    sessioneInPresenza.getLuogo(),
+                                    sessioneInPresenza.getOrario_inizio_timestamp()
+                                )
+                            );
+
+                            for (Ricetta ricetta : sessioneInPresenza.getRicette()) {
+                                ricetta.setIngredienti(getIngredientiToDatabase(ricetta.getID()));
+                            }
+                        } //else if (sessione instanceof Sessione_online) {
+                            //Sessione_online sessioneOnline = (Sessione_online) sessione;
+                            //sessioneOnline.setLink(sessioneOnline.getLink()); // facoltativo
+                        //}
+                    }
+                }
+
+                return nuovoChef;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    
     // Metodo per ottenere i corsi dello chef dal database
     public LinkedList<Corso> getCorsiToDatabase(int id) {
-    	CorsoDAO corsoDAO = new CorsoDAO(conn, this);
-    	return corsoDAO.getCorsiByChefId(id);
+    	CorsoDAO corsoDAO = new CorsoDAO(conn);
+    	try {
+			return corsoDAO.getCorsi(id);
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
     }
     
     // Metodo per ottenere le sessioni di un corso dal database
     public LinkedList<Sessione> getSessioniToDatabase(int id) {
     	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
-    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn, this);
-    	LinkedList<Sessione> sessioni = new LinkedList<Sessione>(sessione_onlineDAO.getSessioniOnline(id));
-		sessioni.addAll(sessione_in_presenzaDAO.getSessioniPresenza(id));
-		return sessioni;
+    	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
+    	try {
+    		LinkedList<Sessione> sessioni = new LinkedList<Sessione>(sessione_onlineDAO.getSessioniOnline(id));
+    		sessioni.addAll(sessione_in_presenzaDAO.getSessioniPresenza(id));
+    		return sessioni;
+    	} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
     }
     
     // Metodo per ottenere le ricette di una sessione in presenza dal database
     public LinkedList<Ricetta> getRicetteToDatabase(String luogo, Timestamp orarioInizio) {
-		RicettaDAO ricettaDAO = new RicettaDAO(conn, this);
-		return ricettaDAO.getRicettabyLuogoAndData(luogo, orarioInizio);
+		RicettaDAO ricettaDAO = new RicettaDAO(conn);
+		try {
+			return ricettaDAO.getRicetta(luogo, orarioInizio);
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
 	}
     
     // Metodo per ottenere gli ingredienti di una ricetta dal database
     public LinkedList<Ingrediente> getIngredientiToDatabase(int id) {
 		IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
-		return ingredienteDAO.getIngredienteByRicettaId(id);
+		try {
+			return ingredienteDAO.getIngrediente(id);
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
 	}
     
     // Metodo per salvare gli ingredienti di una ricetta nel database
     public boolean setIngredienteToDatabase(LinkedList<Ingrediente> ingredienti, int idRicetta) {
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
-    	return ingredienteDAO.saveIngredienti(ingredienti, idRicetta);
+    	try {
+    		return ingredienteDAO.saveIngredienti(ingredienti, idRicetta);
+    	} catch (SQLException e) {
+    		throw new DatabaseException(e);
+    	}
     }
     
     /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
@@ -347,12 +429,21 @@ public class Controller {
 		}
 	}  
     
+    public void aggiungiIngredientiAlleRicette() {
+		for (Ricetta ricetta : sessione_in_presenza.getRicette()) {
+			//ricetta.setIngredienti(getIngredientiToDatabase(ricetta.getID()));
+			LinkedList<Ingrediente> ingredienti = getIngredientiToDatabase(ricetta.getID());
+			ricetta.setIngredienti(ingredienti);
+		}
+	}
+    
     /*----------------------------------------- main ------------------------------------------------*/
    
     public void test() {
     	String email = "anna.verdi@gmail.com";
         String password = "Verdi89@";
-        chef = chefDAO.getChefByEmailAndPassword(email, password);
+        chef = getAllChefToDatabase(email, password);
+        chef.setCorso(getCorsiToDatabase(chef.getID()));
 //      this.corso = chef.getCorso().get(0);
         homepageFrame = new HomepageFrame(this);
         homepageFrame.setVisible(true);

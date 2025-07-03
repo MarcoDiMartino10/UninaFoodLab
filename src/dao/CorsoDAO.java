@@ -1,52 +1,34 @@
 package dao;
 
 import java.sql.*;
-import java.util.*;
-
-import controller.Controller;
-
 import java.sql.Date;
+import java.util.LinkedList;
 
-import dto.*;
+import dto.Corso;
 
 public class CorsoDAO {
     
 	// Attributi
 	private Connection conn;
-	private Controller controller;
 	
-	// Attributi statici
-	public static final String TABLE_NAME = "Corso";
-
 	// Costruttore
-    public CorsoDAO(Connection conn, Controller controller) {
+    public CorsoDAO(Connection conn) {
         this.conn = conn;
-        this.controller = controller;
     }
     
     // Metodi
-    public LinkedList<Corso> getCorsiByChefId(int idChef) {
-    	LinkedList<Corso> corsi = new LinkedList<Corso>();
-        String sql = """
-            SELECT id, nome, categoria, data_inizio, frequenza, costo, numero_sessioni
-            FROM Corso
-            WHERE id_chef = ?
-        """;
-
+    public LinkedList<Corso> getCorsi(int idChef) throws SQLException {
+        LinkedList<Corso> corsi = new LinkedList<>();
+        String sql = "SELECT * FROM Corso WHERE id_chef = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idChef);
             try (ResultSet rs = ps.executeQuery()) {
-            	while (rs.next()) {
-            		int id = rs.getInt("id");
-            	    Corso corso = new Corso(id, rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, controller.getSessioniToDatabase(id));
-            	    corsi.add(corso);
-            	}
-            	return corsi;
+                while (rs.next()) {
+                    corsi.add(new Corso(rs.getInt("id"), rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, null));
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
+        return corsi;
     }
     
     public boolean saveCorso(Corso corso) {

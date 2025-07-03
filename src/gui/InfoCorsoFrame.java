@@ -145,7 +145,7 @@ public class InfoCorsoFrame extends JFrame {
         courseTable.getTableHeader().setReorderingAllowed(false);
         courseTable.getTableHeader().setResizingAllowed(false);
         courseTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        courseTable.setFillsViewportHeight(true); // migliora visibilità
+        courseTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(courseTable);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -175,11 +175,13 @@ public class InfoCorsoFrame extends JFrame {
 
         JButton addOnlineButton = new JButton("Aggiungi Sessione Online");
         styleButton(addOnlineButton);
+        setHandCursor(addOnlineButton);
         addOnlineButton.addActionListener(_ -> controller.apriAggiungiSessioneOnlineDialog());
         buttonPanel.add(addOnlineButton);
 
         JButton addInPresenzaButton = new JButton("Aggiungi Sessione In Presenza");
         styleButton(addInPresenzaButton);
+        setHandCursor(addInPresenzaButton);
         addInPresenzaButton.addActionListener(_ -> controller.apriAggiungiSessioneInPresenzaDialog());
         buttonPanel.add(addInPresenzaButton);
 
@@ -210,5 +212,19 @@ public class InfoCorsoFrame extends JFrame {
         button.setForeground(Color.WHITE);
         button.setMargin(new Insets(15, 20, 15, 20));
         button.setFocusPainted(false);
+    }
+    
+ // Mette il cursore con il dito sul bottone passato come parametro
+    private void setHandCursor(JComponent component) {
+        component.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                component.setCursor(Cursor.getDefaultCursor());
+            }
+        });
     }
 }

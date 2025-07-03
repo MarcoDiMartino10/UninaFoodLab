@@ -16,30 +16,22 @@ public class IngredienteDAO {
 	}
 	
 	// Metodi
-	public LinkedList<Ingrediente> getIngredienteByRicettaId(int idRicetta) {
-    	LinkedList<Ingrediente> ingredienti = new LinkedList<Ingrediente>();
-    	String sql = """
-    		    SELECT i.id, i.Nome, i.Quantità, i.Unità_di_misura, i.ID_ricetta
-    		    FROM Ingrediente i
-    		    WHERE i.ID_ricetta = ?
-    		""";
+	public LinkedList<Ingrediente> getIngrediente(int idRicetta) throws SQLException {
+	    LinkedList<Ingrediente> ingredienti = new LinkedList<>();
+	    String sql = "SELECT * FROM Ingrediente WHERE ID_ricetta = ?";
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setInt(1, idRicetta);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                ingredienti.add(new Ingrediente(rs.getInt("id"), rs.getString("Nome"), rs.getBigDecimal("Quantità"), rs.getString("Unità_di_misura"), idRicetta));
+	            }
+	        }
+	    }
+	    return ingredienti;
+	}
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idRicetta);
-            try (ResultSet rs = ps.executeQuery()) {
-            	while (rs.next()) {
-            	    Ingrediente ingrediente = new Ingrediente(rs.getInt("id"), rs.getString("Nome"), rs.getBigDecimal("Quantità"), rs.getString("Unità_di_misura"), idRicetta);
-            	    ingredienti.add(ingrediente);
-            	}
-            	return ingredienti;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 	
-	public boolean saveIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) {
+	public boolean saveIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) throws SQLException {
 	    StringBuilder sql = new StringBuilder("INSERT INTO Ingrediente (ID, Nome, Quantità, Unità_di_misura, ID_ricetta) VALUES ");
 	    for (int i = 0; i < ingredienti.size(); i++) {
 	        sql.append("(?, ?, ?, ?, ?)");
@@ -49,7 +41,6 @@ public class IngredienteDAO {
 	            sql.append(";");
 	        }
 	    }
-
 	    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 	        int paramIndex = 1;
 	        for (Ingrediente ingr : ingredienti) {
@@ -61,26 +52,22 @@ public class IngredienteDAO {
 	        }
 	        ps.executeUpdate();
 	        return true;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
 	    }
 	}
+
 	
-	public int ultimoIdIngrediente() {
-		String sql = "SELECT MAX(id) AS max_id FROM ingrediente";
-		try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            try (ResultSet rs = ps.executeQuery()) {
-            	int maxID = 1;
-        		if (rs.next()) {
-        		    maxID = rs.getInt("max_id") + 1;
-        		}
-            	return maxID;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-		return -1;
+	public int nuovoIdIngrediente() throws SQLException {
+	    String sql = "SELECT MAX(id) AS max_id FROM ingrediente";
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        try (ResultSet rs = ps.executeQuery()) {
+	            int maxID = 1;
+	            if (rs.next()) {
+	                maxID = rs.getInt("max_id") + 1;
+	            }
+	            return maxID;
+	        }
+	    }
 	}
+
 
 }

@@ -157,18 +157,14 @@ public class HomepageFrame extends JFrame {
         styleButton(nuovoCorsoButton);
         buttonPanel.add(nuovoCorsoButton);
         setHandCursor(nuovoCorsoButton);
-        nuovoCorsoButton.addActionListener(_ -> {
-        	controller.apriAggiungiCorsoDialog();
-        });
+        nuovoCorsoButton.addActionListener(_ -> controller.apriAggiungiCorsoDialog());
         
         // Bottone Visualizza Report
         reportButton = new JButton("Visualizza Report");
         styleButton(reportButton);
         buttonPanel.add(reportButton);
         setHandCursor(reportButton);
-        reportButton.addActionListener(_ -> {
-			controller.apriReportMensileFrame();
-		});
+        reportButton.addActionListener(_ -> controller.apriReportMensileFrame());
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }

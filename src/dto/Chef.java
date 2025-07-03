@@ -74,7 +74,7 @@ public class Chef {
     public void setNumeroTel(String numero_tel) {
         this.numero_tel = numero_tel;
     }    
-    public void setCorsi(LinkedList<Corso> corsi) {
+    public void setCorso(LinkedList<Corso> corsi) {
 		this.corsi = corsi;
 	}
     
