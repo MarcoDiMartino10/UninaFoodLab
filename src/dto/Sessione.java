@@ -25,6 +25,9 @@ public class Sessione {
 	public Timestamp getOrario_inizio_timestamp() {
 		return orario_inizio;
 	}
+	public Timestamp getOrario_fine_timestamp() {
+		return orario_fine;
+	}
 	public String getOrario_fine() {
 		SimpleDateFormat newFormato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return newFormato.format(orario_fine);

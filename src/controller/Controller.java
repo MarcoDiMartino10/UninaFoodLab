@@ -29,14 +29,15 @@ public class Controller {
     private RicetteFrame ricetteFrame;
     private AggiungiRicettaDialog aggiungiRicettaDialog;
     private AggiungiCorsoDialog aggiungiCorsoDialog;
+    private AggiungiSessioneOnlineDialog aggiungiSessioneOnlineDialog;
 
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-    	loginFrame = new LoginFrame(this);
-    	loginFrame.setVisible(true);
+//    	loginFrame = new LoginFrame(this);
+//    	loginFrame.setVisible(true);
         chefDAO = new ChefDAO(conn);
-        //test();
+        test();
     }
     
     /*------------------------------------------ Metodi per aprire o chiudere le finestre -----------------------------------------------*/
@@ -101,6 +102,21 @@ public class Controller {
 		homepageFrame.dispose();
 		homepageFrame = new HomepageFrame(this);
 		homepageFrame.setVisible(true);
+	}
+    
+    public void apriAggiungiSessioneOnlineDialog() {
+		aggiungiSessioneOnlineDialog = new AggiungiSessioneOnlineDialog(this);
+		aggiungiSessioneOnlineDialog.setVisible(true);
+	}
+    
+    public void chiudiAggiungiSessioneOnlineDialog() {
+    	aggiungiSessioneOnlineDialog.dispose();
+    }
+    
+    private void aggiornaInfoCorsoFrame() {
+    	infoCorsoFrame.dispose();
+    	infoCorsoFrame = new InfoCorsoFrame(this);
+    	infoCorsoFrame.setVisible(true);
 	}
     
     /*------------------------------------------- Metodi per ottenere i dati per le interfacce grafiche ----------------------------------------------*/
@@ -182,9 +198,19 @@ public class Controller {
 		aggiornaHomepageFrame();
 	}
     
-    /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
+    public void aggiungiSessioneOnline(String link, Timestamp inizio, Timestamp fine) {
+    	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
+		int idCorso = corso.getID();
+		Sessione_online sessione = new Sessione_online(link, inizio, fine, idCorso);
+		sessione_onlineDAO.saveSessione(sessione);
+		aggiungiSessioneAlCorso(sessione);
+		aggiungiSessioneOnlineDialog.dispose();
+		aggiornaInfoCorsoFrame();
+	}
     
-    public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
+
+	public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
 		for (Corso corso1 : chef.getCorso()) {
 			if (corso1.getNome().equals(corso.getNome())) {
 				for (Sessione sessione : corso1.getSessioni()) {
@@ -203,6 +229,10 @@ public class Controller {
     public void aggiungiCorsoAlloChef(Corso corso) {
     	chef.getCorso().add(corso);
     }
+    
+    private void aggiungiSessioneAlCorso(Sessione_online sessione) {
+    	corso.getSessioni().add(sessione);
+	}
     
     /*----------------------------------------- main ------------------------------------------------*/
    

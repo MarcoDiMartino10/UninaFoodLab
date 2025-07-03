@@ -183,6 +183,30 @@ public class InfoCorsoFrame extends JFrame {
 
         
         apriSessione(null);
+        
+     // Pannello bottoni aggiunta
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        buttonPanel.setBackground(new Color(245, 245, 245));
+
+        // Bottone Aggiungi Sessione Online
+        JButton addOnlineButton = new JButton("Aggiungi Sessione Online");
+        styleButton(addOnlineButton);
+        addOnlineButton.addActionListener(e -> controller.apriAggiungiSessioneOnlineDialog());
+        buttonPanel.add(addOnlineButton);
+
+        // Bottone Aggiungi Sessione In Presenza
+        JButton addInPresenzaButton = new JButton("Aggiungi Sessione In Presenza");
+        styleButton(addInPresenzaButton);
+        addInPresenzaButton.addActionListener(e -> /*controller.aggiungiSessioneInPresenza()*/ System.out.println("Aggiungi Sessione In Presenza"));
+        buttonPanel.add(addInPresenzaButton);
+
+        // Aggiungi pannello bottoni al mainPanel
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        mainPanel.add(buttonPanel, gbc);
+
     }
     
     /*-----------------------------------------------------------------------------------------*/
@@ -205,5 +229,20 @@ public class InfoCorsoFrame extends JFrame {
             }
         });
     }
+    
+ // Stili bottoni in basso
+    private void styleButton(JButton button) {
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(new Color(0, 102, 204));
+        button.setForeground(Color.WHITE);
+        button.setMargin(new Insets(15, 20, 15, 20));  // padding interno più naturale
+        button.setPreferredSize(null);  // togli dimensioni fisse, lascia che si adattino
+        button.setFocusPainted(false);
+    }
+
+
+
+
+
     
 }
