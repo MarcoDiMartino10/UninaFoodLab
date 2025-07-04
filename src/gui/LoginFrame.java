@@ -96,6 +96,9 @@ public class LoginFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 1;
         gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
 
         campoEmail = new JTextField(20);
         campoEmail.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -122,6 +125,9 @@ public class LoginFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 1;
         gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
 
         campoPassword = new JPasswordField(20);
         campoPassword.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -140,7 +146,7 @@ public class LoginFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        bottoneLogin = new JButton("Login");
+        bottoneLogin = new JButton("Accedi");
         bottoneLogin.setFont(new Font("Arial", Font.BOLD, 14));
         bottoneLogin.setBackground(new Color(0, 102, 204));
         bottoneLogin.setForeground(Color.WHITE);
@@ -163,6 +169,29 @@ public class LoginFrame extends JFrame {
         
         // Listener per il bottone Login
         bottoneLogin.addActionListener(_ -> controller.login());
+        
+     // Scritta cliccabile per la registrazione
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(20, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
+
+        JLabel scrittaRegistrati = new JLabel("Non sei registrato? Clicca qui");
+        scrittaRegistrati.setFont(new Font("Arial", Font.PLAIN, 13));
+        scrittaRegistrati.setForeground(Color.BLUE);
+        scrittaRegistrati.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        scrittaRegistrati.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.apriRegistrazioneFrame(); 
+            }
+        });
+
+        pannelloLogin.add(scrittaRegistrati, gbc);
+
     }
     
     /*-----------------------------------------------------------------------------------------*/
@@ -176,8 +205,8 @@ public class LoginFrame extends JFrame {
     }
     
     // Metodo per mostrare un messaggio di errore in caso di credenziali errate
-    public void credenzialiErrate() {
-    	JOptionPane.showMessageDialog(this, "Il campo luogo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+    public void credenzialiErrate(int count) {
+    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" +(--count)+ " tentativi rimasti.", "Errore", JOptionPane.ERROR_MESSAGE);
         campoEmail.requestFocusInWindow();
     }
 

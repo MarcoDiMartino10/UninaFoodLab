@@ -83,7 +83,7 @@ public class ReportMensileFrame extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
 
         Chef chef = controller.getChef();
-        int totaleCorsi = chef.getCorso().size();
+        int totaleCorsi = (chef.getCorso() == null) ? 0 : chef.getCorso().size();
         int sessioniOnline = 0;
         int sessioniInPresenza = 0;
         int totaleRicette = 0;
@@ -94,6 +94,17 @@ public class ReportMensileFrame extends JFrame {
         LinkedList<String> categorie = new LinkedList<>();
         int[] corsiPerCategoria;
 
+        if(totaleCorsi == 0) {
+			JLabel noDataLabel = new JLabel("Nessun corso disponibile per il report mensile.");
+			noDataLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+			noDataLabel.setForeground(Color.GRAY);
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.gridwidth = 2;
+			dataPanel.add(noDataLabel, gbc);
+			mainPanel.add(dataPanel, BorderLayout.NORTH);
+			return;
+		}
         for (Corso corso : chef.getCorso()) {
             String categoria = corso.getCategoria().toLowerCase();
             if (!categorie.contains(categoria)) categorie.add(categoria);

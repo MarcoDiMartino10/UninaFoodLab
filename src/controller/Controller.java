@@ -33,6 +33,8 @@ public class Controller {
     private AggiungiSessioneOnlineDialog aggiungiSessioneOnlineDialog;
     private AggiungiSessioneInPresenzaDialog aggiungiSessioneInPresenzaDialog;
     private ReportMensileFrame reportMensileFrame;
+    private RegistrazioneFrame registrazioneFrame;
+	int count = 3;
 
     //Costruttore
     public Controller(Connection conn) {
@@ -55,8 +57,15 @@ public class Controller {
             homepageFrame = new HomepageFrame(Controller.this);
             homepageFrame.setVisible(true);
         } else {
-        	loginFrame.credenzialiErrate();
+        	loginFrame.credenzialiErrate(count);
+        	count--;
+            if(count == 0) {
+    			loginFrame = null;
+    			System.exit(0);
+    			return;
+    		}
         }
+    	
     }
     
     // Chiudi homepage e riapri login
@@ -181,6 +190,25 @@ public class Controller {
     	homepageFrame.setVisible(true);
     }
     
+    public void apriRegistrazioneFrame() {
+		registrazioneFrame = new RegistrazioneFrame(this);
+		registrazioneFrame.setVisible(true);
+		loginFrame.dispose();
+	}
+    
+    // Chiudi registrazioneFrame e riapri loginFrame
+    public void apriLoginFrame() {
+		registrazioneFrame.dispose();
+		loginFrame = new LoginFrame(this);
+		loginFrame.setVisible(true);
+	}
+    
+    // Chiudi registrazioneFrame e riapri homepageFrame
+    public void closeRegistrazioneAndOpenHomepage() {
+    	registrazioneFrame.dispose();
+    	homepageFrame = new HomepageFrame(this);
+    	homepageFrame.setVisible(true);
+    }
     /*------------------------------------------- Metodi per ottenere i dati per le interfacce grafiche ----------------------------------------------*/
     
     // Getters per Chef
@@ -202,6 +230,9 @@ public class Controller {
     public LinkedList<Corso> getCorsiFiltratiPerCategoria(String categoria) {
         LinkedList<Corso> corsiFiltrati = new LinkedList<>();
         LinkedList<Corso> corsi = chef.getCorso();
+        if(corsi == null) {
+			return corsiFiltrati;
+		}
         for (int i = 0; i < corsi.size(); i++) {
             Corso corso = corsi.get(i);
             if (categoria.equals("Tutti") || corso.getCategoria().toLowerCase().equals(categoria.toLowerCase())) {
@@ -304,6 +335,16 @@ public class Controller {
     	aggiungiSessioneAlCorso(sessione_in_presenza);
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
     }
+    
+    
+    public boolean saveChefToDatabase() {
+		chefDAO = new ChefDAO(conn);
+		try {
+			return chefDAO.saveChef(chef);
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
+	}
     
     // Metodo per ottenere TUTTI i dati dello chef dal db, quindi anche i corsi, le sessioni, le ricette e gli ingredienti
     public Chef getAllChefToDatabase(String email, String password) {
@@ -434,6 +475,24 @@ public class Controller {
 			ricetta.setIngredienti(ingredienti);
 		}
 	}
+    
+    public boolean creaChef() {
+    	int id;
+    	try {
+    	id = chefDAO.nuovoIdChef();
+    	} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
+    	chef = new Chef(id, registrazioneFrame.getNome(), 
+				registrazioneFrame.getCognome(), 
+				registrazioneFrame.getEmail(), 
+				registrazioneFrame.getPassword(),
+				registrazioneFrame.getBiografia(),
+				registrazioneFrame.getTelefono(),
+    			null);
+    	 return saveChefToDatabase();
+    	
+    }
     
     /*----------------------------------------- main ------------------------------------------------*/
    
