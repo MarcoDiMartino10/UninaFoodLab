@@ -235,7 +235,7 @@ public class AggiungiRicettaDialog extends JDialog {
             setLocationRelativeTo(this);
         });
 
-        annullaButton.addActionListener(_ -> controller.chiudiAggiungiRicettaFrame());
+        annullaButton.addActionListener(_ -> controller.chiudiAggiungiRicettaDialog());
         
         inviaButton.addActionListener(_ -> {
         	LinkedList<Ingrediente>ingredienti = new LinkedList<>();
@@ -289,9 +289,9 @@ public class AggiungiRicettaDialog extends JDialog {
                 ingredienti.add(ingrediente);
             }
 
-            if (flag == false) controller.aggiungiRicetta(nomeRicetta, ingredienti);
+            if (flag == false) controller.saveRicettaAndIngredienteToDatabase(nomeRicetta, ingredienti);
             else {
-            	controller.aggiungiSessioneRicetta(nomeRicetta, ingredienti);
+            	controller.saveSessioneAndRicettaToDatabase(nomeRicetta, ingredienti);
             	controller.chiudiAggiungiSessioneInPresenzaDialog();
             }
             dispose();

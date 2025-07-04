@@ -168,7 +168,7 @@ public class LoginFrame extends JFrame {
         });
         
         // Listener per il bottone Login
-        bottoneLogin.addActionListener(_ -> controller.login());
+        bottoneLogin.addActionListener(_ -> controller.apriHomepageByLogin());
         
      // Scritta cliccabile per la registrazione
         gbc = new GridBagConstraints();

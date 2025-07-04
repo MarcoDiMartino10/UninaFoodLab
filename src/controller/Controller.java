@@ -35,7 +35,7 @@ public class Controller {
     private AggiungiSessioneInPresenzaDialog aggiungiSessioneInPresenzaDialog;
     private ReportMensileFrame reportMensileFrame;
     private RegistrazioneFrame registrazioneFrame;
-	int count = 3;
+	private int count = 3;
 
     //Costruttore
     public Controller(Connection conn) {
@@ -49,10 +49,10 @@ public class Controller {
     /*------------------------------------------ Metodi per per il passaggio tra le finestre -----------------------------------------------*/
     
  // Metodo per effettuare il login
-    public void login() {
+    public void apriHomepageByLogin() {
         String email = loginFrame.getEmail();
         String password = loginFrame.getPassword();
-        chef = getAllChefToDatabase(email, password);
+        chef = getAllChefInfoFromDatabase(email, password);
         if (chef != null) {
         	loginFrame.dispose();
             homepageFrame = new HomepageFrame(Controller.this);
@@ -70,11 +70,31 @@ public class Controller {
     }
     
     // Chiudi homepage e riapri login
-    public void logout() {
+    public void apriLoginByHomepage() {
     	homepageFrame.dispose();
     	loginFrame = new LoginFrame(this);
     	loginFrame.setVisible(true);
 	}
+    
+    public void apriRegistrazioneFrame() {
+  		registrazioneFrame = new RegistrazioneFrame(this);
+  		registrazioneFrame.setVisible(true);
+  		loginFrame.dispose();
+  	}
+      
+      // Chiudi registrazioneFrame e riapri loginFrame
+      public void apriLoginByRegistrazione() {
+  		registrazioneFrame.dispose();
+  		loginFrame = new LoginFrame(this);
+  		loginFrame.setVisible(true);
+  	}
+      
+      // Chiudi registrazioneFrame e riapri homepageFrame
+      public void apriHomepageByRegistrazione() {
+      	registrazioneFrame.dispose();
+      	homepageFrame = new HomepageFrame(this);
+      	homepageFrame.setVisible(true);
+      }
     
     // Apri infoCorsoFrame e chiudi homepageFrame
     public void apriInfoCorso(Corso corso) {
@@ -107,13 +127,13 @@ public class Controller {
     }
     
     // Apri aggiungiRicettaDialog
-    public void apriAggiungiRicettaFrame() {
+    public void apriAggiungiRicettaDialog() {
     	aggiungiRicettaDialog = new AggiungiRicettaDialog(this, false);
 		aggiungiRicettaDialog.setVisible(true);
 	}
     
     // Chiudi aggiungiRicettaDialog
-    public void chiudiAggiungiRicettaFrame() {
+    public void chiudiAggiungiRicettaDialog() {
     	aggiungiRicettaDialog.dispose();
     }
     
@@ -191,25 +211,6 @@ public class Controller {
     	homepageFrame.setVisible(true);
     }
     
-    public void apriRegistrazioneFrame() {
-		registrazioneFrame = new RegistrazioneFrame(this);
-		registrazioneFrame.setVisible(true);
-		loginFrame.dispose();
-	}
-    
-    // Chiudi registrazioneFrame e riapri loginFrame
-    public void apriLoginFrame() {
-		registrazioneFrame.dispose();
-		loginFrame = new LoginFrame(this);
-		loginFrame.setVisible(true);
-	}
-    
-    // Chiudi registrazioneFrame e riapri homepageFrame
-    public void closeRegistrazioneAndOpenHomepage() {
-    	registrazioneFrame.dispose();
-    	homepageFrame = new HomepageFrame(this);
-    	homepageFrame.setVisible(true);
-    }
     /*------------------------------------------- Metodi per ottenere i dati per le interfacce grafiche ----------------------------------------------*/
     
     // Getters per Chef
@@ -272,8 +273,18 @@ public class Controller {
     	}
     }
     
+ // Metodo per salvare lo chef nel database
+    private boolean saveChefToDatabase() {
+		chefDAO = new ChefDAO(conn);
+		try {
+			return chefDAO.saveChef(chef);
+		} catch (SQLException e) {
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNO CHEF", e);
+		}
+	}
+    
     // Metodo per aggiungere una nuova ricetta
-    public void aggiungiRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    public void saveRicettaAndIngredienteToDatabase(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
     	RicettaDAO ricettaDAO = new RicettaDAO(conn);
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
     	try {
@@ -287,7 +298,7 @@ public class Controller {
     }
     
     // Metodo per aggiungere un nuovo corso
-    public void aggiungiCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
+    public void saveCorsoToDatabase(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
 		CorsoDAO corsoDAO = new CorsoDAO(conn);
 		int idCorso;
 		try {
@@ -303,7 +314,7 @@ public class Controller {
 	}
     
     // Metodo per aggiungere una sessione online
-    public void aggiungiSessioneOnline(String link, Timestamp inizio, Timestamp fine) {
+    public void saveSessioneOnlineToDatabase(String link, Timestamp inizio, Timestamp fine) {
     	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
 		Sessione_online sessione = new Sessione_online(link, inizio, fine, corso.getID());
 		try {
@@ -317,14 +328,14 @@ public class Controller {
 	}
     
     // Metodo per aggiungere una sessione in presenza
-    public void aggiungiSessioneInPresenza(String luogo, Timestamp inizio, Timestamp fine, int maxPosti) {
+    public void saveSessioneInPresenzaToDatabase(String luogo, Timestamp inizio, Timestamp fine, int maxPosti) {
     	sessione_in_presenza = new Sessione_in_presenza(luogo, maxPosti, inizio, fine, corso.getID(), null);
     	apriAggiungiRicettaFrameBySessione();
     	aggiornaInfoCorsoFrame();
     }
     
     // Metodo per aggiungere una sessione in presenza con ricetta e ingredienti
-    public void aggiungiSessioneRicetta(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    public void saveSessioneAndRicettaToDatabase(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
     	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
     	RicettaDAO ricettaDAO = new RicettaDAO(conn);
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
@@ -339,18 +350,8 @@ public class Controller {
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
     }
     
-    // Metodo per salvare lo chef nel database
-    public boolean saveChefToDatabase() {
-		chefDAO = new ChefDAO(conn);
-		try {
-			return chefDAO.saveChef(chef);
-		} catch (SQLException e) {
-			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNO CHEF", e);
-		}
-	}
-    
     // Metodo per ottenere TUTTI i dati dello chef dal db, quindi anche i corsi, le sessioni, le ricette e gli ingredienti
-    public Chef getAllChefToDatabase(String email, String password) {
+    private Chef getAllChefInfoFromDatabase(String email, String password) {
         try {
             Chef nuovoChef = chefDAO.getChef(email, password);
             if (nuovoChef != null) {
@@ -387,7 +388,7 @@ public class Controller {
 
     
     // Metodo per ottenere i corsi dello chef dal database
-    public LinkedList<Corso> getCorsiToDatabase(int id) {
+    private LinkedList<Corso> getCorsiToDatabase(int id) {
     	CorsoDAO corsoDAO = new CorsoDAO(conn);
     	try {
 			return corsoDAO.getCorsi(id);
@@ -397,7 +398,7 @@ public class Controller {
     }
     
     // Metodo per ottenere le sessioni di un corso dal database
-    public LinkedList<Sessione> getSessioniToDatabase(int id) {
+    private LinkedList<Sessione> getSessioniToDatabase(int id) {
     	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
     	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
     	try {
@@ -410,7 +411,7 @@ public class Controller {
     }
     
     // Metodo per ottenere le ricette di una sessione in presenza dal database
-    public LinkedList<Ricetta> getRicetteToDatabase(String luogo, Timestamp orarioInizio) {
+    private LinkedList<Ricetta> getRicetteToDatabase(String luogo, Timestamp orarioInizio) {
 		RicettaDAO ricettaDAO = new RicettaDAO(conn);
 		try {
 			return ricettaDAO.getRicette(luogo, orarioInizio);
@@ -420,7 +421,7 @@ public class Controller {
 	}
     
     // Metodo per ottenere gli ingredienti di una ricetta dal database
-    public LinkedList<Ingrediente> getIngredientiToDatabase(int id) {
+    private LinkedList<Ingrediente> getIngredientiToDatabase(int id) {
 		IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
 		try {
 			return ingredienteDAO.getIngredienti(id);
@@ -432,7 +433,7 @@ public class Controller {
     /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
     
     // Metodo per aggiungere una ricetta alla sessione in presenza
-	public void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    private void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
 		for (Corso corso1 : chef.getCorso()) {
 			if (corso1.getNome().equals(corso.getNome())) {
 				for (Sessione sessione : corso1.getSessioni()) {
@@ -449,7 +450,7 @@ public class Controller {
 	}
     
 	// Metodo per aggiungere un corso alla lista dei corsi dello chef
-    public void aggiungiCorsoAlloChef(Corso corso) {
+    private void aggiungiCorsoAlloChef(Corso corso) {
     	chef.getCorso().add(corso);
     }
     
@@ -460,14 +461,6 @@ public class Controller {
 			corso.setNumero_sessioni(corso.getSessioni().size());
 		}
 	}  
-    
-    // Metodo per aggiungere una ricetta e gli ingredienti alla lista delle ricette della sessione in presenza
-    public void aggiungiIngredientiAlleRicette() {
-		for (Ricetta ricetta : sessione_in_presenza.getRicette()) {
-			LinkedList<Ingrediente> ingredienti = getIngredientiToDatabase(ricetta.getID());
-			ricetta.setIngredienti(ingredienti);
-		}
-	}
     
     // Metodo per creare un nuovo chef
     public boolean creaChef() {
@@ -486,7 +479,7 @@ public class Controller {
     public void test() {
     	String email = "anna.verdi@gmail.com";
         String password = "Verdi89@";
-        chef = getAllChefToDatabase(email, password);
+        chef = getAllChefInfoFromDatabase(email, password);
         homepageFrame = new HomepageFrame(this);
         homepageFrame.setVisible(true);
     }

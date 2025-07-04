@@ -225,7 +225,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
 					}
 				}
 			}
-            controller.aggiungiSessioneOnline(link, inizio, fine);
+            controller.saveSessioneOnlineToDatabase(link, inizio, fine);
         });
 
         setContentPane(mainPanel);

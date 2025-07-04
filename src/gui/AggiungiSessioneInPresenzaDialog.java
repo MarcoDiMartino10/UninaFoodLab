@@ -259,7 +259,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 					}
 				}
 			}
-            controller.aggiungiSessioneInPresenza(luogo, inizio, fine, maxPosti);
+            controller.saveSessioneInPresenzaToDatabase(luogo, inizio, fine, maxPosti);
         });
 
         setContentPane(mainPanel);

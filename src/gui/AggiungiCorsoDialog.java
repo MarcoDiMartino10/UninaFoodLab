@@ -288,7 +288,7 @@ public class AggiungiCorsoDialog extends JDialog {
                 return;
             }
             
-            controller.aggiungiCorso(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
+            controller.saveCorsoToDatabase(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
         });
 
         setContentPane(mainPanel);

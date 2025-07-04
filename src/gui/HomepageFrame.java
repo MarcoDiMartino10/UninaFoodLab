@@ -67,7 +67,7 @@ public class HomepageFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-            		controller.logout();
+            		controller.apriLoginByHomepage();
             	}
             }
         });

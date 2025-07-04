@@ -126,7 +126,7 @@ public class RicetteFrame extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         setHandCursor(aggiungiRicettaButton);
         aggiungiRicettaButton.addActionListener(_ -> {
-        	controller.apriAggiungiRicettaFrame();
+        	controller.apriAggiungiRicettaDialog();
         });
     }
     

@@ -382,7 +382,7 @@ public class RegistrazioneFrame extends JFrame {
 		
         if(controller.creaChef()) {
 			JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
-			controller.closeRegistrazioneAndOpenHomepage();
+			controller.apriHomepageByRegistrazione();
 		} else {
 			JOptionPane.showMessageDialog(this, "Utente già registrato.", "Errore", JOptionPane.ERROR_MESSAGE);
 			return;
@@ -406,7 +406,7 @@ public class RegistrazioneFrame extends JFrame {
         scrittaLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                controller.apriLoginFrame(); 
+                controller.apriLoginByRegistrazione(); 
             }
         });
 
