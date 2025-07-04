@@ -169,7 +169,7 @@ public class InfoCorsoFrame extends JFrame {
 
         apriSessione(null);
 
-        // Pannello bottoni (SOUTH)
+        // Pannello bottoni
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
         buttonPanel.setBackground(new Color(245, 245, 245));
 

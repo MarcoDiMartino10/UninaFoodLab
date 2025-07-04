@@ -23,10 +23,10 @@ public class LoginFrame extends JFrame {
     	// Finestra
     	super("Accesso a UninaFoodLab");
         setSize(800, 600);
+        setMinimumSize(new Dimension(550, 500));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Logo.png")));
-        setMinimumSize(new Dimension(550, 500));
         
         // Pannello di sfondo
         JPanel pannelloSfondo = new JPanel() {

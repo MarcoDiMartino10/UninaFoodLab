@@ -13,7 +13,7 @@ public class Ricetta {
 	public Ricetta(int ID, String nome, LinkedList<Ingrediente> ingredienti) {
 		this.ID = ID;
 		this.nome = nome;
-		this.ingredienti = ingredienti;
+		this.ingredienti = (ingredienti != null) ? ingredienti : new LinkedList<Ingrediente>();
 	}
 	
 	// Getters

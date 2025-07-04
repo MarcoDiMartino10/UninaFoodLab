@@ -20,7 +20,7 @@ public class DBConnection {
         return dbcon;
     }
     
-    public Connection getConnection() {
+    /*public Connection getConnection() {
         String pwd = null;
         BufferedReader b = null;
         try {
@@ -32,6 +32,16 @@ public class DBConnection {
             }
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();
+        }
+        return conn;
+    }*/
+    public Connection getConnection() throws SQLException, IOException {
+        if (conn == null || conn.isClosed()) {
+            try (BufferedReader b = new BufferedReader(new FileReader("pwd_DB/pwdfile"))) {
+                String pwd = b.readLine();
+                String s_url = "jdbc:postgresql://localhost:5432/UninaFoodLab?currentSchema=schema_progetto";
+                conn = DriverManager.getConnection(s_url, "postgres", pwd);
+            }
         }
         return conn;
     }

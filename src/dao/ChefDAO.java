@@ -14,6 +14,7 @@ public class ChefDAO {
         this.conn = conn;
     }
     
+    // Recupera uno Chef dal database
     public Chef getChef(String email, String password) throws SQLException {
     	String sql = "SELECT * FROM Chef WHERE email = ? AND password = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -26,20 +27,8 @@ public class ChefDAO {
             return null;
         }
     }
-
-    public int nuovoIdChef() throws SQLException {
-        String sql = "SELECT MAX(id) AS max_id FROM Chef";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            try (ResultSet rs = ps.executeQuery()) {
-                int maxID = 1;
-                if (rs.next()) {
-                    maxID = rs.getInt("max_id") + 1;
-                }
-                return maxID;
-            }
-        }
-    }
     
+    // Inserisce uno Chef nel database
     public boolean saveChef(Chef chef) throws SQLException {
 		String sql = "INSERT INTO Chef (id, nome, cognome, email, password, biografia, numero_tel) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -53,5 +42,19 @@ public class ChefDAO {
 			return ps.executeUpdate() > 0;
 		}
 	}
+    
+    // Calcola il nuovo ID per uno Chef
+    public int nuovoIdChef() throws SQLException {
+        String sql = "SELECT MAX(id) AS max_id FROM Chef";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                int maxID = 1;
+                if (rs.next()) {
+                    maxID = rs.getInt("max_id") + 1;
+                }
+                return maxID;
+            }
+        }
+    }
    
 }

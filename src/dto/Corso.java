@@ -27,18 +27,7 @@ public class Corso {
 		this.Costo = Costo;
 		this.Numero_sessioni = numeroSessioni;
 		this.ID_Chef = ID_Chef;
-		this.sessioni = sessioni;
-	}
-	
-	public Corso(int ID, String Nome, String Categoria, LocalDate Data_inizio, String Frequenza, BigDecimal Costo, int numeroSessioni, int ID_Chef) {
-		this.ID = ID;
-		this.Nome = Nome;
-		this.Categoria = Categoria;
-		this.Data_inizio = Data_inizio;
-		this.Frequenza = Frequenza;
-		this.Costo = Costo;
-		this.Numero_sessioni = numeroSessioni;
-		this.ID_Chef = ID_Chef;
+		this.sessioni = (sessioni != null) ? sessioni : new LinkedList<Sessione>();
 	}
 	
 	// Getters

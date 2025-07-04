@@ -15,12 +15,7 @@ public class Sessione_in_presenza extends Sessione {
 		super(orario_inizio, orario_fine, id_Corso);
 		this.luogo = luogo;
 		this.max_posti = max_posti;
-		this.ricette = ricette;
-	}
-	public Sessione_in_presenza(String luogo, int max_posti, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso) {
-		super(orario_inizio, orario_fine, id_Corso);
-		this.luogo = luogo;
-		this.max_posti = max_posti;
+		this.ricette = (ricette != null) ? ricette : new LinkedList<Ricetta>();
 	}
 
 	// Getters

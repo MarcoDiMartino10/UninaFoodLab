@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.*;
-import java.sql.Date;
 import java.util.LinkedList;
 
 import dto.Corso;
@@ -16,7 +15,7 @@ public class CorsoDAO {
         this.conn = conn;
     }
     
-    // Metodi
+    // Recupera i corsi di uno chef dal database
     public LinkedList<Corso> getCorsi(int idChef) throws SQLException {
         LinkedList<Corso> corsi = new LinkedList<>();
         String sql = "SELECT * FROM Corso WHERE id_chef = ?";
@@ -31,6 +30,7 @@ public class CorsoDAO {
         return corsi;
     }
     
+    // Inserisci un nuovo corso nel database
     public boolean saveCorso(Corso corso) {
     	String sql = "INSERT INTO Corso (Id, Nome, Categoria, Data_inizio, Frequenza, Costo, Numero_sessioni, Id_chef) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -50,7 +50,8 @@ public class CorsoDAO {
 		return false;
     }
     
-    public int ultimoIdCorso() {
+    // Calcola il nuovo ID per un corso
+    public int nuovoIdCorso() throws SQLException {
 		String sql = "SELECT MAX(id) AS max_id FROM Corso";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
             try (ResultSet rs = ps.executeQuery()) {
@@ -60,10 +61,7 @@ public class CorsoDAO {
         		}
             	return maxID;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-		return -1;
 	}
     
 }

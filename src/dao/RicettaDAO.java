@@ -15,8 +15,8 @@ public class RicettaDAO {
 		this.conn = conn;
 	}
 	
-	// Metodi
-	public LinkedList<Ricetta> getRicetta(String luogo, Timestamp orario_inizio) throws SQLException {
+	// Recupera le ricette di una sessione dal database
+	public LinkedList<Ricetta> getRicette(String luogo, Timestamp orario_inizio) throws SQLException {
 	    LinkedList<Ricetta> ricette = new LinkedList<>();
 	    String sql = """
 	        SELECT r.id, r.Nome
@@ -35,7 +35,8 @@ public class RicettaDAO {
 	    }
 	    return ricette;
 	}
-
+	
+	// Inserisce una nuova ricetta nel database
 	public boolean saveRicetta(String luogo, Timestamp orario_inizio, String nome, LinkedList<Ingrediente> ingredienti) throws SQLException {
 	    try {
 	        conn.setAutoCommit(false);
@@ -72,7 +73,7 @@ public class RicettaDAO {
 	    }
 	}
 
-	
+	// Calcola il nuovo ID per una ricetta
 	public int nuovoIdRicetta() throws SQLException {
 	    String sql = "SELECT MAX(id) AS max_id FROM ricetta";
 	    try (PreparedStatement ps = conn.prepareStatement(sql)) {

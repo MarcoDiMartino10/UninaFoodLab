@@ -90,14 +90,12 @@ public class HomepageFrame extends JFrame {
         
         // Categorie senza ripetizioni per il filtro
         LinkedList<String> categoriaUnica = new LinkedList<>();
-        if(chef.getCorso() != null) {
         for (int i = 0; i < chef.getCorso().size(); i++) {
             String categoria = chef.getCorso().get(i).getCategoria();
             if (!categoriaUnica.contains(categoria.toLowerCase())) {
 				categoria = categoria.toLowerCase();
             	categoriaUnica.add(categoria);
-            	}
-        	}
+            }
         }
         String[] categorie = new String[categoriaUnica.size() + 1];
         categorie[0] = "Tutti";
@@ -124,17 +122,12 @@ public class HomepageFrame extends JFrame {
 
         // Tabella dei corsi con colonna per aprire la pagina del corso
         String[] columnNames = {"ID(nascosto)", "CORSO", "CATEGORIA", "DATA DI INIZIO"};
-        String[][] data;
-        if(chef.getCorso() != null) {
-        data = new String[chef.getCorso().size()][4];
+        String[][] data = new String[chef.getCorso().size()][4];
         int i = 0;
 	    while (i < chef.getCorso().size()) {
 	         data[i] = new String[]{String.valueOf(chef.getCorso().get(i).getID()), chef.getCorso().get(i).getNome(), chef.getCorso().get(i).getCategoria(), chef.getCorso().get(i).getData_inizio_formato()};
 	         i++;
-	     }
-        }else {
-        	data = new String[0][4];
-        }
+	    }
         courseTable = new JTable(data, columnNames) {
         	private static final long serialVersionUID = 1L;
             @Override
@@ -199,9 +192,7 @@ public class HomepageFrame extends JFrame {
     private void filtraCorsiPerCategoria(String categoria) {
         LinkedList<Corso> corsiFiltrati = controller.getCorsiFiltratiPerCategoria(categoria);
 
-        String[][] data;
-        if(!corsiFiltrati.isEmpty()) {
-        data = new String[corsiFiltrati.size()][4];
+        String[][] data = new String[corsiFiltrati.size()][4];
         for (int i = 0; i < corsiFiltrati.size(); i++) {
             Corso c = corsiFiltrati.get(i);
             data[i][0] = String.valueOf(c.getID());
@@ -209,9 +200,6 @@ public class HomepageFrame extends JFrame {
             data[i][2] = c.getCategoria();
             data[i][3] = c.getData_inizio().toString();
         }
-        } else {
-			data = new String[0][4];
-		}
 
         String[] columnNames = {"ID(nascosto)", "CORSO", "CATEGORIA", "DATA DI INIZIO"};
         courseTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));

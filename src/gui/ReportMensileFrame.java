@@ -83,7 +83,7 @@ public class ReportMensileFrame extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
 
         Chef chef = controller.getChef();
-        int totaleCorsi = (chef.getCorso() == null) ? 0 : chef.getCorso().size();
+        int totaleCorsi = chef.getCorso().size();
         int sessioniOnline = 0;
         int sessioniInPresenza = 0;
         int totaleRicette = 0;

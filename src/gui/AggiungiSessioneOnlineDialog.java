@@ -8,6 +8,7 @@ import java.util.*;
 import javax.swing.*;
 
 import controller.*;
+import dto.*;
 
 public class AggiungiSessioneOnlineDialog extends JDialog {
 
@@ -215,7 +216,15 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
             	return;
             }
 
-            
+            for (Sessione sessione : controller.getCorso().getSessioni()) {
+				if (sessione instanceof Sessione_online) {
+					if (inizio.before(sessione.getOrario_fine_timestamp()) && fine.after(sessione.getOrario_inizio_timestamp())) {
+						JOptionPane.showMessageDialog(this, "In questo orario in questo link si sta svolgendo un'altra sessione.", "Errore", JOptionPane.ERROR_MESSAGE);
+						orarioInizioSpinner.requestFocus();
+						return;
+					}
+				}
+			}
             controller.aggiungiSessioneOnline(link, inizio, fine);
         });
 

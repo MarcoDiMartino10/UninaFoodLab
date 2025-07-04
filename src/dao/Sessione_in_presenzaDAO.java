@@ -1,7 +1,7 @@
 package dao;
 
 import java.sql.*;
-import java.util.*;
+import java.util.LinkedList;
 
 import dto.*;
 
@@ -15,8 +15,8 @@ public class Sessione_in_presenzaDAO {
 		this.conn = conn;
 	}
 	
-	// Metodi
-	public LinkedList<Sessione_in_presenza> getSessioniPresenza(int idCorso) throws SQLException {
+	// Recupera le sessioni in presenza di un corso dal database
+	public LinkedList<Sessione_in_presenza> getSessioniInPresenza(int idCorso) throws SQLException {
 	    LinkedList<Sessione_in_presenza> sessioni = new LinkedList<>();
 	    String sql = "SELECT * FROM sessione_in_presenza WHERE id_corso = ?";
 	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -30,8 +30,8 @@ public class Sessione_in_presenzaDAO {
 	    return sessioni;
 	}
 
-	
-	public boolean saveSessione(Sessione_in_presenza sessione) throws SQLException {
+	// Inserisce una nuova sessione in presenza nel database
+	public boolean saveSessioneInPresenza(Sessione_in_presenza sessione) throws SQLException {
 		String sql = "INSERT INTO sessione_in_presenza (luogo, orario_inizio, orario_fine, max_posti, id_corso) VALUES (?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLuogo());

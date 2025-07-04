@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
@@ -230,9 +231,6 @@ public class Controller {
     public LinkedList<Corso> getCorsiFiltratiPerCategoria(String categoria) {
         LinkedList<Corso> corsiFiltrati = new LinkedList<>();
         LinkedList<Corso> corsi = chef.getCorso();
-        if(corsi == null) {
-			return corsiFiltrati;
-		}
         for (int i = 0; i < corsi.size(); i++) {
             Corso corso = corsi.get(i);
             if (categoria.equals("Tutti") || corso.getCategoria().toLowerCase().equals(categoria.toLowerCase())) {
@@ -260,7 +258,7 @@ public class Controller {
 		try {
 			return ricettaDAO.nuovoIdRicetta();
 		} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER LA RICETTA", e);
 		}
 	}
     
@@ -270,7 +268,7 @@ public class Controller {
     	try {
     		return ingredienteDAO.nuovoIdIngrediente();
     	} catch (SQLException e) {
-    		throw new DatabaseException(e);
+    		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER GLI INGREDIENTI", e);
     	}
     }
     
@@ -282,7 +280,7 @@ public class Controller {
     		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
     		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
     	} catch (SQLException e) {
-    		throw new DatabaseException(e);
+    		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA RICETTA O UN INGREDIENTE", e);
     	}
 		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
 		aggiornaRicetteFrame();
@@ -291,8 +289,13 @@ public class Controller {
     // Metodo per aggiungere un nuovo corso
     public void aggiungiCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
 		CorsoDAO corsoDAO = new CorsoDAO(conn);
-		int idCorso = corsoDAO.ultimoIdCorso();
-		Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID());
+		int idCorso;
+		try {
+			idCorso = corsoDAO.nuovoIdCorso();
+		} catch (SQLException e) {
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER IL CORSO", e);
+		}
+		Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getID(), null);
 		corsoDAO.saveCorso(corso);
 		aggiungiCorsoAlloChef(corso);
 		aggiungiCorsoDialog.dispose();
@@ -304,9 +307,9 @@ public class Controller {
     	Sessione_onlineDAO sessione_onlineDAO = new Sessione_onlineDAO(conn);
 		Sessione_online sessione = new Sessione_online(link, inizio, fine, corso.getID());
 		try {
-			sessione_onlineDAO.saveSessione(sessione);
+			sessione_onlineDAO.saveSessioneOnline(sessione);
 		} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA SESSIONE ONLINE", e);
 		}
 		aggiungiSessioneAlCorso(sessione);
 		aggiungiSessioneOnlineDialog.dispose();
@@ -315,7 +318,7 @@ public class Controller {
     
     // Metodo per aggiungere una sessione in presenza
     public void aggiungiSessioneInPresenza(String luogo, Timestamp inizio, Timestamp fine, int maxPosti) {
-    	sessione_in_presenza = new Sessione_in_presenza(luogo, maxPosti, inizio, fine, corso.getID());
+    	sessione_in_presenza = new Sessione_in_presenza(luogo, maxPosti, inizio, fine, corso.getID(), null);
     	apriAggiungiRicettaFrameBySessione();
     	aggiornaInfoCorsoFrame();
     }
@@ -326,23 +329,23 @@ public class Controller {
     	RicettaDAO ricettaDAO = new RicettaDAO(conn);
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
     	try {
-    		sessione_in_presenzaDAO.saveSessione(sessione_in_presenza);
+    		sessione_in_presenzaDAO.saveSessioneInPresenza(sessione_in_presenza);
     		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
     		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
     	} catch (SQLException e) {
-    		throw new DatabaseException(e);
+    		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA SESSIONE IN PRESENZA O UNA RICETTA O UN INGREDIENTE", e);
     	}
     	aggiungiSessioneAlCorso(sessione_in_presenza);
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
     }
     
-    
+    // Metodo per salvare lo chef nel database
     public boolean saveChefToDatabase() {
 		chefDAO = new ChefDAO(conn);
 		try {
 			return chefDAO.saveChef(chef);
 		} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNO CHEF", e);
 		}
 	}
     
@@ -378,7 +381,7 @@ public class Controller {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException(e);
+            throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE TUTTI I DATI DELLO CHEF", e);
         }
     }
 
@@ -389,7 +392,7 @@ public class Controller {
     	try {
 			return corsoDAO.getCorsi(id);
 		} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE I CORSI", e);
 		}
     }
     
@@ -399,10 +402,10 @@ public class Controller {
     	Sessione_in_presenzaDAO sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
     	try {
     		LinkedList<Sessione> sessioni = new LinkedList<Sessione>(sessione_onlineDAO.getSessioniOnline(id));
-    		sessioni.addAll(sessione_in_presenzaDAO.getSessioniPresenza(id));
+    		sessioni.addAll(sessione_in_presenzaDAO.getSessioniInPresenza(id));
     		return sessioni;
     	} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE SESSIONI ONLINE O SESSIONI IN PRESENZA", e);
 		}
     }
     
@@ -410,9 +413,9 @@ public class Controller {
     public LinkedList<Ricetta> getRicetteToDatabase(String luogo, Timestamp orarioInizio) {
 		RicettaDAO ricettaDAO = new RicettaDAO(conn);
 		try {
-			return ricettaDAO.getRicetta(luogo, orarioInizio);
+			return ricettaDAO.getRicette(luogo, orarioInizio);
 		} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE LE RICETTE", e);
 		}
 	}
     
@@ -420,21 +423,11 @@ public class Controller {
     public LinkedList<Ingrediente> getIngredientiToDatabase(int id) {
 		IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
 		try {
-			return ingredienteDAO.getIngrediente(id);
+			return ingredienteDAO.getIngredienti(id);
 		} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE GLI INGREDIENTI", e);
 		}
 	}
-    
-    // Metodo per salvare gli ingredienti di una ricetta nel database
-    public boolean setIngredienteToDatabase(LinkedList<Ingrediente> ingredienti, int idRicetta) {
-    	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
-    	try {
-    		return ingredienteDAO.saveIngredienti(ingredienti, idRicetta);
-    	} catch (SQLException e) {
-    		throw new DatabaseException(e);
-    	}
-    }
     
     /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
     
@@ -476,22 +469,16 @@ public class Controller {
 		}
 	}
     
+    // Metodo per creare un nuovo chef
     public boolean creaChef() {
     	int id;
     	try {
-    	id = chefDAO.nuovoIdChef();
+    		id = chefDAO.nuovoIdChef();
     	} catch (SQLException e) {
-			throw new DatabaseException(e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER LO CHEF" ,e);
 		}
-    	chef = new Chef(id, registrazioneFrame.getNome(), 
-				registrazioneFrame.getCognome(), 
-				registrazioneFrame.getEmail(), 
-				registrazioneFrame.getPassword(),
-				registrazioneFrame.getBiografia(),
-				registrazioneFrame.getTelefono(),
-    			null);
-    	 return saveChefToDatabase();
-    	
+    	chef = new Chef(id, registrazioneFrame.getNome(), registrazioneFrame.getCognome(), registrazioneFrame.getEmail(), registrazioneFrame.getPassword(), registrazioneFrame.getBiografia(), registrazioneFrame.getTelefono(), null);
+    	return saveChefToDatabase();
     }
     
     /*----------------------------------------- main ------------------------------------------------*/
@@ -500,8 +487,6 @@ public class Controller {
     	String email = "anna.verdi@gmail.com";
         String password = "Verdi89@";
         chef = getAllChefToDatabase(email, password);
-        chef.setCorso(getCorsiToDatabase(chef.getID()));
-//      this.corso = chef.getCorso().get(0);
         homepageFrame = new HomepageFrame(this);
         homepageFrame.setVisible(true);
     }
@@ -517,14 +502,18 @@ public class Controller {
     // Main
 	public static void main(String[] args) {
 		perMac();
-		DBConnection dbConnection = DBConnection.getDBConnection();
-        Connection conn = dbConnection.getConnection();
-        if (conn != null) {
+        try {
+            DBConnection dbConnection = DBConnection.getDBConnection();
+            Connection conn = dbConnection.getConnection();
+
             System.out.println("Connessione al database riuscita!");
-        } else {
-            System.out.println("Connessione al database fallita.");
-            return;
+            new Controller(conn);
+
+        } catch (SQLException e) {
+            throw new EccezioniDatabase("ERRORE DURANTE LA CREAZIONE DELLA CONNESSIONE AL DATABASE", e);
+        } catch (IOException e) {
+            throw new EccezioniFile(e);
         }
-        new Controller(conn);
-	}
+    }
+
 }

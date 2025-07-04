@@ -15,7 +15,7 @@ public class Sessione_onlineDAO {
 		this.conn = conn;
 	}
 	
-	// Metodi
+	// Recupera le sessioni online di un corso dal database
 	public LinkedList<Sessione_online> getSessioniOnline(int idCorso) throws SQLException {
 	    LinkedList<Sessione_online> sessioni = new LinkedList<>();
 	    String sql = "SELECT * FROM sessione_online WHERE id_corso = ?";
@@ -30,7 +30,8 @@ public class Sessione_onlineDAO {
 	    return sessioni;
 	}
 	
-	public boolean saveSessione(Sessione_online sessione) throws SQLException {
+	// Inserisce una nuova sessione online nel database
+	public boolean saveSessioneOnline(Sessione_online sessione) throws SQLException {
 		String sql = "INSERT INTO sessione_online (link, orario_inizio, orario_fine, id_corso) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLink());

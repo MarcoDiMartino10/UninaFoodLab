@@ -15,8 +15,8 @@ public class IngredienteDAO {
 		this.conn = conn;
 	}
 	
-	// Metodi
-	public LinkedList<Ingrediente> getIngrediente(int idRicetta) throws SQLException {
+	// Recupera gli ingredienti di una ricetta dal database
+	public LinkedList<Ingrediente> getIngredienti(int idRicetta) throws SQLException {
 	    LinkedList<Ingrediente> ingredienti = new LinkedList<>();
 	    String sql = "SELECT * FROM Ingrediente WHERE ID_ricetta = ?";
 	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -30,7 +30,7 @@ public class IngredienteDAO {
 	    return ingredienti;
 	}
 
-	
+	// Inserisce una lista di ingredienti per una ricetta nel database
 	public boolean saveIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) throws SQLException {
 	    StringBuilder sql = new StringBuilder("INSERT INTO Ingrediente (ID, Nome, Quantità, Unità_di_misura, ID_ricetta) VALUES ");
 	    for (int i = 0; i < ingredienti.size(); i++) {
@@ -55,7 +55,7 @@ public class IngredienteDAO {
 	    }
 	}
 
-	
+	// Calcola il nuovo ID per un ingrediente
 	public int nuovoIdIngrediente() throws SQLException {
 	    String sql = "SELECT MAX(id) AS max_id FROM ingrediente";
 	    try (PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -16,15 +16,15 @@ public class Chef {
 	
 	// Costruttore
 	public Chef(int ID, String nome, String cognome, String email, String password, String biografia, String numero_tel, LinkedList<Corso> corsi) {
-        this.ID = ID;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.email = email;
-        this.password = password;
-        this.biografia = biografia;
-        this.numero_tel = numero_tel;
-        this.corsi = corsi;
-    }
+	    this.ID = ID;
+	    this.nome = nome;
+	    this.cognome = cognome;
+	    this.email = email;
+	    this.password = password;
+	    this.biografia = biografia;
+	    this.numero_tel = numero_tel;
+	    this.corsi = (corsi != null) ? corsi : new LinkedList<>();
+	}
 	
 	// Getters
     public int getID() {
