@@ -305,6 +305,7 @@ public class Controller {
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
     }
     
+    // Metodo per ottenere TUTTI i dati dello chef dal db, quindi anche i corsi, le sessioni, le ricette e gli ingredienti
     public Chef getAllChefToDatabase(String email, String password) {
         try {
             Chef nuovoChef = chefDAO.getChef(email, password);
@@ -326,10 +327,7 @@ public class Controller {
                             for (Ricetta ricetta : sessioneInPresenza.getRicette()) {
                                 ricetta.setIngredienti(getIngredientiToDatabase(ricetta.getID()));
                             }
-                        } //else if (sessione instanceof Sessione_online) {
-                            //Sessione_online sessioneOnline = (Sessione_online) sessione;
-                            //sessioneOnline.setLink(sessioneOnline.getLink()); // facoltativo
-                        //}
+                        }
                     }
                 }
 
@@ -429,9 +427,9 @@ public class Controller {
 		}
 	}  
     
+    // Metodo per aggiungere una ricetta e gli ingredienti alla lista delle ricette della sessione in presenza
     public void aggiungiIngredientiAlleRicette() {
 		for (Ricetta ricetta : sessione_in_presenza.getRicette()) {
-			//ricetta.setIngredienti(getIngredientiToDatabase(ricetta.getID()));
 			LinkedList<Ingrediente> ingredienti = getIngredientiToDatabase(ricetta.getID());
 			ricetta.setIngredienti(ingredienti);
 		}
