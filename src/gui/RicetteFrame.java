@@ -14,14 +14,14 @@ public class RicetteFrame extends JFrame {
     private JButton aggiungiRicettaButton;
     private JTable ricetteTable;
     
-    private JFrame infoCorsoFrame;
+    private JFrame previus;
     
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
-    public RicetteFrame(Controller controller, JFrame infoCorsoFrame) {
+    public RicetteFrame(Controller controller, JFrame previus) {
         super("Homepage - UninaFoodLab");
-        this.infoCorsoFrame = infoCorsoFrame;
+        this.previus = previus;
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +64,7 @@ public class RicetteFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
             		dispose();
-            		infoCorsoFrame.setVisible(true);
+            		previus.setVisible(true);
             	}
             }
         });
@@ -156,7 +156,7 @@ public class RicetteFrame extends JFrame {
     }
     
     public JFrame getChiamante() {
-        return infoCorsoFrame;
+        return previus;
     }
     
     

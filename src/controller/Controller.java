@@ -224,7 +224,7 @@ public class Controller {
 					if (sessione instanceof Sessione_in_presenza) {
 	                    Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
 	                    if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
-	                        sessioneInPresenza.getRicette().add(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
+	                        sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
 	                        return;
 	                    }
 	                }

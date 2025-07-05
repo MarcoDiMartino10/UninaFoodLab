@@ -15,10 +15,12 @@ import dto.*;
 import controller.*;
 
 public class ReportMensileFrame extends JFrame {
-
+	
+	// Attributi
     private static final long serialVersionUID = 1L;
 
-    public ReportMensileFrame(Controller controller, HomepageFrame homepageFrame) {
+    // Costruttore
+    public ReportMensileFrame(Controller controller, HomepageFrame previus) {
         super("Report Mensile - UninaFoodLab");
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -53,7 +55,7 @@ public class ReportMensileFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
                 	dispose();
-                	homepageFrame.setVisible(true);
+                	previus.setVisible(true);
                 }
             }
 

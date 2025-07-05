@@ -40,6 +40,13 @@ public class Sessione_in_presenza extends Sessione {
 	public void setRicette(LinkedList<Ricetta> ricette) {
 		this.ricette = ricette;
 	}
+	
+	// Aggiungi ricetta
+	public void aggiungiRicetta(Ricetta ricetta) {
+		if (ricetta != null) {
+			this.ricette.add(ricetta);
+		}
+	}
 
 	// toString
 	@Override

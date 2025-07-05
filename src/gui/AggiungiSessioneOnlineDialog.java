@@ -16,7 +16,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     Controller controller;
 
-    public AggiungiSessioneOnlineDialog(Controller controller, InfoCorsoFrame infoCorsoFrame) {
+    public AggiungiSessioneOnlineDialog(Controller controller, InfoCorsoFrame previus) {
     	super((InfoCorsoFrame) null, "Aggiungi Sessione Online", true);
         this.controller = controller;
         setSize(550, 300);
@@ -227,8 +227,8 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
 			}
             controller.saveSessioneOnline(link, inizio, fine);
             dispose();
-            infoCorsoFrame.dispose();
-            new InfoCorsoFrame(controller, infoCorsoFrame.getChiamante()).setVisible(true);
+            previus.dispose();
+            new InfoCorsoFrame(controller, previus.getChiamante()).setVisible(true);
         });
 
         setContentPane(mainPanel);
