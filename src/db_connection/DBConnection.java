@@ -23,7 +23,7 @@ public class DBConnection {
     // Metodo per ottenere la connessione al database
     public Connection getConnection() throws SQLException, IOException {
         if (conn == null || conn.isClosed()) {
-            try (BufferedReader b = new BufferedReader(new FileReader("pwd_DB/pwdfile"))) {
+        	try (InputStream is = getClass().getResourceAsStream("/pwdfile"); BufferedReader b = new BufferedReader(new InputStreamReader(is))) {
                 String pwd = b.readLine();
                 String s_url = "jdbc:postgresql://localhost:5432/UninaFoodLab?currentSchema=schema_progetto";
                 conn = DriverManager.getConnection(s_url, "postgres", pwd);

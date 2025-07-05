@@ -71,15 +71,13 @@ public class LoginFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        ImageIcon logo = new ImageIcon("resources/Logo.png");
-        Image originalLogo = logo.getImage();
-        int larghezza = originalLogo.getWidth(null);
-        int altezza = originalLogo.getHeight(null);
-        double rapporto = (double) larghezza / altezza;
-        int newLarghezza = 100;
-        int newAltezza = (int) (newLarghezza / rapporto);
-        Image newLogo = originalLogo.getScaledInstance(newLarghezza, newAltezza, Image.SCALE_SMOOTH);
-        JLabel logoLabel = new JLabel(new ImageIcon(newLogo));
+        ImageIcon logo = new ImageIcon(getClass().getResource("/Logo.png"));
+        Image originalImage = logo.getImage();
+        double aspectRatio = (double) originalImage.getWidth(null) / originalImage.getHeight(null);
+        int newWidth = 100;
+        int newHeight = (int) (newWidth / aspectRatio);
+        Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
         pannelloLogin.add(logoLabel, gbc);
 
         // Scritta Email

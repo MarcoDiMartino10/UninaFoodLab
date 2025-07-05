@@ -39,11 +39,9 @@ public class HomepageFrame extends JFrame {
         headerPanel.setPreferredSize(new Dimension(1000, 100));
         
         // Logo a sinistra
-        ImageIcon logo = new ImageIcon("resources/Logo.png");
+        ImageIcon logo = new ImageIcon(getClass().getResource("/Logo.png"));
         Image originalImage = logo.getImage();
-        int originalWidth = originalImage.getWidth(null);
-        int originalHeight = originalImage.getHeight(null);
-        double aspectRatio = (double) originalWidth / originalHeight;
+        double aspectRatio = (double) originalImage.getWidth(null) / originalImage.getHeight(null);
         int newWidth = 100;
         int newHeight = (int) (newWidth / aspectRatio);
         Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
