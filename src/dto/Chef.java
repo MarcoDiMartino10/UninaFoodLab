@@ -70,16 +70,16 @@ public class Chef {
 		this.corsi = corsi;
 	}
     
+    // toString
+    @Override
+    public String toString() {
+        return nome + " " + cognome;
+    }
+    
     // Aggiungi un corso
     public void addCorso(Corso corso) {
 		if (corso != null) {
 			this.corsi.add(corso);
 		}
 	}
-    
-    // toString
-    @Override
-    public String toString() {
-        return nome + " " + cognome;
-    }
 }

@@ -2,7 +2,7 @@ package exception;
 
 public class EccezioniFile extends RuntimeException {
 	
-	//Attributo
+	// Attributo
     private static final long serialVersionUID = 1L;
 	
     // Costruttore

@@ -13,14 +13,14 @@ public class RicetteFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
     private JButton aggiungiRicettaButton;
     private JTable ricetteTable;
-    
     private JFrame previous;
     
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
     public RicetteFrame(Controller controller, JFrame previous) {
-        super("Homepage - UninaFoodLab");
+        
+    	super("Homepage - UninaFoodLab");
         this.previous = previous;
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -155,6 +155,7 @@ public class RicetteFrame extends JFrame {
         button.setPreferredSize(new Dimension(250, 50));
     }
     
+    // Metodo per ottenere il frame chiamante
     public JFrame getChiamante() {
         return previous;
     }

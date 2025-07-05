@@ -19,7 +19,7 @@ import controller.*;
 public class AggiungiCorsoDialog extends JDialog {
 
     // Attributi
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;   
     Controller controller;
     String nomeCorso;
     String categoria;
@@ -27,14 +27,15 @@ public class AggiungiCorsoDialog extends JDialog {
     String frequenza;
     String costo;
     int numsessioni;
-
     private JTextField nomeField;
     private JTextField categoriaField;
     private JTextField frequenzaField;
     private JTextField costoField;
     private JTextField numsessioniField;
 
+    // Costruttore
     public AggiungiCorsoDialog(Controller controller, HomepageFrame previous) {
+    	
     	super((HomepageFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(550, 400);

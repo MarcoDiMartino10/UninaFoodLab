@@ -7,7 +7,7 @@ import dto.*;
 
 public class RicettaDAO {
 	
-	// Attributi
+	// Attributo
 	private Connection conn;
 	
 	// Costruttore

@@ -6,7 +6,7 @@ import dto.Chef;
 
 public class ChefDAO {
     
-	// Attributi
+	// Attributo
 	private Connection conn;
 	
 	// Costruttore

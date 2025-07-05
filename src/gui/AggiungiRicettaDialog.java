@@ -20,6 +20,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	
 	// Costruttore
 	public AggiungiRicettaDialog(Controller controller, boolean flag, JFrame previous) {
+		
 		super((RicetteFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(520, 280);
@@ -113,15 +114,17 @@ public class AggiungiRicettaDialog extends JDialog {
         centerPanel.add(ingredientiScroll, BorderLayout.CENTER);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // Pannello bottoni invia
+        // Pannello bottoni
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonsPanel.setBackground(Color.WHITE);
         buttonsPanel.setVisible(false);
 
+        // Bottone Invia
         JButton inviaButton = new JButton("Invia");
         styleButton(inviaButton);
         inviaButton.setPreferredSize(new Dimension(120, 40));
 
+        // Bottone Annulla
         JButton annullaButton = new JButton("Annulla");
         styleButton(annullaButton);
         annullaButton.setBackground(Color.LIGHT_GRAY);
@@ -135,9 +138,12 @@ public class AggiungiRicettaDialog extends JDialog {
         LinkedList<JTextField> nomeFields = new LinkedList<>();
         LinkedList<JTextField> quantitaFields = new LinkedList<>();
         LinkedList<JTextField> unitàFields = new LinkedList<>();
-
+        
+        // Genera ingredienti
         generaButton.addActionListener(_ -> {
-            ingredientiPanel.removeAll();
+            
+        	// Controlli nome e numero ingredienti
+        	ingredientiPanel.removeAll();
             int numIngredienti;
             String nomeRicetta = nomeField.getText().trim();
             if (nomeRicetta.isEmpty()) {
@@ -163,7 +169,7 @@ public class AggiungiRicettaDialog extends JDialog {
                 return;
             }
 
-            // Aggiungi riga header per i campi ingredienti
+            // Titolo riga ingredienti
             JPanel headerIng = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
             headerIng.setBackground(new Color(240, 240, 240));
             headerIng.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
@@ -185,6 +191,8 @@ public class AggiungiRicettaDialog extends JDialog {
             nomeFields.clear();
             quantitaFields.clear();
             unitàFields.clear();
+            
+            // Righe ingredienti
             for (int i = 0; i < numIngredienti; i++) {
                 JPanel singoloIngrediente = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
                 singoloIngrediente.setBackground(Color.WHITE);
@@ -234,15 +242,18 @@ public class AggiungiRicettaDialog extends JDialog {
             setSize(520, 500);
             setLocationRelativeTo(this);
         });
-
+        
+        // Bottone Annulla
         annullaButton.addActionListener(_ -> dispose());
         
+        // Bottone Invia
         inviaButton.addActionListener(_ -> {
         	LinkedList<Ingrediente>ingredienti = new LinkedList<>();
             int IdRicetta = controller.nuovoIdRicetta();
             int IdIngrediente = controller.nuovoIdIngrediente();
             LinkedList<String> nomiUsati = new LinkedList<>();
-
+            
+            // Controlli su ingredienti
             for (int i = 0; i < nomeFields.size(); i++) {
                 String nomeIngrediente = nomeFields.get(i).getText().trim();
                 String testo = quantitaFields.get(i).getText().trim();
@@ -288,17 +299,16 @@ public class AggiungiRicettaDialog extends JDialog {
                 Ingrediente ingrediente = new Ingrediente(IdIngrediente++, nomeIngrediente, quantità, unità, IdRicetta);
                 ingredienti.add(ingrediente);
             }
-
+            
+            // Comportamento bottone Invia
             dispose();
             if (flag == false) {
             	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
-//            	dispose();
             	previous.dispose();
                 new RicetteFrame(controller, ((RicetteFrame) previous).getChiamante()).setVisible(true);
             }
             else {
             	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
-//            	dispose();
             }
         });
 
@@ -308,6 +318,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	
 	/*-----------------------------------------------------------------------------------------*/
 	
+	// Metodo per lo stile dei bottoni
 	private void styleButton(JButton button) {
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setBackground(new Color(0, 102, 204));

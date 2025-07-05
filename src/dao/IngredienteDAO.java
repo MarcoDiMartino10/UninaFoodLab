@@ -7,7 +7,7 @@ import dto.*;
 
 public class IngredienteDAO {
 	
-	// Attributi
+	// Attributo
 	private Connection conn;
 	
 	// Costruttore
@@ -67,6 +67,5 @@ public class IngredienteDAO {
 	        }
 	    }
 	}
-
 
 }

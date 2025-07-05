@@ -40,18 +40,18 @@ public class Sessione_in_presenza extends Sessione {
 	public void setRicette(LinkedList<Ricetta> ricette) {
 		this.ricette = ricette;
 	}
+
+	// toString
+	@Override
+	public String toString() {
+		return "Sessione_in_presenza[luogo= " + luogo + ", orario_inizio=" + getOrario_inizio() + ", orario_fine=" + getOrario_fine() + ']';
+	}
 	
 	// Aggiungi ricetta
 	public void aggiungiRicetta(Ricetta ricetta) {
 		if (ricetta != null) {
 			this.ricette.add(ricetta);
 		}
-	}
-
-	// toString
-	@Override
-	public String toString() {
-		return "Sessione_in_presenza[luogo= " + luogo + ", orario_inizio=" + getOrario_inizio() + ", orario_fine=" + getOrario_fine() + ']';
 	}
 
 }

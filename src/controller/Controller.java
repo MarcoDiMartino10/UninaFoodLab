@@ -18,11 +18,9 @@ public class Controller {
 	
 	// Attributi
     Connection conn;
-    
     private Chef chef;
     private Corso corso;
     private Sessione_in_presenza sessione_in_presenza;
-    
 	public int count = 3;
 
     //Costruttore
@@ -31,7 +29,6 @@ public class Controller {
     	LoginFrame loginFrame = new LoginFrame(this);
     	loginFrame.setVisible(true);
         new ChefDAO(conn);
-        //test();
     }
     
     public void checkcount() {
@@ -178,7 +175,8 @@ public class Controller {
     	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
     }
     
-    public Chef queryChefFull(String email, String password) {
+    // Metodo per ottenere tutte le informazioni dello chef dal database
+    public Chef getAllInfoChef(String email, String password) {
         ChefDAO chefDAO = new ChefDAO(conn);
         CorsoDAO corsoDAO = new CorsoDAO(conn);
         Sessione_onlineDAO sessioneOnlineDAO = new Sessione_onlineDAO(conn);
@@ -242,15 +240,8 @@ public class Controller {
 	}
     
     /*----------------------------------------- main ------------------------------------------------*/
-   
-    public void test() {
-    	String email = "anna.verdi@gmail.com";
-        String password = "Verdi89@";
-        chef = queryChefFull(email, password);
-        HomepageFrame homepageFrame = new HomepageFrame(this, new LoginFrame(this));
-        homepageFrame.setVisible(true);
-    }
     
+    // Metodo per visualizzare correttamente le interfacce grafiche su Mac
 	public static void perMac() {
 		try {
 		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());

@@ -7,7 +7,7 @@ import dto.Corso;
 
 public class CorsoDAO {
     
-	// Attributi
+	// Attributo
 	private Connection conn;
 	
 	// Costruttore

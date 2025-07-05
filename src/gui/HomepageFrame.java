@@ -18,7 +18,6 @@ public class HomepageFrame extends JFrame {
     private JComboBox<String> categoryFilter;
     private JTable courseTable;
     private boolean checkDoubleClick = false;
-    
     private JFrame previous;
     
     /*-----------------------------------------------------------------------------------------*/

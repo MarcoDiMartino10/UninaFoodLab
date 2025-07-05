@@ -91,18 +91,17 @@ public class Corso {
 		this.Numero_sessioni = numeroSessioni;
 	}
 	
-	// Aggiungi sessione
-	public void aggiungiSessione(Sessione sessione) {
-		if (sessione != null) {
-			sessioni.add(sessione);
-			Numero_sessioni++;
-		}
-	}
-	
 	// toString
 	@Override
 	public String toString() {
 		return "Corso [Nome= " + Nome + ", Categoria= " + Categoria + ", Data_inizio= " + Data_inizio + "]";
+	}
+	
+	// Aggiungi sessione
+	public void aggiungiSessione(Sessione sessione) {
+		if (sessione != null) {
+			sessioni.add(sessione);
+		}
 	}
 
 }

@@ -16,7 +16,9 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     Controller controller;
 
+    // Costruttore
     public AggiungiSessioneOnlineDialog(Controller controller, InfoCorsoFrame previous) {
+    	
     	super((InfoCorsoFrame) null, "Aggiungi Sessione Online", true);
         this.controller = controller;
         setSize(550, 300);
@@ -73,7 +75,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         inputPanel.add(linkField, gbc);
 
-     // Label e spinner per Data e Orario Inizio
+        // Label e spinner per Data e Orario Inizio
         JLabel dataOrarioInizioLabel = new JLabel("Data e orario inizio sessione:");
         dataOrarioInizioLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -88,7 +90,6 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
         ));
         orarioInizioSpinner.setBackground(new Color(240, 248, 255));
 
-        // Posizionamento inizio
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0;
@@ -115,7 +116,6 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
         ));
         orarioFineSpinner.setBackground(new Color(240, 248, 255));
 
-        // Posizionamento fine
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 0;
@@ -164,7 +164,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
                 return;
             }
 
-            // check date e orari
+            // Controllo date e orari
             Date inizioDate = (Date) orarioInizioSpinner.getValue();
             Date fineDate = (Date) orarioFineSpinner.getValue();
 
@@ -179,26 +179,22 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
                 return;
             }
 
-         // Cast diretto dai JSpinner
             Timestamp inizio = new Timestamp(((Date) orarioInizioSpinner.getValue()).getTime());
             Timestamp fine = new Timestamp(((Date) orarioFineSpinner.getValue()).getTime());
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
-            // Controllo: inizio non prima di ora
             if (inizio.before(now)) {
                 JOptionPane.showMessageDialog(this, "La data e orario di inizio non possono essere anteriori all'attuale.", "Errore", JOptionPane.ERROR_MESSAGE);
                 orarioInizioSpinner.requestFocus();
                 return;
             }
 
-            // Controllo: fine non prima di ora
             if (fine.before(now)) {
                 JOptionPane.showMessageDialog(this, "La data e orario di fine non possono essere anteriori all'attuale.", "Errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
                 return;
             }
 
-            // Controllo: inizio < fine
             if (!fine.after(inizio)) {
                 JOptionPane.showMessageDialog(this, "La data e orario di fine devono essere successivi a quelli di inizio.", "Errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
@@ -225,6 +221,8 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
 					}
 				}
 			}
+            
+            // Salvo la sessione
             controller.saveSessioneOnline(link, inizio, fine);
             dispose();
             previous.dispose();

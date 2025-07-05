@@ -15,8 +15,10 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
     // Attributi
     private static final long serialVersionUID = 1L;
     Controller controller;
-
+    
+    // Costruttore
     public AggiungiSessioneInPresenzaDialog(Controller controller, InfoCorsoFrame previous) {
+    	
     	super((InfoCorsoFrame) null, "Aggiungi Sessione in Presenza", true);
         this.controller = controller;
         setSize(550, 350);
@@ -41,7 +43,6 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // Creo il pannello centrale
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(Color.WHITE);
 
@@ -88,7 +89,6 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
         ));
         orarioInizioSpinner.setBackground(new Color(240, 248, 255));
 
-        // Posizionamento inizio
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0;
@@ -115,7 +115,6 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
         ));
         orarioFineSpinner.setBackground(new Color(240, 248, 255));
 
-        // Posizionamento fine
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 0;
@@ -168,9 +167,11 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
         centerPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-
+        
+        // Bottone annulla
         annullaButton.addActionListener(_ -> dispose());
-
+        
+        // Bottone invia
         inviaButton.addActionListener(_ -> {
             String luogo = luogoField.getText().trim();
 
@@ -181,7 +182,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
                 return;
             }
 
-            // check date e orari
+            // Controllo date e orari
             Date inizioDate = (Date) orarioInizioSpinner.getValue();
             Date fineDate = (Date) orarioFineSpinner.getValue();
 
@@ -196,26 +197,22 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
                 return;
             }
 
-         // Cast diretto dai JSpinner
             Timestamp inizio = new Timestamp(((Date) orarioInizioSpinner.getValue()).getTime());
             Timestamp fine = new Timestamp(((Date) orarioFineSpinner.getValue()).getTime());
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
-            // Controllo: inizio non prima di ora
             if (inizio.before(now)) {
                 JOptionPane.showMessageDialog(this, "La data e orario di inizio non possono essere anteriori all'attuale.", "Errore", JOptionPane.ERROR_MESSAGE);
                 orarioInizioSpinner.requestFocus();
                 return;
             }
 
-            // Controllo: fine non prima di ora
             if (fine.before(now)) {
                 JOptionPane.showMessageDialog(this, "La data e orario di fine non possono essere anteriori all'attuale.", "Errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
                 return;
             }
 
-            // Controllo: inizio < fine
             if (!fine.after(inizio)) {
                 JOptionPane.showMessageDialog(this, "La data e orario di fine devono essere successivi a quelli di inizio.", "Errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
@@ -233,6 +230,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
             	return;
             }
             
+            // Controllo numero massimo di posti
             int maxPosti;
             try {
             	int max_posti = Integer.parseInt(maxPostiField.getText().trim());
@@ -257,6 +255,8 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 					}
 				}
 			}
+            
+            // Salvo sessione
             controller.setNewSessioneAttribute(luogo, inizio, fine, maxPosti);
             new AggiungiRicettaDialog(controller, true, previous).setVisible(true);
             dispose();

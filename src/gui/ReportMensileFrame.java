@@ -21,14 +21,15 @@ public class ReportMensileFrame extends JFrame {
 
     // Costruttore
     public ReportMensileFrame(Controller controller, HomepageFrame previous) {
-        super("Report Mensile - UninaFoodLab");
+        
+    	super("Report Mensile - UninaFoodLab");
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Logo.png")));
 
-        // HEADER
+        // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(0, 102, 204, 180));
         headerPanel.setPreferredSize(new Dimension(1000, 100));
@@ -67,16 +68,16 @@ public class ReportMensileFrame extends JFrame {
 
         getContentPane().add(headerPanel, BorderLayout.NORTH);
 
-        // MAIN PANEL
+        // Main
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(245, 245, 245));
         getContentPane().add(mainPanel, BorderLayout.CENTER);
 
 
-        // STATISTICHE
-        JPanel dataPanel = new JPanel(new GridBagLayout());
-        dataPanel.setBackground(Color.WHITE);
-        dataPanel.setBorder(BorderFactory.createCompoundBorder(
+        // Pannello con le statistiche
+        JPanel statistichePannello = new JPanel(new GridBagLayout());
+        statistichePannello.setBackground(Color.WHITE);
+        statistichePannello.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
@@ -96,18 +97,20 @@ public class ReportMensileFrame extends JFrame {
 
         LinkedList<String> categorie = new LinkedList<>();
         int[] corsiPerCategoria;
-
+        
+        // Utente appena creato
         if(totaleCorsi == 0) {
-			JLabel noDataLabel = new JLabel("Nessun corso disponibile per il report mensile.");
-			noDataLabel.setFont(new Font("Arial", Font.ITALIC, 16));
-			noDataLabel.setForeground(Color.GRAY);
+			JLabel noCorsiLabel = new JLabel("Nessun corso disponibile per il report mensile.");
+			noCorsiLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+			noCorsiLabel.setForeground(Color.GRAY);
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.gridwidth = 2;
-			dataPanel.add(noDataLabel, gbc);
-			mainPanel.add(dataPanel, BorderLayout.NORTH);
+			statistichePannello.add(noCorsiLabel, gbc);
+			mainPanel.add(statistichePannello, BorderLayout.NORTH);
 			return;
 		}
+        
         for (Corso corso : chef.getCorso()) {
             String categoria = corso.getCategoria().toLowerCase();
             if (!categorie.contains(categoria)) categorie.add(categoria);
@@ -154,62 +157,59 @@ public class ReportMensileFrame extends JFrame {
             titleLabel1.setFont(new Font("Arial", Font.BOLD, 15));
             gbc.gridx = 0;
             gbc.gridy = i;
-            dataPanel.add(titleLabel1, gbc);
+            statistichePannello.add(titleLabel1, gbc);
 
             JLabel valueLabel = new JLabel(reportData[i][1]);
             valueLabel.setFont(new Font("Arial", Font.PLAIN, 15));
             gbc.gridx = 1;
-            dataPanel.add(valueLabel, gbc);
+            statistichePannello.add(valueLabel, gbc);
         }
 
-        mainPanel.add(dataPanel, BorderLayout.NORTH);
+        mainPanel.add(statistichePannello, BorderLayout.NORTH);
 
-        // PANELLO GRAFICI
-        JPanel chartsPanel = new JPanel();
-        chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
-        chartsPanel.setBackground(new Color(245, 245, 245));
-        chartsPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        // Pannello dei grafici
+        JPanel graficiPanel = new JPanel();
+        graficiPanel.setLayout(new BoxLayout(graficiPanel, BoxLayout.Y_AXIS));
+        graficiPanel.setBackground(new Color(245, 245, 245));
+        graficiPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // GRAFICO 1
-        DefaultPieDataset pieDataset = new DefaultPieDataset();
-        pieDataset.setValue("Online", sessioniOnline);
-        pieDataset.setValue("In Presenza", sessioniInPresenza);
-        JFreeChart pieChart = ChartFactory.createPieChart("Distribuzione Sessioni", pieDataset, true, true, false);
-        ChartPanel pieChartPanel = new ChartPanel(pieChart);
-        pieChartPanel.setPopupMenu(null);
-        chartsPanel.add(wrapChartInPanel(pieChartPanel, "Distribuzione Sessioni"));
+        // Grafico delle sessioni a torta
+        DefaultPieDataset tortaGrafico = new DefaultPieDataset();
+        tortaGrafico.setValue("Online", sessioniOnline);
+        tortaGrafico.setValue("In Presenza", sessioniInPresenza);
+        JFreeChart tortaChart = ChartFactory.createPieChart("Distribuzione Sessioni", tortaGrafico, true, true, false);
+        ChartPanel tortaPanel = new ChartPanel(tortaChart);
+        tortaPanel.setPopupMenu(null);
+        graficiPanel.add(aggiungiNelPanello(tortaPanel, "Distribuzione Sessioni"));
 
-        // GRAFICO 2
-        DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
+        // Grafico dei corsi per categoria
+        DefaultCategoryDataset corsiGrafico = new DefaultCategoryDataset();
         for (int i = 0; i < categorie.size(); i++) {
-            categoryDataset.addValue(corsiPerCategoria[i], "Corsi", categorie.get(i));
+            corsiGrafico.addValue(corsiPerCategoria[i], "Corsi", categorie.get(i));
         }
-        JFreeChart categoryChart = ChartFactory.createBarChart("Corsi per Categoria", "Categoria", "Numero Corsi",
-                categoryDataset, PlotOrientation.VERTICAL, false, true, false);
-        ChartPanel categoryChartPanel = new ChartPanel(categoryChart);
-        categoryChartPanel.setPopupMenu(null);
-        chartsPanel.add(wrapChartInPanel(categoryChartPanel, "Corsi per Categoria"));
-        CategoryPlot catPlot = categoryChart.getCategoryPlot();
-        BarRenderer catRenderer = (BarRenderer) catPlot.getRenderer();
-        catRenderer.setMaximumBarWidth(0.05);
+        JFreeChart corsiChart = ChartFactory.createBarChart("Corsi per Categoria", "Categoria", "Numero Corsi", corsiGrafico, PlotOrientation.VERTICAL, false, true, false);
+        ChartPanel corsiPanel = new ChartPanel(corsiChart);
+        corsiPanel.setPopupMenu(null);
+        graficiPanel.add(aggiungiNelPanello(corsiPanel, "Corsi per Categoria"));
+        CategoryPlot corsiPlot = corsiChart.getCategoryPlot();
+        BarRenderer cilindriCorsi = (BarRenderer) corsiPlot.getRenderer();
+        cilindriCorsi.setMaximumBarWidth(0.05);
 
-
-        // GRAFICO 3
-        DefaultCategoryDataset recipeDataset = new DefaultCategoryDataset();
-        recipeDataset.addValue(minRicette, "Ricette", "Minimo");
-        recipeDataset.addValue(mediaRicette, "Ricette", "Media");
-        recipeDataset.addValue(maxRicette, "Ricette", "Massimo");
-        JFreeChart recipeChart = ChartFactory.createBarChart("Statistiche Ricette", "Metrica", "Numero Ricette", recipeDataset, PlotOrientation.VERTICAL, false, true, false);
-        ChartPanel recipeChartPanel = new ChartPanel(recipeChart);
-        chartsPanel.add(wrapChartInPanel(recipeChartPanel, "Statistiche Ricette"));
-        recipeChartPanel.setPopupMenu(null);
-        CategoryPlot recipePlot = recipeChart.getCategoryPlot();
-        BarRenderer recipeRenderer = (BarRenderer) recipePlot.getRenderer();
-        recipeRenderer.setMaximumBarWidth(0.05);
-
+        // Grafico delle ricette
+        DefaultCategoryDataset ricetteGrafico = new DefaultCategoryDataset();
+        ricetteGrafico.addValue(minRicette, "Ricette", "Minimo");
+        ricetteGrafico.addValue(mediaRicette, "Ricette", "Media");
+        ricetteGrafico.addValue(maxRicette, "Ricette", "Massimo");
+        JFreeChart ricetteChart = ChartFactory.createBarChart("Statistiche Ricette", "Metrica", "Numero Ricette", ricetteGrafico, PlotOrientation.VERTICAL, false, true, false);
+        ChartPanel ricettePanel = new ChartPanel(ricetteChart);
+        graficiPanel.add(aggiungiNelPanello(ricettePanel, "Statistiche Ricette"));
+        ricettePanel.setPopupMenu(null);
+        CategoryPlot ricettePlot = ricetteChart.getCategoryPlot();
+        BarRenderer cilindriRicette = (BarRenderer) ricettePlot.getRenderer();
+        cilindriRicette.setMaximumBarWidth(0.05);
 
         // ScrollPane
-        JScrollPane scrollPane = new JScrollPane(chartsPanel);
+        JScrollPane scrollPane = new JScrollPane(graficiPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -217,9 +217,8 @@ public class ReportMensileFrame extends JFrame {
 
     }
 
-
-    // Metodo helper per impacchettare ogni grafico in un pannello titolato
-    private JPanel wrapChartInPanel(ChartPanel chartPanel, String title) {
+    // Metodo per impostare i grafici nel pannello
+    private JPanel aggiungiNelPanello(ChartPanel chartPanel, String title) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(180, 180, 180)),

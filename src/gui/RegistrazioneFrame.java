@@ -38,7 +38,7 @@ public class RegistrazioneFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image sfondo = new ImageIcon(getClass().getResource("/SfondoLogin.jpg")).getImage();
+                Image sfondo = new ImageIcon(getClass().getResource("/Sfondo.jpg")).getImage();
                 g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -284,6 +284,8 @@ public class RegistrazioneFrame extends JFrame {
         
         // Listener per il bottone Login
         bottoneLogin.addActionListener(_ -> {
+        	
+        	// Controlli sui campi
         	if(campoNome.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Il campo nome non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
 				campoNome.requestFocusInWindow();
@@ -380,14 +382,14 @@ public class RegistrazioneFrame extends JFrame {
 				return;
 			}
 		
-        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoTelefono.getText(), campoBiografia.getText())) {
-			JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
-			dispose();
-			new HomepageFrame(controller, this).setVisible(true);
-		} else {
-			JOptionPane.showMessageDialog(this, "Utente già registrato.", "Errore", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+	        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoTelefono.getText(), campoBiografia.getText())) {
+				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+				dispose();
+				new HomepageFrame(controller, this).setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(this, "Utente già registrato.", "Errore", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
         
         });
         

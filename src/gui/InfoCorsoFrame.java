@@ -8,12 +8,12 @@ import dto.*;
 import controller.*;
 
 public class InfoCorsoFrame extends JFrame {
-
+	
+	// Attributi
     private static final long serialVersionUID = 1L;
     private Controller controller;
     private JTable courseTable;
     private boolean checkDoubleClick = false;
-    
     private JFrame previous;
 
     public InfoCorsoFrame(Controller controller, JFrame previous) {
@@ -67,12 +67,11 @@ public class InfoCorsoFrame extends JFrame {
             }
         });
 
-        // Main Panel con BorderLayout
+        // PAnwnello dell'info corso
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(245, 245, 245));
         getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-        // Info Corso (NORTH)
         JPanel infoPanel = new JPanel(new GridBagLayout());
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -107,7 +106,7 @@ public class InfoCorsoFrame extends JFrame {
         }
         mainPanel.add(infoPanel, BorderLayout.NORTH);
 
-        // Tabella (CENTER)
+        // Tabella Sessioni
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBackground(new Color(245, 245, 245));
         tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -191,7 +190,8 @@ public class InfoCorsoFrame extends JFrame {
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
-
+    
+    // Apri Sessione selezionata
     public void apriSessione(ActionListener listener) {
         courseTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -218,7 +218,8 @@ public class InfoCorsoFrame extends JFrame {
             }
         });
     }
-
+    
+    // Stile del bottone
     private void styleButton(JButton button) {
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setBackground(new Color(0, 102, 204));
@@ -227,7 +228,7 @@ public class InfoCorsoFrame extends JFrame {
         button.setFocusPainted(false);
     }
     
- // Mette il cursore con il dito sul bottone passato come parametro
+    // Mette il cursore con il dito sul bottone passato come parametro
     private void setHandCursor(JComponent component) {
         component.addMouseListener(new MouseAdapter() {
             @Override
@@ -241,6 +242,7 @@ public class InfoCorsoFrame extends JFrame {
         });
     }
     
+    // Restituisce il frame chiamante
     public JFrame getChiamante() {
         return previous;
     }

@@ -7,7 +7,7 @@ import dto.*;
 
 public class Sessione_onlineDAO {
 	
-	// Attributi
+	// Attributo
 	private Connection conn;
 	
 	// Costruttore

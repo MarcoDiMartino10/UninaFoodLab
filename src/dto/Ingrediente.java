@@ -12,11 +12,6 @@ public class Ingrediente {
 	private int ID_ricetta;
 	
 	// Costruttore
-	public Ingrediente(int ID, String nome) {
-		this.ID = ID;
-		this.nome = nome;
-	}
-	
 	public Ingrediente(int ID, String nome, BigDecimal quantità, String unità_di_misura, int ID_ricetta) {
 		this.ID = ID;
 		this.nome = nome;

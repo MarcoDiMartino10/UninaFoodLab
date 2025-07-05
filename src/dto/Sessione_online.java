@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class Sessione_online extends Sessione{
 	
-	// Attributi
+	// Attributo
 	private String link;
 	
 	// Costruttore
@@ -13,13 +13,13 @@ public class Sessione_online extends Sessione{
 		this.link = link;
 	}
 	
-	// Getters
+	// Getter
 	@Override
 	public String getLink() {
 		return link;
 	}
 	
-	// Setters
+	// Setter
 	public void setLink(String link) {
 		this.link = link;
 	}

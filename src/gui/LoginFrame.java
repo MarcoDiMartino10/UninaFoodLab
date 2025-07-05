@@ -36,7 +36,7 @@ public class LoginFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image sfondo = new ImageIcon(getClass().getResource("/SfondoLogin.jpg")).getImage();
+                Image sfondo = new ImageIcon(getClass().getResource("/Sfondo.jpg")).getImage();
                 g.drawImage(sfondo, 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -171,7 +171,7 @@ public class LoginFrame extends JFrame {
         
         // Listener per il bottone Login
         bottoneLogin.addActionListener(_ -> {
-        	if (controller.queryChefFull(campoEmail.getText(), new String(campoPassword.getPassword())) == null) {
+        	if (controller.getAllInfoChef(campoEmail.getText(), new String(campoPassword.getPassword())) == null) {
 				credenzialiErrate();
 				return;
 			}
