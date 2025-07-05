@@ -19,7 +19,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	/*-----------------------------------------------------------------------------------------*/
 	
 	// Costruttore
-	public AggiungiRicettaDialog(Controller controller, boolean flag) {
+	public AggiungiRicettaDialog(Controller controller, boolean flag, JFrame ricetteFrame) {
 		super((RicetteFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(520, 280);
@@ -235,7 +235,7 @@ public class AggiungiRicettaDialog extends JDialog {
             setLocationRelativeTo(this);
         });
 
-        annullaButton.addActionListener(_ -> controller.chiudiAggiungiRicettaDialog());
+        annullaButton.addActionListener(_ -> setVisible(false));
         
         inviaButton.addActionListener(_ -> {
         	LinkedList<Ingrediente>ingredienti = new LinkedList<>();
@@ -289,10 +289,15 @@ public class AggiungiRicettaDialog extends JDialog {
                 ingredienti.add(ingrediente);
             }
 
-            if (flag == false) controller.saveRicettaAndIngredienteToDatabase(nomeRicetta, ingredienti);
+            if (flag == false) {
+            	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
+            	setVisible(false);
+                ricetteFrame.dispose();
+                new RicetteFrame(controller, ((RicetteFrame) ricetteFrame).getChiamante()).setVisible(true);
+            }
             else {
-            	controller.saveSessioneAndRicettaToDatabase(nomeRicetta, ingredienti);
-            	controller.chiudiAggiungiSessioneInPresenzaDialog();
+            	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
+            	setVisible(false);
             }
             dispose();
         });

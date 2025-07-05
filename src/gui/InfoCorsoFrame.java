@@ -13,10 +13,13 @@ public class InfoCorsoFrame extends JFrame {
     private Controller controller;
     private JTable courseTable;
     private boolean checkDoubleClick = false;
+    
+    private JFrame homepageFrame;
 
-    public InfoCorsoFrame(Controller controller) {
+    public InfoCorsoFrame(Controller controller, JFrame homepageFrame) {
 
         super("Informazioni corso - UninaFoodLab");
+        this.homepageFrame = homepageFrame;
         this.controller = controller;
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -38,7 +41,7 @@ public class InfoCorsoFrame extends JFrame {
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
         headerPanel.add(logoLabel, BorderLayout.WEST);
 
-        Corso corso = controller.getCorso();
+        Corso corso = controller.getCorsoAttribute();
         JLabel corsoLabel = new JLabel("Informazioni " + corso.getNome() + "       ", SwingConstants.CENTER);
         corsoLabel.setFont(new Font("Arial", Font.BOLD, 30));
         corsoLabel.setForeground(Color.WHITE);
@@ -53,7 +56,8 @@ public class InfoCorsoFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    controller.chiudiInfoCorso();
+                	setVisible(false);
+					homepageFrame.setVisible(true);
                 }
             }
 
@@ -176,13 +180,13 @@ public class InfoCorsoFrame extends JFrame {
         JButton addOnlineButton = new JButton("Aggiungi Sessione Online");
         styleButton(addOnlineButton);
         setHandCursor(addOnlineButton);
-        addOnlineButton.addActionListener(_ -> controller.apriAggiungiSessioneOnlineDialog());
+        addOnlineButton.addActionListener(_ -> new AggiungiSessioneOnlineDialog(controller, this).setVisible(true));
         buttonPanel.add(addOnlineButton);
 
         JButton addInPresenzaButton = new JButton("Aggiungi Sessione In Presenza");
         styleButton(addInPresenzaButton);
         setHandCursor(addInPresenzaButton);
-        addInPresenzaButton.addActionListener(_ -> controller.apriAggiungiSessioneInPresenzaDialog());
+        addInPresenzaButton.addActionListener(_ -> new AggiungiSessioneInPresenzaDialog(controller, this).setVisible(true));
         buttonPanel.add(addInPresenzaButton);
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -198,7 +202,18 @@ public class InfoCorsoFrame extends JFrame {
                     if (row >= 0) {
                         String luogo = (String) courseTable.getModel().getValueAt(row, 1);
                         String orarioInizio = (String) courseTable.getModel().getValueAt(row, 2);
-                        controller.sessioneSelezionata(luogo, orarioInizio);
+                        for (Sessione s : controller.getCorsoAttribute().getSessioni()) {
+                            if (s instanceof Sessione_in_presenza &&
+                                s.getLuogo().equals(luogo) &&
+                                s.getOrario_inizio().equals(orarioInizio)) {
+                                controller.setSessioneAttribute((Sessione_in_presenza) s);
+                            	//Sessione_in_presenza sip = (Sessione_in_presenza) s;
+                            	//controller.saveSessioneInPresenzaToDatabase(sip.getLuogo(), sip.getOrario_inizio_timestamp(), sip.getOrario_fine_timestamp(), sip.getMax_posti());
+                                setVisible(false);
+                                new RicetteFrame(controller, InfoCorsoFrame.this).setVisible(true);
+                                break;
+                            }
+                        }
                     }
                     checkDoubleClick = false;
                 }
@@ -226,5 +241,9 @@ public class InfoCorsoFrame extends JFrame {
                 component.setCursor(Cursor.getDefaultCursor());
             }
         });
+    }
+    
+    public JFrame getChiamante() {
+        return homepageFrame;
     }
 }

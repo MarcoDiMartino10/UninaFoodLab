@@ -14,7 +14,8 @@ public class LoginFrame extends JFrame {
     private JTextField campoEmail;
     private JPasswordField campoPassword;
     private JButton bottoneLogin;
-    
+    private Controller controller;
+        
 /*-----------------------------------------------------------------------------------------*/    
     
     // Costruttore
@@ -22,6 +23,7 @@ public class LoginFrame extends JFrame {
         
     	// Finestra
     	super("Accesso a UninaFoodLab");
+    	this.controller = controller;
         setSize(800, 600);
         setMinimumSize(new Dimension(550, 500));
         setLocationRelativeTo(null);
@@ -168,7 +170,14 @@ public class LoginFrame extends JFrame {
         });
         
         // Listener per il bottone Login
-        bottoneLogin.addActionListener(_ -> controller.apriHomepageByLogin());
+        bottoneLogin.addActionListener(_ -> {
+        	if (controller.queryChefFull(campoEmail.getText(), new String(campoPassword.getPassword())) == null) {
+				credenzialiErrate();
+				return;
+			}
+        	dispose();
+        	new HomepageFrame(controller, this).setVisible(true);
+        });
         
      // Scritta cliccabile per la registrazione
         gbc = new GridBagConstraints();
@@ -185,8 +194,9 @@ public class LoginFrame extends JFrame {
 
         scrittaRegistrati.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                controller.apriRegistrazioneFrame(); 
+            public void mouseClicked(MouseEvent e) { 
+            	dispose();
+            	new RegistrazioneFrame(controller, LoginFrame.this).setVisible(true);
             }
         });
 
@@ -196,17 +206,10 @@ public class LoginFrame extends JFrame {
     
     /*-----------------------------------------------------------------------------------------*/
     
-    // Metodi per ottenere i valori inseriti
-    public String getEmail() {
-        return campoEmail.getText();
-    }
-    public String getPassword() {
-        return new String(campoPassword.getPassword());
-    }
-    
     // Metodo per mostrare un messaggio di errore in caso di credenziali errate
-    public void credenzialiErrate(int count) {
-    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" +(--count)+ " tentativi rimasti.", "Errore", JOptionPane.ERROR_MESSAGE);
+    public void credenzialiErrate() {
+    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" +(controller.count--)+ " tentativi rimasti.", "Errore", JOptionPane.ERROR_MESSAGE);
+    	controller.checkcount();
         campoEmail.requestFocusInWindow();
     }
 

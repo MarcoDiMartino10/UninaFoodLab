@@ -14,11 +14,14 @@ public class RicetteFrame extends JFrame {
     private JButton aggiungiRicettaButton;
     private JTable ricetteTable;
     
+    private JFrame infoCorsoFrame;
+    
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
-    public RicetteFrame(Controller controller) {
+    public RicetteFrame(Controller controller, JFrame infoCorsoFrame) {
         super("Homepage - UninaFoodLab");
+        this.infoCorsoFrame = infoCorsoFrame;
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +46,7 @@ public class RicetteFrame extends JFrame {
         headerPanel.add(logoLabel, BorderLayout.WEST);
         
         // Titolo header
-        String testoTitolo = "Ricette di " + controller.getCorso().getNome() + "           ";
+        String testoTitolo = "Ricette di " + controller.getCorsoAttribute().getNome() + "           ";
         JLabel titleLabel = new JLabel(testoTitolo, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setForeground(Color.WHITE);
@@ -60,7 +63,8 @@ public class RicetteFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-            		controller.chiudiRicetteFrame();
+            		setVisible(false);
+            		infoCorsoFrame.setVisible(true);
             	}
             }
         });
@@ -73,7 +77,7 @@ public class RicetteFrame extends JFrame {
         getContentPane().add(mainPanel, BorderLayout.CENTER);
 
         // Tabella delle ricette della sessione
-        Sessione_in_presenza sessione = controller.getSessione();
+        Sessione_in_presenza sessione = controller.getSessioneAttribute();
         String[] columnNames = {"ID(nascosto)", "NOME RICETTA", "INGREDIENTI"};
         String[][] data = new String[sessione.getRicette().size()][3];
         int i = 0;
@@ -125,9 +129,7 @@ public class RicetteFrame extends JFrame {
         buttonPanel.add(aggiungiRicettaButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         setHandCursor(aggiungiRicettaButton);
-        aggiungiRicettaButton.addActionListener(_ -> {
-        	controller.apriAggiungiRicettaDialog();
-        });
+        aggiungiRicettaButton.addActionListener(_ -> new AggiungiRicettaDialog(controller, false, this).setVisible(true));
     }
     
     /*-----------------------------------------------------------------------------------------*/
@@ -152,5 +154,11 @@ public class RicetteFrame extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
         button.setPreferredSize(new Dimension(250, 50));
     }
+    
+    public JFrame getChiamante() {
+        return infoCorsoFrame;
+    }
+    
+    
 
 }

@@ -16,14 +16,14 @@ public class CorsoDAO {
     }
     
     // Recupera i corsi di uno chef dal database
-    public LinkedList<Corso> getCorsi(int idChef) throws SQLException {
+    public LinkedList<Corso> getCorsi(String emailChef) throws SQLException {
         LinkedList<Corso> corsi = new LinkedList<>();
-        String sql = "SELECT * FROM Corso WHERE id_chef = ?";
+        String sql = "SELECT * FROM Corso WHERE email_chef = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idChef);
+            ps.setString(1, emailChef);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    corsi.add(new Corso(rs.getInt("id"), rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), idChef, null));
+                    corsi.add(new Corso(rs.getInt("id"), rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), rs.getString("email_chef"), null));
                 }
             }
         }
@@ -31,8 +31,8 @@ public class CorsoDAO {
     }
     
     // Inserisci un nuovo corso nel database
-    public boolean saveCorso(Corso corso) {
-    	String sql = "INSERT INTO Corso (Id, Nome, Categoria, Data_inizio, Frequenza, Costo, Numero_sessioni, Id_chef) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public void saveCorso(Corso corso) throws SQLException {
+    	String sql = "INSERT INTO Corso (Id, Nome, Categoria, Data_inizio, Frequenza, Costo, Numero_sessioni, Email_chef) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setInt(1, corso.getID());
 			ps.setString(2, corso.getNome());
@@ -41,13 +41,9 @@ public class CorsoDAO {
 			ps.setString(5, corso.getFrequenza());
 			ps.setBigDecimal(6, corso.getCosto());
 			ps.setInt(7, corso.getNumero_sessioni());
-			ps.setInt(8, corso.getID_Chef());
+			ps.setString(8, corso.getEmailChef());
 			ps.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-		return false;
     }
     
     // Calcola il nuovo ID per un corso

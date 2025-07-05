@@ -19,10 +19,12 @@ public class HomepageFrame extends JFrame {
     private JTable courseTable;
     private boolean checkDoubleClick = false;
     
+    private JFrame loginFrame;
+    
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
-    public HomepageFrame(Controller controller) {
+    public HomepageFrame(Controller controller, JFrame loginFrame) {
         super("Homepage - UninaFoodLab");
         this.controller = controller;
         setSize(1000, 700);
@@ -49,7 +51,7 @@ public class HomepageFrame extends JFrame {
         headerPanel.add(logoLabel, BorderLayout.WEST);
         
         // Titolo al centro
-        Chef chef = controller.getChef();
+        Chef chef = controller.getChefAttribute();
         String testoTitolo = "Benvenuto Chef " + chef.getNome() + " " + chef.getCognome() + "           ";
         JLabel titleLabel = new JLabel(testoTitolo, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -67,7 +69,8 @@ public class HomepageFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-            		controller.apriLoginByHomepage();
+            		setVisible(false);
+            		loginFrame.setVisible(true);
             	}
             }
         });
@@ -157,14 +160,19 @@ public class HomepageFrame extends JFrame {
         styleButton(nuovoCorsoButton);
         buttonPanel.add(nuovoCorsoButton);
         setHandCursor(nuovoCorsoButton);
-        nuovoCorsoButton.addActionListener(_ -> controller.apriAggiungiCorsoDialog());
+        nuovoCorsoButton.addActionListener(_ -> {
+        	new AggiungiCorsoDialog(controller, this).setVisible(true);
+        });
         
         // Bottone Visualizza Report
         reportButton = new JButton("Visualizza Report");
         styleButton(reportButton);
         buttonPanel.add(reportButton);
         setHandCursor(reportButton);
-        reportButton.addActionListener(_ -> controller.apriReportMensileFrame());
+        reportButton.addActionListener(_ -> {
+        	setVisible(false);
+        	new ReportMensileFrame(controller, HomepageFrame.this).setVisible(true);;
+        });
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -178,14 +186,6 @@ public class HomepageFrame extends JFrame {
         button.setForeground(Color.WHITE);
         button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
         button.setPreferredSize(new Dimension(250, 50));
-    }
-
-    // ActionListener Aggiungi Corso e Visualizza Report
-    public void addNuovoCorsoListener(ActionListener listener) {
-        nuovoCorsoButton.addActionListener(listener);
-    }
-    public void addReportListener(ActionListener listener) {
-        reportButton.addActionListener(listener);
     }
     
     // Filtra i corsi in base alla categoria selezionata
@@ -216,14 +216,17 @@ public class HomepageFrame extends JFrame {
                     int row = courseTable.rowAtPoint(e.getPoint()); 
                     if (row >= 0) {
                         int idCorso = Integer.parseInt((String) courseTable.getModel().getValueAt(row, 0));
-                        for (int i = 0; i < controller.getChef().getCorso().size(); i++) {
-                            if (controller.getChef().getCorso().get(i).getID() == idCorso) {
-                            	controller.apriInfoCorso(controller.getChef().getCorso().get(i));
+                        LinkedList<Corso> corsi = controller.getChefAttribute().getCorso();
+                        for (int i = 0; i < corsi.size(); i++) {
+                            if (corsi.get(i).getID() == idCorso) {
+                            	controller.setCorsoAttribute(corsi.get(i));
+                            	setVisible(false);
+                            	new InfoCorsoFrame(controller, HomepageFrame.this).setVisible(true);
+                            	checkDoubleClick = false;
                                 return;
                             }
                         }
                     }
-                    checkDoubleClick = false;
                 }
             }
         });
@@ -241,6 +244,10 @@ public class HomepageFrame extends JFrame {
                 component.setCursor(Cursor.getDefaultCursor());
             }
         });
+    }
+    
+    public JFrame getChiamante() {
+        return loginFrame;
     }
 
 }

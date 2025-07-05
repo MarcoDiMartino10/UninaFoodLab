@@ -31,7 +31,7 @@ public class IngredienteDAO {
 	}
 
 	// Inserisce una lista di ingredienti per una ricetta nel database
-	public boolean saveIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) throws SQLException {
+	public void saveIngredienti(LinkedList<Ingrediente> ingredienti, int idRicetta) throws SQLException {
 	    StringBuilder sql = new StringBuilder("INSERT INTO Ingrediente (ID, Nome, Quantità, Unità_di_misura, ID_ricetta) VALUES ");
 	    for (int i = 0; i < ingredienti.size(); i++) {
 	        sql.append("(?, ?, ?, ?, ?)");
@@ -51,7 +51,6 @@ public class IngredienteDAO {
 	            ps.setInt(paramIndex++, idRicetta);
 	        }
 	        ps.executeUpdate();
-	        return true;
 	    }
 	}
 

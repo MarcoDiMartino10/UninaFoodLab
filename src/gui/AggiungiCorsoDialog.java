@@ -34,8 +34,8 @@ public class AggiungiCorsoDialog extends JDialog {
     private JTextField costoField;
     private JTextField numsessioniField;
 
-    public AggiungiCorsoDialog(Controller controller) {
-    	super((InfoCorsoFrame) null, "Aggiungi Corso", true);
+    public AggiungiCorsoDialog(Controller controller, HomepageFrame homepageFrame) {
+    	super((HomepageFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(550, 400);
         setLocationRelativeTo(this);
@@ -220,7 +220,7 @@ public class AggiungiCorsoDialog extends JDialog {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Listener annulla
-        annullaButton.addActionListener(_ -> controller.chiudiAggiungiCorsoDialog());
+        annullaButton.addActionListener(_ -> setVisible(false));
 
         // Listener invia
         inviaButton.addActionListener(_ -> {
@@ -288,7 +288,10 @@ public class AggiungiCorsoDialog extends JDialog {
                 return;
             }
             
-            controller.saveCorsoToDatabase(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
+            controller.saveCorso(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
+            setVisible(false);
+            homepageFrame.dispose();
+            new HomepageFrame(controller, homepageFrame.getChiamante()).setVisible(true);
         });
 
         setContentPane(mainPanel);

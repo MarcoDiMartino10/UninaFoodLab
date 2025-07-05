@@ -53,7 +53,7 @@ public class Sessione {
 		return "Sessione[" + "orario_inizio=" + orario_inizio + ", orario_fine=" + orario_fine + ']';
 	}
 	
-	// Metodi
+	// Metodi che verranno implementati nelle sottoclassi
 	public String getLink() {
 		return null;
 	}

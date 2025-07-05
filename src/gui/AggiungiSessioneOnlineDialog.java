@@ -16,7 +16,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     Controller controller;
 
-    public AggiungiSessioneOnlineDialog(Controller controller) {
+    public AggiungiSessioneOnlineDialog(Controller controller, InfoCorsoFrame infoCorsoFrame) {
     	super((InfoCorsoFrame) null, "Aggiungi Sessione Online", true);
         this.controller = controller;
         setSize(550, 300);
@@ -151,7 +151,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Listener annulla
-        annullaButton.addActionListener(_ -> controller.chiudiAggiungiSessioneOnlineDialog());
+        annullaButton.addActionListener(_ -> setVisible(false));
 
         // Listener invia
         inviaButton.addActionListener(_ -> {
@@ -216,7 +216,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
             	return;
             }
 
-            for (Sessione sessione : controller.getCorso().getSessioni()) {
+            for (Sessione sessione : controller.getCorsoAttribute().getSessioni()) {
 				if (sessione instanceof Sessione_online) {
 					if (inizio.before(sessione.getOrario_fine_timestamp()) && fine.after(sessione.getOrario_inizio_timestamp())) {
 						JOptionPane.showMessageDialog(this, "In questo orario in questo link si sta svolgendo un'altra sessione.", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -225,7 +225,10 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
 					}
 				}
 			}
-            controller.saveSessioneOnlineToDatabase(link, inizio, fine);
+            controller.saveSessioneOnline(link, inizio, fine);
+            setVisible(false);
+            infoCorsoFrame.dispose();
+            new InfoCorsoFrame(controller, infoCorsoFrame.getChiamante()).setVisible(true);
         });
 
         setContentPane(mainPanel);

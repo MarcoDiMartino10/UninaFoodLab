@@ -18,7 +18,7 @@ public class ReportMensileFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public ReportMensileFrame(Controller controller) {
+    public ReportMensileFrame(Controller controller, HomepageFrame homepageFrame) {
         super("Report Mensile - UninaFoodLab");
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -52,7 +52,8 @@ public class ReportMensileFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    controller.chiudiReportMensileFrame();
+                	setVisible(false);
+                	homepageFrame.setVisible(true);
                 }
             }
 
@@ -82,7 +83,7 @@ public class ReportMensileFrame extends JFrame {
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        Chef chef = controller.getChef();
+        Chef chef = controller.getChefAttribute();
         int totaleCorsi = chef.getCorso().size();
         int sessioniOnline = 0;
         int sessioniInPresenza = 0;

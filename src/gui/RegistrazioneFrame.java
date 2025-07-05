@@ -22,7 +22,7 @@ public class RegistrazioneFrame extends JFrame {
 /*-----------------------------------------------------------------------------------------*/    
     
     // Costruttore
-    public RegistrazioneFrame(Controller controller) {
+    public RegistrazioneFrame(Controller controller, LoginFrame loginFrame) {
         
     	// Finestra
     	super("Registrazione a UninaFoodLab");
@@ -332,8 +332,8 @@ public class RegistrazioneFrame extends JFrame {
 				return;
         	}
         	
-        	if(campoTelefono.getText().length() < 10 || campoTelefono.getText().length() > 15) {
-				JOptionPane.showMessageDialog(this, "Il numero di telefono deve essere compreso tra 10 e 15 cifre.", "Errore", JOptionPane.ERROR_MESSAGE);
+        	if(campoTelefono.getText().length() < 8 || campoTelefono.getText().length() > 15) {
+				JOptionPane.showMessageDialog(this, "Il numero di telefono deve essere compreso tra 8 e 15 cifre.", "Errore", JOptionPane.ERROR_MESSAGE);
 				campoTelefono.requestFocusInWindow();
 				return;
 			}
@@ -380,9 +380,10 @@ public class RegistrazioneFrame extends JFrame {
 				return;
 			}
 		
-        if(controller.creaChef()) {
+        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoTelefono.getText(), campoBiografia.getText())) {
 			JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
-			controller.apriHomepageByRegistrazione();
+			dispose();
+			new HomepageFrame(controller, this).setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Utente già registrato.", "Errore", JOptionPane.ERROR_MESSAGE);
 			return;
@@ -406,35 +407,13 @@ public class RegistrazioneFrame extends JFrame {
         scrittaLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                controller.apriLoginByRegistrazione(); 
+            	dispose();
+            	loginFrame.setVisible(true);
             }
         });
 
         pannelloLogin.add(scrittaLogin, gbc);
 
     }
-    
-    /*-----------------------------------------------------------------------------------------*/
-    
-    // Metodi per ottenere i valori inseriti
-    public String getEmail() {
-        return campoEmail.getText().toLowerCase();
-    }
-    public String getPassword() {
-        return new String(campoPassword.getPassword());
-    }
-    public String getNome() {
-		return campoNome.getText();
-	}
-	public String getCognome() {
-		return campoCognome.getText();
-	}
-	public String getTelefono() {
-		return campoTelefono.getText();
-	}
-	public String getBiografia() {
-		return campoBiografia.getText();
-	}
-
 
 }

@@ -16,7 +16,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     Controller controller;
 
-    public AggiungiSessioneInPresenzaDialog(Controller controller) {
+    public AggiungiSessioneInPresenzaDialog(Controller controller, InfoCorsoFrame infoCorsoFrame) {
     	super((InfoCorsoFrame) null, "Aggiungi Sessione in Presenza", true);
         this.controller = controller;
         setSize(550, 350);
@@ -169,10 +169,8 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // Listener annulla
-        annullaButton.addActionListener(_ -> controller.chiudiAggiungiSessioneInPresenzaDialog());
+        annullaButton.addActionListener(_ -> setVisible(false));
 
-        // Listener invia
         inviaButton.addActionListener(_ -> {
             String luogo = luogoField.getText().trim();
 
@@ -250,7 +248,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
                 return;
             }
 
-            for (Sessione sessione : controller.getCorso().getSessioni()) {
+            for (Sessione sessione : controller.getCorsoAttribute().getSessioni()) {
 				if (sessione instanceof Sessione_in_presenza) {
 					if (inizio.before(sessione.getOrario_fine_timestamp()) && fine.after(sessione.getOrario_inizio_timestamp())) {
 						JOptionPane.showMessageDialog(this, "In questo orario in questo luogo si sta svolgendo un'altra sessione.", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -259,7 +257,12 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 					}
 				}
 			}
-            controller.saveSessioneInPresenzaToDatabase(luogo, inizio, fine, maxPosti);
+            controller.setNewSessioneAttribute(luogo, inizio, fine, maxPosti);
+            new AggiungiRicettaDialog(controller, true, infoCorsoFrame).setVisible(true);
+            setVisible(false);
+            infoCorsoFrame.dispose();
+            new InfoCorsoFrame(controller, infoCorsoFrame.getChiamante()).setVisible(true);
+            
         });
 
         setContentPane(mainPanel);

@@ -37,7 +37,7 @@ public class RicettaDAO {
 	}
 	
 	// Inserisce una nuova ricetta nel database
-	public boolean saveRicetta(String luogo, Timestamp orario_inizio, String nome, LinkedList<Ingrediente> ingredienti) throws SQLException {
+	public void saveRicetta(String luogo, Timestamp orario_inizio, String nome, LinkedList<Ingrediente> ingredienti) throws SQLException {
 	    try {
 	        conn.setAutoCommit(false);
 	        int id_ricetta = ingredienti.get(0).getID_ricetta();
@@ -55,7 +55,6 @@ public class RicettaDAO {
 	            ps.executeUpdate();
 	        }
 	        conn.commit();
-	        return true;
 
 	    } catch (SQLException e) {
 	        try {

@@ -5,7 +5,6 @@ import java.util.*;
 public class Chef {
 	
 	// Attributi
-	private int ID;
 	private String nome;
 	private String cognome;
 	private String email;
@@ -15,8 +14,7 @@ public class Chef {
 	private LinkedList<Corso> corsi = new LinkedList<Corso>();
 	
 	// Costruttore
-	public Chef(int ID, String nome, String cognome, String email, String password, String biografia, String numero_tel, LinkedList<Corso> corsi) {
-	    this.ID = ID;
+	public Chef(String nome, String cognome, String email, String password, String biografia, String numero_tel, LinkedList<Corso> corsi) {
 	    this.nome = nome;
 	    this.cognome = cognome;
 	    this.email = email;
@@ -27,9 +25,6 @@ public class Chef {
 	}
 	
 	// Getters
-    public int getID() {
-        return ID;
-    }
     public String getNome() {
         return nome;
     }
@@ -53,9 +48,6 @@ public class Chef {
 	}
 
     // Setters
-    public void setID(int ID) {
-		this.ID = ID;
-	} 
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -76,6 +68,13 @@ public class Chef {
     }    
     public void setCorso(LinkedList<Corso> corsi) {
 		this.corsi = corsi;
+	}
+    
+    // Aggiungi un corso
+    public void addCorso(Corso corso) {
+		if (corso != null) {
+			this.corsi.add(corso);
+		}
 	}
     
     // toString

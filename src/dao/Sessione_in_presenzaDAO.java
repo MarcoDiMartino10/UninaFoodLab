@@ -31,7 +31,7 @@ public class Sessione_in_presenzaDAO {
 	}
 
 	// Inserisce una nuova sessione in presenza nel database
-	public boolean saveSessioneInPresenza(Sessione_in_presenza sessione) throws SQLException {
+	public void saveSessioneInPresenza(Sessione_in_presenza sessione) throws SQLException {
 		String sql = "INSERT INTO sessione_in_presenza (luogo, orario_inizio, orario_fine, max_posti, id_corso) VALUES (?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLuogo());
@@ -40,7 +40,6 @@ public class Sessione_in_presenzaDAO {
 			ps.setInt(4, sessione.getMax_posti());
 			ps.setInt(5, sessione.getId_Corso());
 			ps.executeUpdate();
-			return true;
 		}
 	}
 	

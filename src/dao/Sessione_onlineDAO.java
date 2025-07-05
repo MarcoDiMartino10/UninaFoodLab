@@ -31,7 +31,7 @@ public class Sessione_onlineDAO {
 	}
 	
 	// Inserisce una nuova sessione online nel database
-	public boolean saveSessioneOnline(Sessione_online sessione) throws SQLException {
+	public void saveSessioneOnline(Sessione_online sessione) throws SQLException {
 		String sql = "INSERT INTO sessione_online (link, orario_inizio, orario_fine, id_corso) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLink());
@@ -39,7 +39,6 @@ public class Sessione_onlineDAO {
 			ps.setTimestamp(3, sessione.getOrario_fine_timestamp());
 			ps.setInt(4, sessione.getId_Corso());
 			ps.executeUpdate();
-			return true;
 		}
 	}
 	
