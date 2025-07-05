@@ -52,7 +52,7 @@ public class ReportMensileFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                	setVisible(false);
+                	dispose();
                 	homepageFrame.setVisible(true);
                 }
             }

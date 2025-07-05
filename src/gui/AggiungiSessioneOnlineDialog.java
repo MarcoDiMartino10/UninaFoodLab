@@ -151,7 +151,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Listener annulla
-        annullaButton.addActionListener(_ -> setVisible(false));
+        annullaButton.addActionListener(_ -> dispose());
 
         // Listener invia
         inviaButton.addActionListener(_ -> {
@@ -226,7 +226,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
 				}
 			}
             controller.saveSessioneOnline(link, inizio, fine);
-            setVisible(false);
+            dispose();
             infoCorsoFrame.dispose();
             new InfoCorsoFrame(controller, infoCorsoFrame.getChiamante()).setVisible(true);
         });

@@ -220,7 +220,7 @@ public class AggiungiCorsoDialog extends JDialog {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Listener annulla
-        annullaButton.addActionListener(_ -> setVisible(false));
+        annullaButton.addActionListener(_ -> dispose());
 
         // Listener invia
         inviaButton.addActionListener(_ -> {
@@ -289,7 +289,7 @@ public class AggiungiCorsoDialog extends JDialog {
             }
             
             controller.saveCorso(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
-            setVisible(false);
+            dispose();
             homepageFrame.dispose();
             new HomepageFrame(controller, homepageFrame.getChiamante()).setVisible(true);
         });

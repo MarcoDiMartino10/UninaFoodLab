@@ -56,7 +56,7 @@ public class InfoCorsoFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                	setVisible(false);
+                	dispose();
 					homepageFrame.setVisible(true);
                 }
             }
@@ -207,9 +207,7 @@ public class InfoCorsoFrame extends JFrame {
                                 s.getLuogo().equals(luogo) &&
                                 s.getOrario_inizio().equals(orarioInizio)) {
                                 controller.setSessioneAttribute((Sessione_in_presenza) s);
-                            	//Sessione_in_presenza sip = (Sessione_in_presenza) s;
-                            	//controller.saveSessioneInPresenzaToDatabase(sip.getLuogo(), sip.getOrario_inizio_timestamp(), sip.getOrario_fine_timestamp(), sip.getMax_posti());
-                                setVisible(false);
+                                dispose();
                                 new RicetteFrame(controller, InfoCorsoFrame.this).setVisible(true);
                                 break;
                             }

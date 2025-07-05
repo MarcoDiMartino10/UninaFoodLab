@@ -169,7 +169,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        annullaButton.addActionListener(_ -> setVisible(false));
+        annullaButton.addActionListener(_ -> dispose());
 
         inviaButton.addActionListener(_ -> {
             String luogo = luogoField.getText().trim();
@@ -259,7 +259,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 			}
             controller.setNewSessioneAttribute(luogo, inizio, fine, maxPosti);
             new AggiungiRicettaDialog(controller, true, infoCorsoFrame).setVisible(true);
-            setVisible(false);
+            dispose();
             infoCorsoFrame.dispose();
             new InfoCorsoFrame(controller, infoCorsoFrame.getChiamante()).setVisible(true);
             
