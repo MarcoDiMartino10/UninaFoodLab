@@ -16,7 +16,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     Controller controller;
 
-    public AggiungiSessioneInPresenzaDialog(Controller controller, InfoCorsoFrame previus) {
+    public AggiungiSessioneInPresenzaDialog(Controller controller, InfoCorsoFrame previous) {
     	super((InfoCorsoFrame) null, "Aggiungi Sessione in Presenza", true);
         this.controller = controller;
         setSize(550, 350);
@@ -258,10 +258,10 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 				}
 			}
             controller.setNewSessioneAttribute(luogo, inizio, fine, maxPosti);
-            new AggiungiRicettaDialog(controller, true, previus).setVisible(true);
+            new AggiungiRicettaDialog(controller, true, previous).setVisible(true);
             dispose();
-            previus.dispose();
-            new InfoCorsoFrame(controller, previus.getChiamante()).setVisible(true);
+            previous.dispose();
+            new InfoCorsoFrame(controller, previous.getChiamante()).setVisible(true);
             
         });
 

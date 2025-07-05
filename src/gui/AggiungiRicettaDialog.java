@@ -19,7 +19,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	/*-----------------------------------------------------------------------------------------*/
 	
 	// Costruttore
-	public AggiungiRicettaDialog(Controller controller, boolean flag, JFrame previus) {
+	public AggiungiRicettaDialog(Controller controller, boolean flag, JFrame previous) {
 		super((RicetteFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
         setSize(520, 280);
@@ -293,8 +293,8 @@ public class AggiungiRicettaDialog extends JDialog {
             if (flag == false) {
             	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
 //            	dispose();
-                previus.dispose();
-                new RicetteFrame(controller, ((RicetteFrame) previus).getChiamante()).setVisible(true);
+            	previous.dispose();
+                new RicetteFrame(controller, ((RicetteFrame) previous).getChiamante()).setVisible(true);
             }
             else {
             	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);

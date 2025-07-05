@@ -22,7 +22,7 @@ public class RegistrazioneFrame extends JFrame {
 /*-----------------------------------------------------------------------------------------*/    
     
     // Costruttore
-    public RegistrazioneFrame(Controller controller, LoginFrame previus) {
+    public RegistrazioneFrame(Controller controller, LoginFrame previous) {
         
     	// Finestra
     	super("Registrazione a UninaFoodLab");
@@ -408,7 +408,7 @@ public class RegistrazioneFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	dispose();
-            	previus.setVisible(true);
+            	previous.setVisible(true);
             }
         });
 

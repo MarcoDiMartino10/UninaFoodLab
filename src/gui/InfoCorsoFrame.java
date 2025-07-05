@@ -14,12 +14,12 @@ public class InfoCorsoFrame extends JFrame {
     private JTable courseTable;
     private boolean checkDoubleClick = false;
     
-    private JFrame previus;
+    private JFrame previous;
 
-    public InfoCorsoFrame(Controller controller, JFrame previus) {
+    public InfoCorsoFrame(Controller controller, JFrame previous) {
 
         super("Informazioni corso - UninaFoodLab");
-        this.previus = previus;
+        this.previous = previous;
         this.controller = controller;
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -57,7 +57,7 @@ public class InfoCorsoFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
                 	dispose();
-					previus.setVisible(true);
+                	previous.setVisible(true);
                 }
             }
 
@@ -242,6 +242,6 @@ public class InfoCorsoFrame extends JFrame {
     }
     
     public JFrame getChiamante() {
-        return previus;
+        return previous;
     }
 }
