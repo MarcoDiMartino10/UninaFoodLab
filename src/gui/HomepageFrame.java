@@ -18,15 +18,13 @@ public class HomepageFrame extends JFrame {
     private JComboBox<String> categoryFilter;
     private JTable courseTable;
     private boolean checkDoubleClick = false;
-    private JFrame previous;
     
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
-    public HomepageFrame(Controller controller, JFrame previous) {
+    public HomepageFrame(Controller controller) {
         super("Homepage - UninaFoodLab");
         this.controller = controller;
-        this.previous = previous;
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,8 +65,7 @@ public class HomepageFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-            		dispose();
-            		new LoginFrame(controller).setVisible(true);
+            		controller.apriLoginByHomepage();
             	}
             }
         });
@@ -159,7 +156,7 @@ public class HomepageFrame extends JFrame {
         buttonPanel.add(nuovoCorsoButton);
         setHandCursor(nuovoCorsoButton);
         nuovoCorsoButton.addActionListener(_ -> {
-        	new AggiungiCorsoDialog(controller, this).setVisible(true);
+        	controller.apriAggiungiCorsoDialog();
         });
         
         // Bottone Visualizza Report
@@ -168,8 +165,7 @@ public class HomepageFrame extends JFrame {
         buttonPanel.add(reportButton);
         setHandCursor(reportButton);
         reportButton.addActionListener(_ -> {
-        	dispose();
-        	new ReportMensileFrame(controller, HomepageFrame.this).setVisible(true);;
+        	controller.apriReportMensileFrame();
         });
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -218,8 +214,7 @@ public class HomepageFrame extends JFrame {
                         for (int i = 0; i < corsi.size(); i++) {
                             if (corsi.get(i).getID() == idCorso) {
                             	controller.setCorsoAttribute(corsi.get(i));
-                            	dispose();
-                            	new InfoCorsoFrame(controller, HomepageFrame.this).setVisible(true);
+                            	controller.apriInfoCorso();
                             	checkDoubleClick = false;
                                 return;
                             }
@@ -242,10 +237,6 @@ public class HomepageFrame extends JFrame {
                 component.setCursor(Cursor.getDefaultCursor());
             }
         });
-    }
-    
-    public JFrame getChiamante() {
-        return previous;
     }
 
 }

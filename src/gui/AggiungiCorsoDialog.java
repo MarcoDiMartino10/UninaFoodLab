@@ -34,7 +34,7 @@ public class AggiungiCorsoDialog extends JDialog {
     private JTextField numsessioniField;
 
     // Costruttore
-    public AggiungiCorsoDialog(Controller controller, HomepageFrame previous) {
+    public AggiungiCorsoDialog(Controller controller) {
     	
     	super((HomepageFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
@@ -290,9 +290,7 @@ public class AggiungiCorsoDialog extends JDialog {
             }
             
             controller.saveCorso(nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni);
-            dispose();
-            previous.dispose();
-            new HomepageFrame(controller, previous.getChiamante()).setVisible(true);
+            controller.chiudiAggiungiCorsoDialog();
         });
 
         setContentPane(mainPanel);

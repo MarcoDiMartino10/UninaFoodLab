@@ -14,12 +14,10 @@ public class InfoCorsoFrame extends JFrame {
     private Controller controller;
     private JTable courseTable;
     private boolean checkDoubleClick = false;
-    private JFrame previous;
 
-    public InfoCorsoFrame(Controller controller, JFrame previous) {
+    public InfoCorsoFrame(Controller controller) {
 
         super("Informazioni corso - UninaFoodLab");
-        this.previous = previous;
         this.controller = controller;
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -56,8 +54,7 @@ public class InfoCorsoFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                	dispose();
-                	previous.setVisible(true);
+                	controller.chiudiInfoCorso();
                 }
             }
 
@@ -240,10 +237,5 @@ public class InfoCorsoFrame extends JFrame {
                 component.setCursor(Cursor.getDefaultCursor());
             }
         });
-    }
-    
-    // Restituisce il frame chiamante
-    public JFrame getChiamante() {
-        return previous;
     }
 }

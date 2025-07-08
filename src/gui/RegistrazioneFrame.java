@@ -22,7 +22,7 @@ public class RegistrazioneFrame extends JFrame {
 /*-----------------------------------------------------------------------------------------*/    
     
     // Costruttore
-    public RegistrazioneFrame(Controller controller, LoginFrame previous) {
+    public RegistrazioneFrame(Controller controller) {
         
     	// Finestra
     	super("Registrazione a UninaFoodLab");
@@ -382,8 +382,7 @@ public class RegistrazioneFrame extends JFrame {
 		
 	        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoTelefono.getText(), campoBiografia.getText())) {
 				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
-				dispose();
-				new HomepageFrame(controller, this).setVisible(true);
+				controller.apriHomepageByRegistrazione();
 			} else {
 				JOptionPane.showMessageDialog(this, "Utente già registrato.", "Errore", JOptionPane.ERROR_MESSAGE);
 				return;
@@ -407,8 +406,7 @@ public class RegistrazioneFrame extends JFrame {
         scrittaLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	dispose();
-            	previous.setVisible(true);
+            	controller.apriLoginByRegistrazione();
             }
         });
 

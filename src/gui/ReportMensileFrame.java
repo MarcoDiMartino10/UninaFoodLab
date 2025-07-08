@@ -20,7 +20,7 @@ public class ReportMensileFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     // Costruttore
-    public ReportMensileFrame(Controller controller, HomepageFrame previous) {
+    public ReportMensileFrame(Controller controller) {
         
     	super("Report Mensile - UninaFoodLab");
         setSize(1000, 700);
@@ -55,8 +55,7 @@ public class ReportMensileFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                	dispose();
-                	previous.setVisible(true);
+                	controller.chiudiReportMensileFrame();
                 }
             }
 

@@ -29,19 +29,176 @@ public class Controller {
     private ChefDAO chefDAO;
     private CorsoDAO corsoDAO;
 	public int count = 3;
+	
+	private LoginFrame loginFrame;
+	private RegistrazioneFrame registrazioneFrame;
+	private HomepageFrame homepageFrame;
+	private InfoCorsoFrame infoCorsoFrame;
+	private RicetteFrame ricetteFrame;
+	private AggiungiRicettaDialog aggiungiRicettaDialog;
+	private AggiungiCorsoDialog aggiungiCorsoDialog;
+	private AggiungiSessioneOnlineDialog aggiungiSessioneOnlineDialog;
+	private AggiungiSessioneInPresenzaDialog aggiungiSessioneInPresenzaDialog;
+	private ReportMensileFrame reportMensileFrame;
 
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-    	LoginFrame loginFrame = new LoginFrame(this);
-    	loginFrame.setVisible(true);
-        new ChefDAO(conn);
+        //new ChefDAO(conn);
+    	apriLoginFrame();
     }
     
     public void checkcount() {
     	if (count < 0)
     		System.exit(0);
     }
+    
+    /*------------------------------------------- Interfacce grafiche ----------------------------------------------*/
+    
+    public void apriLoginFrame() {
+		loginFrame = new LoginFrame(this);
+		loginFrame.setVisible(true);
+	}
+	
+	// Apri RegistrazioneFrame da LoginFrame
+	public void apriRegistrazioneFrame() {
+		loginFrame.dispose();
+  		registrazioneFrame = new RegistrazioneFrame(this);
+  		registrazioneFrame.setVisible(true);
+  	}
+    
+	// Apre HomepageFrame da LoginFrame
+    public void apriHomepageByLogin() {
+    	loginFrame.dispose();
+    	homepageFrame = new HomepageFrame(this);
+    	homepageFrame.setVisible(true);
+    }
+    
+    // Chiude RegistrazioneFrame e riapre LoginFrame
+    public void apriLoginByRegistrazione() {
+		registrazioneFrame.dispose();
+		loginFrame = new LoginFrame(this);
+		loginFrame.setVisible(true);
+	}
+    
+    // Apre HomepageFrame e chiude RegistrazioneFrame
+    public void apriHomepageByRegistrazione() {
+    	registrazioneFrame.dispose();
+    	homepageFrame = new HomepageFrame(this);
+    	homepageFrame.setVisible(true);
+    }
+    
+    // Chiudi homepage e riapri login
+    public void apriLoginByHomepage() {
+    	homepageFrame.dispose();
+    	loginFrame = new LoginFrame(this);
+    	loginFrame.setVisible(true);
+	}
+    
+    // Apri infoCorsoFrame e chiudi homepageFrame
+    public void apriInfoCorso() {
+    	homepageFrame.dispose();
+    	infoCorsoFrame = new InfoCorsoFrame(this);
+    	infoCorsoFrame.setVisible(true);
+    }
+    
+    // Chiudi infoCorsoFrame e riapri homepageFrame
+    public void chiudiInfoCorso() {
+	  infoCorsoFrame.dispose();
+	  homepageFrame = new HomepageFrame(this);
+	  homepageFrame.setVisible(true);
+	}
+    
+ // Apri aggiungiCorsoDialog per aggiungere un nuovo corso
+    public void apriAggiungiCorsoDialog() {
+    	aggiungiCorsoDialog = new AggiungiCorsoDialog(this);
+    	aggiungiCorsoDialog.setVisible(true);
+    }
+
+    // Chiudi aggiungiCorsoDialog dopo l'aggiunta di un nuovo corso
+    public void chiudiAggiungiCorsoDialog() {
+		aggiungiCorsoDialog.dispose();
+		homepageFrame.dispose();
+		homepageFrame = new HomepageFrame(this);
+		homepageFrame.setVisible(true);
+	}
+    
+    public void apriReportMensileFrame() {
+    	homepageFrame.dispose();
+		reportMensileFrame = new ReportMensileFrame(this);
+		reportMensileFrame.setVisible(true);
+	}
+
+    // Chiudi reportMensileFrame e riapri homepageFrame
+    public void chiudiReportMensileFrame() {
+    	reportMensileFrame.dispose();
+    	homepageFrame = new HomepageFrame(this);
+    	homepageFrame.setVisible(true);
+    }
+    
+    // Apri ricetteFrame e chiudi infoCorsoFrame
+    public void apriRicetteFrame(Sessione_in_presenza sessione) {
+    	this.sessione_in_presenza = sessione;
+    	ricetteFrame = new RicetteFrame(this);
+    	ricetteFrame.setVisible(true);
+    	infoCorsoFrame.setVisible(false);
+    }
+    
+    // Chiudi ricetteFrame e riapri infoCorsoFrame
+    public void chiudiRicetteFrame() {
+    	ricetteFrame.dispose();
+    	infoCorsoFrame = new InfoCorsoFrame(this);
+    	infoCorsoFrame.setVisible(true);
+    }
+    
+    // Apri aggiungiRicettaDialog
+    public void apriAggiungiRicettaDialog() {
+    	aggiungiRicettaDialog = new AggiungiRicettaDialog(this, false);
+		aggiungiRicettaDialog.setVisible(true);
+	}
+    
+    // Chiudi aggiungiRicettaDialog
+    public void chiudiAggiungiRicettaDialog() {
+    	aggiungiRicettaDialog.dispose();
+    }
+    
+    // Aggiorna ricetteFrame dopo l'aggiunta di una nuova ricetta
+    public void aggiornaRicetteFrame() {
+		ricetteFrame.dispose();
+		ricetteFrame = new RicetteFrame(this);
+		ricetteFrame.setVisible(true);
+	}
+    
+    public void apriAggiungiSessioneOnlineDialog() {
+		aggiungiSessioneOnlineDialog = new AggiungiSessioneOnlineDialog(this);
+		aggiungiSessioneOnlineDialog.setVisible(true);
+	}
+    
+    public void chiudiAggiungiSessioneOnlineDialog() {
+    	aggiungiSessioneOnlineDialog.dispose();
+    }
+    
+    // Apri aggiungiSessioneInPresenzaDialog per aggiungere una sessione in presenza
+    public void apriAggiungiSessioneInPresenzaDialog() {
+		aggiungiSessioneInPresenzaDialog = new AggiungiSessioneInPresenzaDialog(this);
+		aggiungiSessioneInPresenzaDialog.setVisible(true);
+	}
+    
+    public void chiudiAggiungiSessioneInPresenzaDialog() {
+    	aggiungiSessioneInPresenzaDialog.dispose();
+    }
+    
+    private void aggiornaInfoCorsoFrame() {
+    	infoCorsoFrame.dispose();
+    	infoCorsoFrame = new InfoCorsoFrame(this);
+    	infoCorsoFrame.setVisible(true);
+	}
+    
+    // Apri aggiungiRicettaFrame per aggiungere una ricetta alla sessione in presenza
+    public void apriAggiungiRicettaFrameBySessione() {
+    	aggiungiRicettaDialog = new AggiungiRicettaDialog(this, true);
+		aggiungiRicettaDialog.setVisible(true);
+	}
     
     /*------------------------------------------- Get e Set ----------------------------------------------*/
     
