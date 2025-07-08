@@ -18,7 +18,7 @@ public class Ricetta {
 		this.nome = nome;
 		this.luogo = luogo;
 		this.orario_inizio = orario_inizio;
-		this.ingredienti = ingredienti;
+		this.ingredienti = ingredienti; //logx
 	}
 	
 	// Getters
