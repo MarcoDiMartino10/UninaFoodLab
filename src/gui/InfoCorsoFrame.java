@@ -54,7 +54,8 @@ public class InfoCorsoFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                	controller.chiudiInfoCorso();
+                	dispose();
+                	controller.apriHomepageFrame();
                 }
             }
 
@@ -204,9 +205,8 @@ public class InfoCorsoFrame extends JFrame {
                                 s.getLuogo().equals(luogo) &&
                                 s.getOrario_inizio().equals(orarioInizio)) {
                                 controller.setSessioneAttribute((Sessione_in_presenza) s);
-//                                dispose();
-//                                new RicetteFrame(controller, InfoCorsoFrame.this).setVisible(true);
-                                controller.sessioneSelezionata(luogo, orarioInizio);
+                                dispose();
+                                controller.apriRicetteFrame();
                                 break;
                             }
                         }

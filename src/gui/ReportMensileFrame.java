@@ -55,7 +55,8 @@ public class ReportMensileFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                	controller.chiudiReportMensileFrame();
+                	dispose();
+                	controller.apriHomepageFrame();
                 }
             }
 

@@ -13,11 +13,10 @@ public class RicetteFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
     private JButton aggiungiRicettaButton;
     private JTable ricetteTable;
-    private JFrame previous;
     
     /*-----------------------------------------------------------------------------------------*/
 
-    // Costruttore
+    // Costruttore 	
     public RicetteFrame(Controller controller) {
         
     	super("Homepage - UninaFoodLab");
@@ -61,7 +60,7 @@ public class RicetteFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
             		dispose();
-            		previous.setVisible(true);
+            		controller.apriInfoCorsoFrame();
             	}
             }
         });
@@ -126,7 +125,7 @@ public class RicetteFrame extends JFrame {
         buttonPanel.add(aggiungiRicettaButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         setHandCursor(aggiungiRicettaButton);
-        aggiungiRicettaButton.addActionListener(_ ->controller.apriAggiungiRicettaDialog());
+        aggiungiRicettaButton.addActionListener(_ ->controller.apriAggiungiRicettaDialog(false));
     }
     
     /*-----------------------------------------------------------------------------------------*/
@@ -150,11 +149,6 @@ public class RicetteFrame extends JFrame {
         button.setForeground(Color.WHITE);
         button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
         button.setPreferredSize(new Dimension(250, 50));
-    }
-    
-    // Metodo per ottenere il frame chiamante
-    public JFrame getChiamante() {
-        return previous;
     }
     
     

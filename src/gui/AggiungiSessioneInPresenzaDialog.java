@@ -258,16 +258,12 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
             
             // Salvo sessione
             controller.setNewSessioneAttribute(luogo, inizio, fine, maxPosti);
-//            new AggiungiRicettaDialog(controller);
-            controller.apriAggiungiRicettaDialog();
+            controller.apriAggiungiRicettaDialog(true);
+            
 			
 			// Chiudo il dialog
-//            dispose();
-//            previous.dispose();
-//            new InfoCorsoFrame(controller, previous.getChiamante()).setVisible(true);
-//            controller.apriInfoCorso();
-            controller.chiudiAggiungiSessioneInPresenzaDialog();
-            controller.aggiornaInfoCorsoFrame();
+            dispose();
+            controller.apriInfoCorsoFrame();
             
         });
 

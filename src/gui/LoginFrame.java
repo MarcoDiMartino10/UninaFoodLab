@@ -173,7 +173,8 @@ public class LoginFrame extends JFrame {
 				credenzialiErrate();
 				return;
 			}
-        	controller.apriHomepageByLogin();
+        	dispose();
+        	controller.apriHomepageFrame();
         });
         
      // Scritta cliccabile per la registrazione
@@ -192,6 +193,7 @@ public class LoginFrame extends JFrame {
         scrittaRegistrati.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) { 
+            	dispose();
             	controller.apriRegistrazioneFrame();
             }
         });

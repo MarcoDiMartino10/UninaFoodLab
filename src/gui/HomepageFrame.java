@@ -65,7 +65,8 @@ public class HomepageFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
             	if (SwingUtilities.isLeftMouseButton(e)) {
-            		controller.apriLoginByHomepage();
+            		dispose();
+            		controller.apriLoginFrame();
             	}
             }
         });
@@ -165,6 +166,7 @@ public class HomepageFrame extends JFrame {
         buttonPanel.add(reportButton);
         setHandCursor(reportButton);
         reportButton.addActionListener(_ -> {
+        	dispose();
         	controller.apriReportMensileFrame();
         });
 
@@ -214,7 +216,8 @@ public class HomepageFrame extends JFrame {
                         for (int i = 0; i < corsi.size(); i++) {
                             if (corsi.get(i).getID() == idCorso) {
                             	controller.setCorsoAttribute(corsi.get(i));
-                            	controller.apriInfoCorso();
+                            	dispose();
+                            	controller.apriInfoCorsoFrame();
                             	checkDoubleClick = false;
                                 return;
                             }

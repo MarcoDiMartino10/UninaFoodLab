@@ -244,7 +244,7 @@ public class AggiungiRicettaDialog extends JDialog {
         });
         
         // Bottone Annulla
-        annullaButton.addActionListener(_ -> controller.chiudiAggiungiRicettaDialog());
+        annullaButton.addActionListener(_ -> dispose());
         
         // Bottone Invia
         inviaButton.addActionListener(_ -> {
@@ -304,19 +304,10 @@ public class AggiungiRicettaDialog extends JDialog {
             dispose();
             if (flag == false) {
             	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
-//                new RicetteFrame(controller, ((RicetteFrame) previous).getChiamante()).setVisible(true);
-            	controller.apriRicetteFrame(controller.getSessioneAttribute());
-            }
-            else {
+            	controller.apriRicetteFrame();
+            } else {
             	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
             }
-//            if (flag == false) { 
-//            	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
-//            } else {
-//            	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
-//            }
-//            
-//            controller.chiudiAggiungiSessioneInPresenzaDialog();
         });
 
 
