@@ -116,6 +116,23 @@ public class Controller {
 		aggiungiRicettaDialog.setVisible(true);
 	}
     
+    public void aggiornaHomepageFrame() {
+    	homepageFrame.dispose();
+    	homepageFrame = new HomepageFrame(this);
+    	homepageFrame.setVisible(true);
+    }
+    public void aggiornaInfoCorsoFrame() {
+		infoCorsoFrame.dispose();
+		infoCorsoFrame = new InfoCorsoFrame(this);
+		infoCorsoFrame.setVisible(true);
+	}
+    
+    public void aggiornaRicetteFrame() {
+    	ricetteFrame.dispose();
+    	ricetteFrame = new RicetteFrame(this);
+    	ricetteFrame.setVisible(true);
+    }
+    
     /*------------------------------------------- Get e Set ----------------------------------------------*/
     
     public Chef getChefAttribute() {

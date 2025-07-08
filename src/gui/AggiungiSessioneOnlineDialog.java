@@ -225,7 +225,7 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
             // Salvo la sessione
             controller.saveSessioneOnline(link, inizio, fine);
             dispose();
-			controller.apriInfoCorsoFrame();
+			controller.aggiornaInfoCorsoFrame();
         });
 
         setContentPane(mainPanel);

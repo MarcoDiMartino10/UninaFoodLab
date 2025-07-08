@@ -263,7 +263,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 			
 			// Chiudo il dialog
             dispose();
-            controller.apriInfoCorsoFrame();
+            controller.aggiornaInfoCorsoFrame();
             
         });
 
