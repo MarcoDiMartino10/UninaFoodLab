@@ -188,7 +188,7 @@ public class Controller {
     	aggiungiSessioneInPresenzaDialog.dispose();
     }
     
-    private void aggiornaInfoCorsoFrame() {
+    public void aggiornaInfoCorsoFrame() {
     	infoCorsoFrame.dispose();
     	infoCorsoFrame = new InfoCorsoFrame(this);
     	infoCorsoFrame.setVisible(true);
@@ -242,6 +242,15 @@ public class Controller {
         return corsiFiltrati;
     }
     
+    public void sessioneSelezionata(String luogo, String orarioInizio) {
+        for (Sessione s : corso.getSessioni()) {
+            if (s instanceof Sessione_in_presenza && s.getLuogo().equals(luogo) && s.getOrario_inizio().equals(orarioInizio)) {
+                apriRicetteFrame((Sessione_in_presenza) s);
+                return;
+            }
+        }
+    }
+    
     /*------------------------------------------- Metodi di accesso al database ----------------------------------------------*/
     
     // Metodo per ottenere il nuovo ID di ricetta
@@ -283,8 +292,10 @@ public class Controller {
     public void saveRicettaAndIngrediente(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
     	ricettaDAO = new RicettaDAO(conn);
     	ingredienteDAO = new IngredienteDAO(conn);
+    	int idRicetta = ingredienti.get(0).getID_ricetta(); // Assunto: già assegnato correttamente
+
     	try {
-    		ricettaDAO.saveRicetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
+    		ricettaDAO.saveRicetta(idRicetta, nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
     		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
     	} catch (SQLException e) {
     		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA RICETTA O UN INGREDIENTE", e);

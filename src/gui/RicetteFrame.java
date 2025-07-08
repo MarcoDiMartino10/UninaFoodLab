@@ -18,10 +18,9 @@ public class RicetteFrame extends JFrame {
     /*-----------------------------------------------------------------------------------------*/
 
     // Costruttore
-    public RicetteFrame(Controller controller, JFrame previous) {
+    public RicetteFrame(Controller controller) {
         
     	super("Homepage - UninaFoodLab");
-        this.previous = previous;
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +126,7 @@ public class RicetteFrame extends JFrame {
         buttonPanel.add(aggiungiRicettaButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         setHandCursor(aggiungiRicettaButton);
-        aggiungiRicettaButton.addActionListener(_ -> new AggiungiRicettaDialog(controller, false, this).setVisible(true));
+        aggiungiRicettaButton.addActionListener(_ ->controller.apriAggiungiRicettaDialog());
     }
     
     /*-----------------------------------------------------------------------------------------*/

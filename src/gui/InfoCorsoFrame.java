@@ -176,13 +176,13 @@ public class InfoCorsoFrame extends JFrame {
         JButton addOnlineButton = new JButton("Aggiungi Sessione Online");
         styleButton(addOnlineButton);
         setHandCursor(addOnlineButton);
-        addOnlineButton.addActionListener(_ -> new AggiungiSessioneOnlineDialog(controller, this).setVisible(true));
+        addOnlineButton.addActionListener(_ -> controller.apriAggiungiSessioneOnlineDialog());
         buttonPanel.add(addOnlineButton);
 
         JButton addInPresenzaButton = new JButton("Aggiungi Sessione In Presenza");
         styleButton(addInPresenzaButton);
         setHandCursor(addInPresenzaButton);
-        addInPresenzaButton.addActionListener(_ -> new AggiungiSessioneInPresenzaDialog(controller, this).setVisible(true));
+        addInPresenzaButton.addActionListener(_ -> controller.apriAggiungiSessioneInPresenzaDialog());
         buttonPanel.add(addInPresenzaButton);
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -204,8 +204,9 @@ public class InfoCorsoFrame extends JFrame {
                                 s.getLuogo().equals(luogo) &&
                                 s.getOrario_inizio().equals(orarioInizio)) {
                                 controller.setSessioneAttribute((Sessione_in_presenza) s);
-                                dispose();
-                                new RicetteFrame(controller, InfoCorsoFrame.this).setVisible(true);
+//                                dispose();
+//                                new RicetteFrame(controller, InfoCorsoFrame.this).setVisible(true);
+                                controller.sessioneSelezionata(luogo, orarioInizio);
                                 break;
                             }
                         }

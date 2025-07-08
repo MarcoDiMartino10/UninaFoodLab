@@ -19,7 +19,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	/*-----------------------------------------------------------------------------------------*/
 	
 	// Costruttore
-	public AggiungiRicettaDialog(Controller controller, boolean flag, JFrame previous) {
+	public AggiungiRicettaDialog(Controller controller, boolean flag) {
 		
 		super((RicetteFrame) null, "Aggiungi Corso", true);
         this.controller = controller;
@@ -244,7 +244,7 @@ public class AggiungiRicettaDialog extends JDialog {
         });
         
         // Bottone Annulla
-        annullaButton.addActionListener(_ -> dispose());
+        annullaButton.addActionListener(_ -> controller.chiudiAggiungiRicettaDialog());
         
         // Bottone Invia
         inviaButton.addActionListener(_ -> {
@@ -300,16 +300,23 @@ public class AggiungiRicettaDialog extends JDialog {
                 ingredienti.add(ingrediente);
             }
             
-            // Comportamento bottone Invia
+//             Comportamento bottone Invia
             dispose();
             if (flag == false) {
             	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
-            	previous.dispose();
-                new RicetteFrame(controller, ((RicetteFrame) previous).getChiamante()).setVisible(true);
+//                new RicetteFrame(controller, ((RicetteFrame) previous).getChiamante()).setVisible(true);
+            	controller.apriRicetteFrame(controller.getSessioneAttribute());
             }
             else {
             	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
             }
+//            if (flag == false) { 
+//            	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
+//            } else {
+//            	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
+//            }
+//            
+//            controller.chiudiAggiungiSessioneInPresenzaDialog();
         });
 
 
