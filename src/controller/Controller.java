@@ -120,7 +120,7 @@ public class Controller {
     	RicettaDAO ricettaDAO = new RicettaDAO(conn);
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
     	try {
-    		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    		ricettaDAO.saveRicetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
     		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
     	} catch (SQLException e) {
     		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA RICETTA O UN INGREDIENTE", e);
@@ -166,7 +166,7 @@ public class Controller {
     	IngredienteDAO ingredienteDAO = new IngredienteDAO(conn);
     	try {
     		sessione_in_presenzaDAO.saveSessioneInPresenza(sessione_in_presenza);
-    		ricettaDAO.saveRicetta(sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp(), nomeRicetta, ingredienti);
+    		ricettaDAO.saveRicetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
     		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
     	} catch (SQLException e) {
     		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA SESSIONE IN PRESENZA O UNA RICETTA O UN INGREDIENTE", e);
@@ -222,7 +222,7 @@ public class Controller {
 					if (sessione instanceof Sessione_in_presenza) {
 	                    Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
 	                    if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
-	                        sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
+	                        sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessioneInPresenza.getLuogo(), sessioneInPresenza.getOrario_inizio_timestamp(), ingredienti));
 	                        return;
 	                    }
 	                }
