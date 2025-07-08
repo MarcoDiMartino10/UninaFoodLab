@@ -44,7 +44,6 @@ public class Controller {
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
-        //new ChefDAO(conn);
     	apriLoginFrame();
     }
     
