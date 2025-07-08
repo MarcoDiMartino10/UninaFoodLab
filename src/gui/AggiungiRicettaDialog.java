@@ -304,7 +304,6 @@ public class AggiungiRicettaDialog extends JDialog {
             dispose();
             if (flag == false) {
             	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);
-            	controller.apriRicetteFrame();
             } else {
             	controller.saveSessioneAndRicettaAndIngrediente(nomeRicetta, ingredienti);
             }
