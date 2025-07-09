@@ -224,6 +224,7 @@ public class InfoCorsoFrame extends JFrame {
         button.setForeground(Color.WHITE);
         button.setMargin(new Insets(15, 20, 15, 20));
         button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(300, 50));
     }
     
     // Mette il cursore con il dito sul bottone passato come parametro

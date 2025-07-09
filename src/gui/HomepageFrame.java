@@ -127,7 +127,7 @@ public class HomepageFrame extends JFrame {
 	         data[i] = new String[]{String.valueOf(chef.getCorso().get(i).getID()), chef.getCorso().get(i).getNome(), chef.getCorso().get(i).getCategoria(), chef.getCorso().get(i).getData_inizio_formato()};
 	         i++;
 	    }
-        courseTable = new JTable(data, columnNames) {
+	    courseTable = new JTable(data, columnNames) {
         	private static final long serialVersionUID = 1L;
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -180,8 +180,9 @@ public class HomepageFrame extends JFrame {
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setBackground(new Color(0, 102, 204));
         button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-        button.setPreferredSize(new Dimension(250, 50));
+        button.setMargin(new Insets(15, 20, 15, 20));
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(300, 50));
     }
     
     // Filtra i corsi in base alla categoria selezionata

@@ -168,6 +168,9 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         
+        luogoField.addActionListener(_ -> maxPostiField.requestFocus());
+        maxPostiField.addActionListener(_ -> inviaButton.doClick());
+        
         // Bottone annulla
         annullaButton.addActionListener(_ -> dispose());
         
@@ -175,9 +178,14 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
         inviaButton.addActionListener(_ -> {
             String luogo = luogoField.getText().trim();
 
-            // Controllo link
+            // Controllo luogo
             if (luogo.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Il campo luogo non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Il campo luogo non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+                luogoField.requestFocus();
+                return;
+            }
+            if (luogo.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "Il campo luogo non può contenere solo numeri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 luogoField.requestFocus();
                 return;
             }
@@ -187,12 +195,12 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
             Date fineDate = (Date) orarioFineSpinner.getValue();
 
             if (inizioDate == null) {
-                JOptionPane.showMessageDialog(this, "Seleziona una data e orario di inizio validi.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Seleziona una data e orario di inizio validi.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 orarioInizioSpinner.requestFocus();
                 return;
             }
             if (fineDate == null) {
-                JOptionPane.showMessageDialog(this, "Seleziona una data e orario di fine validi.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Seleziona una data e orario di fine validi.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
                 return;
             }
@@ -202,30 +210,30 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
             if (inizio.before(now)) {
-                JOptionPane.showMessageDialog(this, "La data e orario di inizio non possono essere anteriori all'attuale.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La data e orario di inizio non possono essere anteriori all'attuale.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 orarioInizioSpinner.requestFocus();
                 return;
             }
 
             if (fine.before(now)) {
-                JOptionPane.showMessageDialog(this, "La data e orario di fine non possono essere anteriori all'attuale.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La data e orario di fine non possono essere anteriori all'attuale.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
                 return;
             }
 
             if (!fine.after(inizio)) {
-                JOptionPane.showMessageDialog(this, "La data e orario di fine devono essere successivi a quelli di inizio.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La data e orario di fine devono essere successivi a quelli di inizio.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 orarioFineSpinner.requestFocus();
                 return;
             }
             
             if (fine.getTime() - inizio.getTime() < 15 * 60 * 1000) {
-				JOptionPane.showMessageDialog(this, "La sessione online deve durare almeno 15 minuti.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "La sessione online deve durare almeno 15 minuti.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				orarioFineSpinner.requestFocus();
 				return;
 			}
             if (fine.getTime() - inizio.getTime() > 5 * 60 * 60 * 1000) {
-            	JOptionPane.showMessageDialog(this, "La sessione online non può durare più di 5 ore.", "Errore", JOptionPane.ERROR_MESSAGE);
+            	JOptionPane.showMessageDialog(this, "La sessione online non può durare più di 5 ore.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
             	orarioFineSpinner.requestFocus();
             	return;
             }
@@ -235,13 +243,13 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
             try {
             	int max_posti = Integer.parseInt(maxPostiField.getText().trim());
             	if (max_posti <= 1) {
-                    JOptionPane.showMessageDialog(this, "Il numero massimo di posti deve essere maggiore di 1.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Il numero massimo di posti deve essere maggiore di 1.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                     maxPostiField.requestFocus();
                     return;
                 }
             	maxPosti = max_posti;
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Inserisci un numero massimo di posti valido.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Inserisci un numero massimo di posti valido.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 maxPostiField.requestFocus();
                 return;
             }
@@ -249,7 +257,7 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
             for (Sessione sessione : controller.getCorsoAttribute().getSessioni()) {
 				if (sessione instanceof Sessione_in_presenza) {
 					if (inizio.before(sessione.getOrario_fine_timestamp()) && fine.after(sessione.getOrario_inizio_timestamp())) {
-						JOptionPane.showMessageDialog(this, "In questo orario in questo luogo si sta svolgendo un'altra sessione.", "Errore", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(this, "In questo orario in questo luogo si sta svolgendo un'altra sessione.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 						orarioInizioSpinner.requestFocus();
 						return;
 					}
@@ -272,12 +280,13 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
     
     // Metodo per lo stile dei bottoni
     private void styleButton(JButton button) {
-	    button.setFont(new Font("Arial", Font.BOLD, 16));
-	    button.setBackground(new Color(0, 102, 204));
-	    button.setForeground(Color.WHITE);
-	    button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-	    button.setPreferredSize(new Dimension(230, 50));
-	}
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(new Color(0, 102, 204));
+        button.setForeground(Color.WHITE);
+        button.setMargin(new Insets(15, 20, 15, 20));
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(230, 50));
+    }
     
     // Metodo per impostare il cursore a mano
     private void setHandCursor(JButton button) {

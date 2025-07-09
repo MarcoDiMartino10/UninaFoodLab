@@ -150,8 +150,9 @@ public class LoginFrame extends JFrame {
         bottoneLogin.setFont(new Font("Arial", Font.BOLD, 14));
         bottoneLogin.setBackground(new Color(0, 102, 204));
         bottoneLogin.setForeground(Color.WHITE);
-        bottoneLogin.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        bottoneLogin.setMargin(new Insets(10, 20, 10, 20));
         bottoneLogin.setFocusPainted(false);
+        bottoneLogin.setPreferredSize(new Dimension(40, 40));
         pannelloLogin.add(bottoneLogin, gbc);
         
         // Cursore mano quando si passa sopra il bottone
@@ -206,7 +207,7 @@ public class LoginFrame extends JFrame {
     
     // Metodo per mostrare un messaggio di errore in caso di credenziali errate
     public void credenzialiErrate() {
-    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" +(controller.count--)+ " tentativi rimasti.", "Errore", JOptionPane.ERROR_MESSAGE);
+    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" +(controller.count--)+ " tentativi rimasti.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
     	controller.checkcount();
         campoEmail.requestFocusInWindow();
     }

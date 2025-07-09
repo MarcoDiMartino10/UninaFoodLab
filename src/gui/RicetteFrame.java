@@ -147,8 +147,9 @@ public class RicetteFrame extends JFrame {
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setBackground(new Color(0, 102, 204));
         button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-        button.setPreferredSize(new Dimension(250, 50));
+        button.setMargin(new Insets(15, 20, 15, 20));
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(300, 50));
     }
     
     

@@ -219,6 +219,12 @@ public class AggiungiCorsoDialog extends JDialog {
         centerPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
+        
+        nomeField.addActionListener(_ -> categoriaField.requestFocus());
+        categoriaField.addActionListener(_ -> frequenzaField.requestFocus());
+        frequenzaField.addActionListener(_ -> costoField.requestFocus());
+        costoField.addActionListener(_ -> numsessioniField.requestFocus());
+        numsessioniField.addActionListener(_ -> inviaButton.doClick());
 
         // Listener annulla
         annullaButton.addActionListener(_ -> dispose());
@@ -234,37 +240,53 @@ public class AggiungiCorsoDialog extends JDialog {
 
             // Controllo nome corso
             if (nomeCorso.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Il campo nome corso non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Il campo nome corso non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+                nomeField.requestFocus();
+                return;
+            }
+            if (nomeCorso.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "Il campo nome corso non può contenere solo numeri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 nomeField.requestFocus();
                 return;
             }
 
             // Controllo categoria
             if (categoria.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Il campo categoria non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Il campo categoria non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 categoriaField.requestFocus();
+                return;
+            }
+            if (categoria.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "Il campo categoria non può contenere solo numeri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+                nomeField.requestFocus();
                 return;
             }
 
             // Controllo data inizio
             Date selectedDate = (Date) datePicker.getModel().getValue();
             if (selectedDate == null) {
-                JOptionPane.showMessageDialog(this, "Seleziona una data di inizio valida.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Seleziona una data di inizio valida.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             LocalDate dataInizio = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             if (dataInizio.isBefore(LocalDate.now())) {
-                JOptionPane.showMessageDialog(this, "La data di inizio non può essere precedente a oggi.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La data di inizio non può essere precedente a oggi.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Controllo frequenza
             if (frequenza.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Il campo frequenza non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Il campo frequenza non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 frequenzaField.requestFocus();
                 return;
             }
+            if (frequenza.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "Il campo frequenza non può contenere solo numeri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+                nomeField.requestFocus();
+                return;
+            }
+            
 
             // Controllo costo
             BigDecimal costo;
@@ -274,7 +296,7 @@ public class AggiungiCorsoDialog extends JDialog {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Inserisci un valore numerico valido per il costo.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Inserisci un valore numerico valido per il costo.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 costoField.requestFocus();
                 return;
             }
@@ -284,7 +306,7 @@ public class AggiungiCorsoDialog extends JDialog {
                 numSessioni = Integer.parseInt(numSessioniStr);
                 if (numSessioni <= 0) throw new NumberFormatException();
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Inserisci un numero intero positivo per il numero di sessioni.", "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Inserisci un numero intero positivo per il numero di sessioni.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 numsessioniField.requestFocus();
                 return;
             }
@@ -299,12 +321,13 @@ public class AggiungiCorsoDialog extends JDialog {
     
     // Metodo per lo stile dei bottoni
     private void styleButton(JButton button) {
-	    button.setFont(new Font("Arial", Font.BOLD, 16));
-	    button.setBackground(new Color(0, 102, 204));
-	    button.setForeground(Color.WHITE);
-	    button.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-	    button.setPreferredSize(new Dimension(230, 50));
-	}
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(new Color(0, 102, 204));
+        button.setForeground(Color.WHITE);
+        button.setMargin(new Insets(15, 20, 15, 20));
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(230, 50));
+    }
     
     // Metodo per impostare il cursore a mano
     private void setHandCursor(JButton button) {

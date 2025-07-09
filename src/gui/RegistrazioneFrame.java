@@ -17,7 +17,7 @@ public class RegistrazioneFrame extends JFrame {
     private JTextField campoTelefono;
     private JTextArea campoBiografia;
     private JPasswordField campoPassword;
-    private JButton bottoneLogin;
+    private JButton bottoneRegistrati;
     
 /*-----------------------------------------------------------------------------------------*/    
     
@@ -248,10 +248,10 @@ public class RegistrazioneFrame extends JFrame {
             BorderFactory.createLineBorder(new Color(200, 200, 200)),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
-        campoPassword.addActionListener(_ -> bottoneLogin.doClick());
+        campoPassword.addActionListener(_ -> bottoneRegistrati.doClick());
         pannelloLogin.add(campoPassword, gbc);
 
-        // Bottone Login
+        // Bottone Registrati
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0;
@@ -259,133 +259,138 @@ public class RegistrazioneFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        bottoneLogin = new JButton("Registrati");
-        bottoneLogin.setFont(new Font("Arial", Font.BOLD, 14));
-        bottoneLogin.setBackground(new Color(0, 102, 204));
-        bottoneLogin.setForeground(Color.WHITE);
-        bottoneLogin.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        bottoneLogin.setFocusPainted(false);
-        pannelloLogin.add(bottoneLogin, gbc);
+        bottoneRegistrati = new JButton("Registrati");
+        bottoneRegistrati.setFont(new Font("Arial", Font.BOLD, 14));
+        bottoneRegistrati.setBackground(new Color(0, 102, 204));
+        bottoneRegistrati.setForeground(Color.WHITE);
+        bottoneRegistrati.setMargin(new Insets(10, 20, 10, 20));
+        bottoneRegistrati.setFocusPainted(false);
+        bottoneRegistrati.setPreferredSize(new Dimension(150, 40));
+        pannelloLogin.add(bottoneRegistrati, gbc);
         
         // Cursore mano quando si passa sopra il bottone
-        bottoneLogin.addMouseListener(new MouseAdapter(){
+        bottoneRegistrati.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseEntered(MouseEvent e) {
-                bottoneLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            	bottoneRegistrati.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                bottoneLogin.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            	bottoneRegistrati.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
         
         // Listener per il bottone Login
-        bottoneLogin.addActionListener(_ -> {
+        bottoneRegistrati.addActionListener(_ -> {
         	
         	// Controlli sui campi
         	if(campoNome.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Il campo nome non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Il campo nome non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoNome.requestFocusInWindow();
 				return;
 			}
         	
         	if (!campoNome.getText().matches("[a-zA-ZàèéìòùÀÈÉÌÒÙ' ]+") || campoNome.getText().trim().isEmpty()) {
-        	    JOptionPane.showMessageDialog(this, "Il campo nome deve contenere solo lettere.", "Errore", JOptionPane.ERROR_MESSAGE);
+        	    JOptionPane.showMessageDialog(this, "Il campo nome deve contenere solo lettere.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
         	    campoNome.requestFocusInWindow();
         	    return;
         	}
         	
         	if(campoNome.getText().length() > 25) {
-        		JOptionPane.showMessageDialog(this, "Il campo nome non può superare i 25 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
+        		JOptionPane.showMessageDialog(this, "Il campo nome non può superare i 25 caratteri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoNome.requestFocusInWindow();
 				return;
         	}
         	
         	if(campoCognome.getText().isEmpty()) {
-        		JOptionPane.showMessageDialog(this, "Il campo cognome non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+        		JOptionPane.showMessageDialog(this, "Il campo cognome non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoCognome.requestFocusInWindow();
 				return;
         	}
         	
         	if (!campoCognome.getText().matches("[a-zA-ZàèéìòùÀÈÉÌÒÙ' ]+") || campoCognome.getText().trim().isEmpty()) {
-        	    JOptionPane.showMessageDialog(this, "Il campo cognome deve contenere solo lettere.", "Errore", JOptionPane.ERROR_MESSAGE);
+        	    JOptionPane.showMessageDialog(this, "Il campo cognome deve contenere solo lettere.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
         	    campoCognome.requestFocusInWindow();
         	    return;
         	}
         	
         	if(campoCognome.getText().length() > 25) {
-        		JOptionPane.showMessageDialog(this, "Il campo cognome non può superare i 25 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
+        		JOptionPane.showMessageDialog(this, "Il campo cognome non può superare i 25 caratteri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoCognome.requestFocusInWindow();
 				return;
         	}
         	
         	if(campoTelefono.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Il campo numero di telefono non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Il campo numero di telefono non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoTelefono.requestFocusInWindow();
 				return;
 			}
         	
         	if(!campoTelefono.getText().matches("\\d+")) {
-        		JOptionPane.showMessageDialog(this, "Il campo numero di telefono deve contenere solo numeri.", "Errore", JOptionPane.ERROR_MESSAGE);
+        		JOptionPane.showMessageDialog(this, "Il campo numero di telefono deve contenere solo numeri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoTelefono.requestFocusInWindow();
 				return;
         	}
         	
         	if(campoTelefono.getText().length() < 8 || campoTelefono.getText().length() > 15) {
-				JOptionPane.showMessageDialog(this, "Il numero di telefono deve essere compreso tra 8 e 15 cifre.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Il numero di telefono deve essere compreso tra 8 e 15 cifre.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoTelefono.requestFocusInWindow();
 				return;
 			}
         	
 			if(campoBiografia.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Il campo biografia non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Il campo biografia non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoBiografia.requestFocusInWindow();
 				return;
 			}
 			
 			if(campoBiografia.getText().length() > 500) {
-				JOptionPane.showMessageDialog(this, "La biografia non può superare i 500 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "La biografia non può superare i 500 caratteri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoBiografia.requestFocusInWindow();
 				return;
 			}
 						
 			if(campoEmail.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Il campo email non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Il campo email non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoEmail.requestFocusInWindow();
 				return;
 			}
 			
 			if(!campoEmail.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-				JOptionPane.showMessageDialog(this, "L'email inserita non è valida.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "L'email inserita non è valida.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoEmail.requestFocusInWindow();
 				return;
 			}
 			
 			if(campoEmail.getText().length() > 100) {
-				JOptionPane.showMessageDialog(this, "L'email non può superare i 100 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "L'email non può superare i 100 caratteri.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoEmail.requestFocusInWindow();
 				return;
 			}
 			
 			if(campoPassword.getPassword().length == 0) {
-				JOptionPane.showMessageDialog(this, "Il campo password non può essere vuoto.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Il campo password non può essere vuoto.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoPassword.requestFocusInWindow();
 				return;
 			}
 			
 			if(campoPassword.getPassword().length < 5 || campoPassword.getPassword().length > 20 || !new String(campoPassword.getPassword()).matches(".*[a-zA-Z].*") || !new String(campoPassword.getPassword()).matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-				JOptionPane.showMessageDialog(this, "La password deve avere almeno 5 caratteri alfanumerici.\nNon più di 20 caratteri.\nAlmeno una lettera maisucola.\nAlmeno un carattere speciale( es: @,!,/)", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "La password deve avere almeno 5 caratteri alfanumerici.\nNon più di 20 caratteri.\nAlmeno una lettera maisucola.\nAlmeno un carattere speciale( es: @,!,/)", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				campoPassword.requestFocusInWindow();
 				return;
 			}
 		
 	        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoTelefono.getText(), campoBiografia.getText())) {
-				JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+	        	ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Check.png"));
+	        	Image img = originalIcon.getImage();
+	        	Image resizedImg = img.getScaledInstance(32, 32,  java.awt.Image.SCALE_SMOOTH);
+	        	ImageIcon checkIcon = new ImageIcon(resizedImg);
+	        	JOptionPane.showMessageDialog(this, "Registrazione avvenuta con successo", "Registrazione effettuata", JOptionPane.PLAIN_MESSAGE, checkIcon);
 				dispose();
 				controller.apriHomepageFrame();
 			} else {
-				JOptionPane.showMessageDialog(this, "Utente già registrato.", "Errore", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Utente già registrato.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
         

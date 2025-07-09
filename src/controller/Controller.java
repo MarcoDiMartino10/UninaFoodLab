@@ -103,13 +103,11 @@ public class Controller {
 		aggiungiSessioneOnlineDialog.setVisible(true);
 	}
     
-    // Apri aggiungiSessioneInPresenzaDialog per aggiungere una sessione in presenza
     public void apriAggiungiSessioneInPresenzaDialog() {
 		aggiungiSessioneInPresenzaDialog = new AggiungiSessioneInPresenzaDialog(this);
 		aggiungiSessioneInPresenzaDialog.setVisible(true);
 	}
     
-    // Apri aggiungiRicettaFrame per aggiungere una ricetta alla sessione in presenza
     public void apriAggiungiRicettaFrameBySessione() {
     	aggiungiRicettaDialog = new AggiungiRicettaDialog(this, true);
 		aggiungiRicettaDialog.setVisible(true);
