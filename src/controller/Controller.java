@@ -46,6 +46,12 @@ public class Controller {
     //Costruttore
     public Controller(Connection conn) {
     	this.conn = conn;
+    	chefDAO = new ChefDAO(conn);
+        corsoDAO = new CorsoDAO(conn);
+        sessione_onlineDAO = new Sessione_onlineDAO(conn);
+        sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
+        ricettaDAO = new RicettaDAO(conn);
+        ingredienteDAO = new IngredienteDAO(conn);
     	apriLoginFrame();
     }
     
@@ -160,10 +166,8 @@ public class Controller {
     // Metodo per ottenere le categorie dei corsi
     public LinkedList<Corso> getCorsiFiltratiPerCategoria(String categoria) {
         LinkedList<Corso> corsiFiltrati = new LinkedList<>();
-        LinkedList<Corso> corsi = chef.getCorso();
-        for (int i = 0; i < corsi.size(); i++) {
-            Corso corso = corsi.get(i);
-            if (categoria.equals("Tutti") || corso.getCategoria().toLowerCase().equals(categoria.toLowerCase())) {
+        for (Corso corso : chef.getCorso()) {
+            if (categoria.equalsIgnoreCase("Tutti") || corso.getCategoria().equalsIgnoreCase(categoria)) {
                 corsiFiltrati.add(corso);
             }
         }
@@ -222,18 +226,13 @@ public class Controller {
 		int idCorso;
 		try {
 			idCorso = corsoDAO.nuovoIdCorso();
-		} catch (SQLException e) {
-			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER IL CORSO", e);
-		}
-		Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getEmail(), null);
-		try {
+			Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getEmail(), null);
 			corsoDAO.saveCorso(corso);
+			chef.addCorso(corso);
 		} catch (SQLException e) {
-			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UN CORSO", e);
+			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER IL CORSO O DURANTE L'ACCESSO AL DATABASE PER INSERIRE UN CORSO", e);
 		}
-		chef.addCorso(corso);
-		
-	}
+    }
     
     // Metodo per aggiungere una sessione online
     public void saveSessioneOnline(String link, Timestamp inizio, Timestamp fine) {
@@ -261,12 +260,6 @@ public class Controller {
     
     // Metodo per ottenere tutte le informazioni dello chef dal database
     public Chef getAllInfoChef(String email, String password) {
-        chefDAO = new ChefDAO(conn);
-        corsoDAO = new CorsoDAO(conn);
-        sessione_onlineDAO = new Sessione_onlineDAO(conn);
-        sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
-        ricettaDAO = new RicettaDAO(conn);
-        ingredienteDAO = new IngredienteDAO(conn);
         try {
             chef = chefDAO.getChef(email, password);
             if (chef == null) {
