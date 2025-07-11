@@ -20,15 +20,17 @@ public class Controller {
     Connection conn;
     private Chef chef;
     private Corso corso;
-    private Sessione_in_presenza sessione_in_presenza;
     private Sessione_online sessione_online;
-    private RicettaDAO ricettaDAO;
-    private IngredienteDAO ingredienteDAO;
-    private Sessione_onlineDAO sessione_onlineDAO;
-    private Sessione_in_presenzaDAO sessione_in_presenzaDAO;
+    private Sessione_in_presenza sessione_in_presenza;
+    
     private ChefDAO chefDAO;
     private CorsoDAO corsoDAO;
-	public int count = 3;
+    private Sessione_onlineDAO sessione_onlineDAO;
+    private Sessione_in_presenzaDAO sessione_in_presenzaDAO;
+    private RicettaDAO ricettaDAO;
+    private IngredienteDAO ingredienteDAO;
+	
+    public int count = 3;
 	
 	private LoginFrame loginFrame;
 	private RegistrazioneFrame registrazioneFrame;
@@ -59,25 +61,21 @@ public class Controller {
 		loginFrame.setVisible(true);
 	}
 	
-	// Apri RegistrazioneFrame da LoginFrame
 	public void apriRegistrazioneFrame() {
   		registrazioneFrame = new RegistrazioneFrame(this);
   		registrazioneFrame.setVisible(true);
   	}
     
-	// Apre HomepageFrame da LoginFrame
     public void apriHomepageFrame() {
     	homepageFrame = new HomepageFrame(this);
     	homepageFrame.setVisible(true);
     }
     
-    // Apri infoCorsoFrame e chiudi homepageFrame
     public void apriInfoCorsoFrame() {
     	infoCorsoFrame = new InfoCorsoFrame(this);
     	infoCorsoFrame.setVisible(true);
     }
     
- // Apri aggiungiCorsoDialog per aggiungere un nuovo corso
     public void apriAggiungiCorsoDialog() {
     	aggiungiCorsoDialog = new AggiungiCorsoDialog(this);
     	aggiungiCorsoDialog.setVisible(true);
@@ -302,20 +300,16 @@ public class Controller {
     
     // Metodo per aggiungere una ricetta alla sessione in presenza
     private void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-		for (Corso corso1 : chef.getCorso()) {
-			if (corso1.getNome().equals(corso.getNome())) {
-				for (Sessione sessione : corso1.getSessioni()) {
-					if (sessione instanceof Sessione_in_presenza) {
-	                    Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
-	                    if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
-	                        sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessioneInPresenza.getLuogo(), sessioneInPresenza.getOrario_inizio_timestamp(), ingredienti));
-	                        return;
-	                    }
-	                }
-				}
-			}
-		}
-	}
+        for (Sessione sessione : corso.getSessioni()) {
+            if (sessione instanceof Sessione_in_presenza) {
+                Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
+                if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
+                    sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessioneInPresenza.getLuogo(), sessioneInPresenza.getOrario_inizio_timestamp(), ingredienti));
+                    return;
+                }
+            }
+        }
+    }
     
     // Metodo per aggiungere una sessione al corso
     private void aggiungiSessioneAlCorso(Sessione sessione) {
