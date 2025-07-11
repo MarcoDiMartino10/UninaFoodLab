@@ -319,7 +319,7 @@ public class AggiungiRicettaDialog extends JDialog {
                     }
                 } else {
                 	quantità = null;
-                    unità = "q.b.";
+                    unità = "qb";
                 }
 
                 if (unità.length() > 10) {
