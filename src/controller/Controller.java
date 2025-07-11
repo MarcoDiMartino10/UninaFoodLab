@@ -176,7 +176,6 @@ public class Controller {
     
     // Metodo per ottenere il nuovo ID di ricetta
     public int nuovoIdRicetta() {
-		ricettaDAO = new RicettaDAO(conn);
 		try {
 			return ricettaDAO.nuovoIdRicetta();
 		} catch (SQLException e) {
@@ -186,7 +185,6 @@ public class Controller {
     
     // Metodo per ottenere il nuovo ID di ingrediente
     public int nuovoIdIngrediente() {
-    	ingredienteDAO = new IngredienteDAO(conn);
     	try {
     		return ingredienteDAO.nuovoIdIngrediente();
     	} catch (SQLException e) {
@@ -196,7 +194,6 @@ public class Controller {
     
     // Metodo per salvare lo chef nel database
     public boolean saveChef(String nome, String cognome, String email, String password, String biografia, String telefono) {
-		chefDAO = new ChefDAO(conn);
 		chef = new Chef(nome, cognome, email, password, biografia, telefono, null);
 		try {
 			chefDAO.saveChef(chef);
@@ -211,9 +208,7 @@ public class Controller {
     
     // Metodo per aggiungere una nuova ricetta
     public void saveRicettaAndIngrediente(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	ricettaDAO = new RicettaDAO(conn);
-    	ingredienteDAO = new IngredienteDAO(conn);
-    	int idRicetta = ingredienti.get(0).getID_ricetta(); // Assunto: già assegnato correttamente
+    	int idRicetta = ingredienti.get(0).getID_ricetta();
 
     	try {
     		ricettaDAO.saveRicetta(idRicetta, nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
@@ -226,7 +221,6 @@ public class Controller {
     
     // Metodo per aggiungere un nuovo corso
     public void saveCorso(String nomeCorso, String categoria, LocalDate dataInizio, String frequenza, BigDecimal costo, int numSessioni) {
-		corsoDAO = new CorsoDAO(conn);
 		int idCorso;
 		try {
 			idCorso = corsoDAO.nuovoIdCorso();
@@ -245,7 +239,6 @@ public class Controller {
     
     // Metodo per aggiungere una sessione online
     public void saveSessioneOnline(String link, Timestamp inizio, Timestamp fine) {
-    	sessione_onlineDAO = new Sessione_onlineDAO(conn);
 		sessione_online = new Sessione_online(link, inizio, fine, corso.getID());
 		try {
 			sessione_onlineDAO.saveSessioneOnline(sessione_online);
@@ -257,9 +250,6 @@ public class Controller {
     
     // Metodo per aggiungere una sessione in presenza con ricetta e ingredienti
     public void saveSessioneAndRicettaAndIngrediente(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	sessione_in_presenzaDAO = new Sessione_in_presenzaDAO(conn);
-    	ricettaDAO = new RicettaDAO(conn);
-    	ingredienteDAO = new IngredienteDAO(conn);
     	try {
     		sessione_in_presenzaDAO.saveSessioneInPresenza(sessione_in_presenza);
     		ricettaDAO.saveRicetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
