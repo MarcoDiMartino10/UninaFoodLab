@@ -14,11 +14,10 @@ public class Corso {
 	private String Frequenza;
 	private int Numero_sessioni;
 	private BigDecimal Costo;
-	private String EmailChef;
 	LinkedList<Sessione> sessioni = new LinkedList<Sessione>();
 	
 	// Costruttore
-	public Corso(int ID, String Nome, String Categoria, LocalDate Data_inizio, String Frequenza, BigDecimal Costo, int numeroSessioni, String EmailChef, LinkedList<Sessione> sessioni) {
+	public Corso(int ID, String Nome, String Categoria, LocalDate Data_inizio, String Frequenza, BigDecimal Costo, int numeroSessioni, LinkedList<Sessione> sessioni) {
 		this.ID = ID;
 		this.Nome = Nome;
 		this.Categoria = Categoria;
@@ -26,7 +25,6 @@ public class Corso {
 		this.Frequenza = Frequenza;
 		this.Costo = Costo;
 		this.Numero_sessioni = numeroSessioni;
-		this.EmailChef = EmailChef;
 		this.sessioni = (sessioni != null) ? sessioni : new LinkedList<Sessione>();
 	}
 	
@@ -55,9 +53,6 @@ public class Corso {
 	public LinkedList<Sessione> getSessioni() {
 		return sessioni;
 	}
-	public String getEmailChef() {
-		return EmailChef;
-	}
 	public int getNumero_sessioni() {
 		return Numero_sessioni;
 	}
@@ -83,9 +78,6 @@ public class Corso {
 	}
 	public void setSessioni(LinkedList<Sessione> sessioni) {
 		this.sessioni = sessioni;
-	}
-	public void setEmailChef(String emailChef) {
-		this.EmailChef = emailChef;
 	}
 	public void setNumero_sessioni(int numeroSessioni) {
 		this.Numero_sessioni = numeroSessioni;

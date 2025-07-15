@@ -23,7 +23,7 @@ public class Sessione_in_presenzaDAO {
 	        ps.setInt(1, idCorso);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            while (rs.next()) {
-	                sessioni.add(new Sessione_in_presenza(rs.getString("luogo"), rs.getInt("max_posti"), rs.getTimestamp("orario_inizio"), rs.getTimestamp("orario_fine"), idCorso, null));
+	                sessioni.add(new Sessione_in_presenza(rs.getString("luogo"), rs.getInt("max_posti"), rs.getTimestamp("orario_inizio"), rs.getTimestamp("orario_fine"), null));
 	            }
 	        }
 	    }
@@ -31,14 +31,14 @@ public class Sessione_in_presenzaDAO {
 	}
 
 	// Inserisce una nuova sessione in presenza nel database
-	public void saveSessioneInPresenza(Sessione_in_presenza sessione) throws SQLException {
+	public void saveSessioneInPresenza(Sessione_in_presenza sessione, int Id_corso) throws SQLException {
 		String sql = "INSERT INTO sessione_in_presenza (luogo, orario_inizio, orario_fine, max_posti, id_corso) VALUES (?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLuogo());
 			ps.setTimestamp(2, sessione.getOrario_inizio_timestamp());
 			ps.setTimestamp(3, sessione.getOrario_fine_timestamp());
 			ps.setInt(4, sessione.getMax_posti());
-			ps.setInt(5, sessione.getId_Corso());
+			ps.setInt(5, Id_corso);
 			ps.executeUpdate();
 		}
 	}

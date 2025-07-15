@@ -8,13 +8,12 @@ public class Sessione_online extends Sessione{
 	private String link;
 	
 	// Costruttore
-	public Sessione_online(String link, Timestamp orario_inizio, Timestamp orario_fine, int id_Corso) {
-		super(orario_inizio, orario_fine, id_Corso);
+	public Sessione_online(String link, Timestamp orario_inizio, Timestamp orario_fine) {
+		super(orario_inizio, orario_fine);
 		this.link = link;
 	}
 	
 	// Getter
-	@Override
 	public String getLink() {
 		return link;
 	}

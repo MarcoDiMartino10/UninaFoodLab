@@ -118,16 +118,18 @@ public class InfoCorsoFrame extends JFrame {
         String[][] data = new String[corso.getSessioni().size()][4];
         for (int i = 0; i < corso.getSessioni().size(); i++) {
             if (corso.getSessioni().get(i) instanceof Sessione_online) {
+            	Sessione_online sessioneOnline = (Sessione_online) corso.getSessioni().get(i);
                 data[i] = new String[]{
                         "ONLINE",
-                        corso.getSessioni().get(i).getLink(),
+                        sessioneOnline.getLink(),
                         corso.getSessioni().get(i).getOrario_inizio(),
                         corso.getSessioni().get(i).getOrario_fine()
                 };
             } else {
+            	Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) corso.getSessioni().get(i);
                 data[i] = new String[]{
                         "IN PRESENZA",
-                        corso.getSessioni().get(i).getLuogo(),
+                        sessioneInPresenza.getLuogo(),
                         corso.getSessioni().get(i).getOrario_inizio(),
                         corso.getSessioni().get(i).getOrario_fine()
                 };
@@ -201,9 +203,7 @@ public class InfoCorsoFrame extends JFrame {
                         String luogo = (String) courseTable.getModel().getValueAt(row, 1);
                         String orarioInizio = (String) courseTable.getModel().getValueAt(row, 2);
                         for (Sessione s : controller.getCorsoAttribute().getSessioni()) {
-                            if (s instanceof Sessione_in_presenza &&
-                                s.getLuogo().equals(luogo) &&
-                                s.getOrario_inizio().equals(orarioInizio)) {
+                            if (s instanceof Sessione_in_presenza && ((Sessione_in_presenza)s).getLuogo().equals(luogo) && s.getOrario_inizio().equals(orarioInizio)) {
                                 controller.setSessioneAttribute((Sessione_in_presenza) s);
                                 dispose();
                                 controller.apriRicetteFrame();

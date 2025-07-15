@@ -28,7 +28,7 @@ public class RicettaDAO {
 	        ps.setTimestamp(2, orario_inizio);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            while (rs.next()) {
-	                ricette.add(new Ricetta(rs.getInt("id"), rs.getString("nome"), luogo, orario_inizio, null));
+	                ricette.add(new Ricetta(rs.getInt("id"), rs.getString("nome"), null));
 	            }
 	        }
 	    }
@@ -36,16 +36,16 @@ public class RicettaDAO {
 	}
 	
 	// Inserisce una nuova ricetta nel database
-		public void saveRicetta(int id_ricetta, String nome, String luogo, Timestamp orario_inizio) throws SQLException {
-			String sql = "INSERT INTO Ricetta (ID, Nome, luogo, orario_inizio) VALUES (?, ?, ?, ?)";
-			try (PreparedStatement ps = conn.prepareStatement(sql)) {
-				ps.setInt(1, id_ricetta);
-				ps.setString(2, nome);
-				ps.setString(3, luogo);
-				ps.setTimestamp(4, orario_inizio);
-				ps.executeUpdate();
-			}
+	public void saveRicetta(int id_ricetta, String nome, String luogo, Timestamp orario_inizio) throws SQLException {
+		String sql = "INSERT INTO Ricetta (ID, Nome, luogo, orario_inizio) VALUES (?, ?, ?, ?)";
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, id_ricetta);
+			ps.setString(2, nome);
+			ps.setString(3, luogo);
+			ps.setTimestamp(4, orario_inizio);
+			ps.executeUpdate();
 		}
+	}
 
 
 	// Calcola il nuovo ID per una ricetta

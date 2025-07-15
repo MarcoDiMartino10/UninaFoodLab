@@ -23,7 +23,7 @@ public class Sessione_onlineDAO {
 	        ps.setInt(1, idCorso);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            while (rs.next()) {
-	                sessioni.add(new Sessione_online(rs.getString("link"), rs.getTimestamp("orario_inizio"), rs.getTimestamp("orario_fine"), idCorso));
+	                sessioni.add(new Sessione_online(rs.getString("link"), rs.getTimestamp("orario_inizio"), rs.getTimestamp("orario_fine")));
 	            }
 	        }
 	    }
@@ -31,13 +31,13 @@ public class Sessione_onlineDAO {
 	}
 	
 	// Inserisce una nuova sessione online nel database
-	public void saveSessioneOnline(Sessione_online sessione) throws SQLException {
+	public void saveSessioneOnline(Sessione_online sessione, int ID_corso) throws SQLException {
 		String sql = "INSERT INTO sessione_online (link, orario_inizio, orario_fine, id_corso) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLink());
 			ps.setTimestamp(2, sessione.getOrario_inizio_timestamp());
 			ps.setTimestamp(3, sessione.getOrario_fine_timestamp());
-			ps.setInt(4, sessione.getId_Corso());
+			ps.setInt(4, ID_corso);
 			ps.executeUpdate();
 		}
 	}

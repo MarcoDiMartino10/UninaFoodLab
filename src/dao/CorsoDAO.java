@@ -23,7 +23,7 @@ public class CorsoDAO {
             ps.setString(1, emailChef);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    corsi.add(new Corso(rs.getInt("id"), rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), rs.getString("email_chef"), null));
+                    corsi.add(new Corso(rs.getInt("id"), rs.getString("nome"), rs.getString("categoria"), rs.getDate("data_inizio").toLocalDate(), rs.getString("frequenza"), rs.getBigDecimal("costo"), rs.getInt("numero_sessioni"), null));
                 }
             }
         }
@@ -31,7 +31,7 @@ public class CorsoDAO {
     }
     
     // Inserisci un nuovo corso nel database
-    public void saveCorso(Corso corso) throws SQLException {
+    public void saveCorso(Corso corso, String email) throws SQLException {
     	String sql = "INSERT INTO Corso (Id, Nome, Categoria, Data_inizio, Frequenza, Costo, Numero_sessioni, Email_chef) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setInt(1, corso.getID());
@@ -41,7 +41,7 @@ public class CorsoDAO {
 			ps.setString(5, corso.getFrequenza());
 			ps.setBigDecimal(6, corso.getCosto());
 			ps.setInt(7, corso.getNumero_sessioni());
-			ps.setString(8, corso.getEmailChef());
+			ps.setString(8, email);
 			ps.executeUpdate();
 		}
     }

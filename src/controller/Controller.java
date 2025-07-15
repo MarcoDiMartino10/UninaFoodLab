@@ -158,7 +158,7 @@ public class Controller {
     
     // Crea sessione e la setta come attributo della classe
     public void setNewSessioneAttribute(String luogo, Timestamp inizio, Timestamp fine, int maxPosti) {
-    	sessione_in_presenza = new Sessione_in_presenza(luogo, maxPosti, inizio, fine, corso.getID(), null);
+    	sessione_in_presenza = new Sessione_in_presenza(luogo, maxPosti, inizio, fine, null);
     }
     
     /*------------------------------------------- Metodo utili alle interfacce grafiche ----------------------------------------------*/
@@ -226,8 +226,8 @@ public class Controller {
 		int idCorso;
 		try {
 			idCorso = corsoDAO.nuovoIdCorso();
-			Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, chef.getEmail(), null);
-			corsoDAO.saveCorso(corso);
+			Corso corso = new Corso(idCorso, nomeCorso, categoria, dataInizio, frequenza, costo, numSessioni, null);
+			corsoDAO.saveCorso(corso, chef.getEmail());
 			chef.addCorso(corso);
 		} catch (SQLException e) {
 			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER RECUPERARE UN NUOVO ID PER IL CORSO O DURANTE L'ACCESSO AL DATABASE PER INSERIRE UN CORSO", e);
@@ -236,9 +236,9 @@ public class Controller {
     
     // Metodo per aggiungere una sessione online
     public void saveSessioneOnline(String link, Timestamp inizio, Timestamp fine) {
-		sessione_online = new Sessione_online(link, inizio, fine, corso.getID());
+		sessione_online = new Sessione_online(link, inizio, fine);
 		try {
-			sessione_onlineDAO.saveSessioneOnline(sessione_online);
+			sessione_onlineDAO.saveSessioneOnline(sessione_online, corso.getID());
 		} catch (SQLException e) {
 			throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA SESSIONE ONLINE", e);
 		}
@@ -248,7 +248,7 @@ public class Controller {
     // Metodo per aggiungere una sessione in presenza con ricetta e ingredienti
     public void saveSessioneAndRicettaAndIngrediente(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
     	try {
-    		sessione_in_presenzaDAO.saveSessioneInPresenza(sessione_in_presenza);
+    		sessione_in_presenzaDAO.saveSessioneInPresenza(sessione_in_presenza, corso.getID());
     		ricettaDAO.saveRicetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
     		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
     	} catch (SQLException e) {
@@ -297,7 +297,7 @@ public class Controller {
             if (sessione instanceof Sessione_in_presenza) {
                 Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
                 if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
-                    sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessioneInPresenza.getLuogo(), sessioneInPresenza.getOrario_inizio_timestamp(), ingredienti));
+                    sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
                     return;
                 }
             }
