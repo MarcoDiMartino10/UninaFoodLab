@@ -12,7 +12,7 @@ public class InfoCorsoFrame extends JFrame {
 	// Attributi
     private static final long serialVersionUID = 1L;
     private Controller controller;
-    private JTable courseTable;
+    private JTable sessioniTable;
     private boolean checkDoubleClick = false;
 
     public InfoCorsoFrame(Controller controller) {
@@ -136,36 +136,36 @@ public class InfoCorsoFrame extends JFrame {
             }
         }
 
-        courseTable = new JTable(data, columnNames) {
+        sessioniTable = new JTable(data, columnNames) {
             private static final long serialVersionUID = 1L;
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        courseTable.setFont(new Font("Arial", Font.PLAIN, 14));
-        courseTable.setRowHeight(30);
-        courseTable.getTableHeader().setReorderingAllowed(false);
-        courseTable.getTableHeader().setResizingAllowed(false);
-        courseTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        courseTable.setFillsViewportHeight(true);
+        sessioniTable.setFont(new Font("Arial", Font.PLAIN, 14));
+        sessioniTable.setRowHeight(30);
+        sessioniTable.getTableHeader().setReorderingAllowed(false);
+        sessioniTable.getTableHeader().setResizingAllowed(false);
+        sessioniTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        sessioniTable.setFillsViewportHeight(true);
 
-        JScrollPane scrollPane = new JScrollPane(courseTable);
+        JScrollPane scrollPane = new JScrollPane(sessioniTable);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
         mainPanel.add(tablePanel, BorderLayout.CENTER);
 
-        courseTable.addMouseMotionListener(new MouseMotionAdapter() {
+        sessioniTable.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                int row = courseTable.rowAtPoint(e.getPoint());
+                int row = sessioniTable.rowAtPoint(e.getPoint());
                 if (row >= 0 &&
-                        "IN PRESENZA".equals(courseTable.getModel().getValueAt(row, 0))) {
-                    courseTable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        "IN PRESENZA".equals(sessioniTable.getModel().getValueAt(row, 0))) {
+                	sessioniTable.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 } else {
-                    courseTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                	sessioniTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             }
         });
@@ -193,15 +193,15 @@ public class InfoCorsoFrame extends JFrame {
     
     // Apri Sessione selezionata
     private void apriSessione(ActionListener listener) {
-        courseTable.addMouseListener(new MouseAdapter() {
+    	sessioniTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e) && !checkDoubleClick) {
                     checkDoubleClick = true;
-                    int row = courseTable.rowAtPoint(e.getPoint());
+                    int row = sessioniTable.rowAtPoint(e.getPoint());
                     if (row >= 0) {
-                        String luogo = (String) courseTable.getModel().getValueAt(row, 1);
-                        String orarioInizio = (String) courseTable.getModel().getValueAt(row, 2);
+                        String luogo = (String) sessioniTable.getModel().getValueAt(row, 1);
+                        String orarioInizio = (String) sessioniTable.getModel().getValueAt(row, 2);
                         for (Sessione s : controller.getCorsoAttribute().getSessioni()) {
                             if (s instanceof Sessione_in_presenza && ((Sessione_in_presenza)s).getLuogo().equals(luogo) && s.getOrario_inizio().equals(orarioInizio)) {
                                 controller.setSessioneAttribute((Sessione_in_presenza) s);
