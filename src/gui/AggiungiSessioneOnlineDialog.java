@@ -14,13 +14,11 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
 
     // Attributi
     private static final long serialVersionUID = 1L;
-    Controller controller;
 
     // Costruttore
     public AggiungiSessioneOnlineDialog(Controller controller) {
     	
     	super((InfoCorsoFrame) null, "Aggiungi Sessione Online", true);
-        this.controller = controller;
         setSize(550, 300);
         setLocationRelativeTo(this);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

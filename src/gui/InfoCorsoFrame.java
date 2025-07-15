@@ -192,7 +192,7 @@ public class InfoCorsoFrame extends JFrame {
     }
     
     // Apri Sessione selezionata
-    public void apriSessione(ActionListener listener) {
+    private void apriSessione(ActionListener listener) {
         courseTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

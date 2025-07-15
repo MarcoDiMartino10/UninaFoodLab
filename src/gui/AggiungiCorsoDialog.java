@@ -19,14 +19,7 @@ import controller.*;
 public class AggiungiCorsoDialog extends JDialog {
 
     // Attributi
-    private static final long serialVersionUID = 1L;   
-    Controller controller;
-    String nomeCorso;
-    String categoria;
-    String dataInizio;
-    String frequenza;
-    String costo;
-    int numsessioni;
+    private static final long serialVersionUID = 1L;
     private JTextField nomeField;
     private JTextField categoriaField;
     private JTextField frequenzaField;
@@ -37,7 +30,6 @@ public class AggiungiCorsoDialog extends JDialog {
     public AggiungiCorsoDialog(Controller controller) {
     	
     	super((HomepageFrame) null, "Aggiungi Corso", true);
-        this.controller = controller;
         setSize(550, 400);
         setLocationRelativeTo(this);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -120,7 +112,24 @@ public class AggiungiCorsoDialog extends JDialog {
         p.put("text.month", "Mese");
         p.put("text.year", "Anno");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new AbstractFormatter() {
+        	private static final long serialVersionUID = 1L;
+            private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+
+            @Override
+            public Object stringToValue(String text) throws ParseException {
+                return dateFormatter.parse(text); // parsing normale
+            }
+
+            @Override
+            public String valueToString(Object value) {
+                if (value instanceof Calendar cal) {
+                    return dateFormatter.format(cal.getTime());
+                }
+                return "";
+            }
+        });
+
         datePicker.getJFormattedTextField().setFont(new Font("Segoe UI", Font.PLAIN, 14));
         datePicker.getJFormattedTextField().setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(100, 150, 250), 2),
@@ -332,28 +341,6 @@ public class AggiungiCorsoDialog extends JDialog {
     // Metodo per impostare il cursore a mano
     private void setHandCursor(JButton button) {
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }
-
-    // Formatter per la data
-    public class DateLabelFormatter extends AbstractFormatter {
-		private static final long serialVersionUID = 1L;
-		private String datePattern = "dd-MM-yyyy";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            if (text == null || text.trim().isEmpty()) return null;
-            return dateFormatter.parse(text);
-        }
-
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-            return "";
-        }
     }
 
 }

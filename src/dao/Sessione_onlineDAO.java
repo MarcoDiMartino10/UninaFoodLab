@@ -31,13 +31,13 @@ public class Sessione_onlineDAO {
 	}
 	
 	// Inserisce una nuova sessione online nel database
-	public void saveSessioneOnline(Sessione_online sessione, int ID_corso) throws SQLException {
+	public void saveSessioneOnline(Sessione_online sessione, int id_corso) throws SQLException {
 		String sql = "INSERT INTO sessione_online (link, orario_inizio, orario_fine, id_corso) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, sessione.getLink());
 			ps.setTimestamp(2, sessione.getOrario_inizio_timestamp());
 			ps.setTimestamp(3, sessione.getOrario_fine_timestamp());
-			ps.setInt(4, ID_corso);
+			ps.setInt(4, id_corso);
 			ps.executeUpdate();
 		}
 	}

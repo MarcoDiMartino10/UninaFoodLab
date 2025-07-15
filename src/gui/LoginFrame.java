@@ -206,8 +206,8 @@ public class LoginFrame extends JFrame {
     /*-----------------------------------------------------------------------------------------*/
     
     // Metodo per mostrare un messaggio di errore in caso di credenziali errate
-    public void credenzialiErrate() {
-    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" +(controller.count--)+ " tentativi rimasti.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+    private void credenzialiErrate() {
+    	JOptionPane.showMessageDialog(this, "Email o password non corretti.\n" + (controller.count--) + " tentativi rimasti.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
     	controller.checkcount();
         campoEmail.requestFocusInWindow();
     }

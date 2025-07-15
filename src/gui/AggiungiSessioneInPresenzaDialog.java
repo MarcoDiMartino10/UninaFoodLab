@@ -14,13 +14,11 @@ public class AggiungiSessioneInPresenzaDialog extends JDialog {
 
     // Attributi
     private static final long serialVersionUID = 1L;
-    Controller controller;
     
     // Costruttore
     public AggiungiSessioneInPresenzaDialog(Controller controller) {
     	
     	super((InfoCorsoFrame) null, "Aggiungi Sessione in Presenza", true);
-        this.controller = controller;
         setSize(550, 350);
         setLocationRelativeTo(this);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

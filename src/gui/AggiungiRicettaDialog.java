@@ -12,8 +12,7 @@ public class AggiungiRicettaDialog extends JDialog {
 	
 	// Attributi
 	private static final long serialVersionUID = 1L;
-	Controller controller;
-	String nomeRicetta;
+	private String nomeRicetta;
 	private JTextField nomeField;
 	
 	/*-----------------------------------------------------------------------------------------*/
@@ -22,7 +21,6 @@ public class AggiungiRicettaDialog extends JDialog {
 	public AggiungiRicettaDialog(Controller controller, boolean flag) {
 		
 		super((RicetteFrame) null, "Aggiungi Corso", true);
-        this.controller = controller;
         setSize(520, 280);
         setLocationRelativeTo(this);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -276,7 +274,6 @@ public class AggiungiRicettaDialog extends JDialog {
         // Bottone Invia
         inviaButton.addActionListener(_ -> {
         	LinkedList<Ingrediente>ingredienti = new LinkedList<>();
-            int IdRicetta = controller.nuovoIdRicetta();
             int IdIngrediente = controller.nuovoIdIngrediente();
             LinkedList<String> nomiUsati = new LinkedList<>();
             
@@ -330,12 +327,12 @@ public class AggiungiRicettaDialog extends JDialog {
                 	JOptionPane.showMessageDialog(this, "L'unita di misura dell'ingrediente numero " + (i + 1) + " non può essere un numero.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
     				return;
     			}
-
-                Ingrediente ingrediente = new Ingrediente(IdIngrediente++, nomeIngrediente, quantità, unità, IdRicetta);
+                
+                Ingrediente ingrediente = new Ingrediente(IdIngrediente++, nomeIngrediente, quantità, unità);
                 ingredienti.add(ingrediente);
             }
             
-//             Comportamento bottone Invia
+//          Comportamento bottone Invia
             dispose();
             if (flag == false) {
             	controller.saveRicettaAndIngrediente(nomeRicetta, ingredienti);

@@ -204,7 +204,7 @@ public class HomepageFrame extends JFrame {
     }
     
     // Apri il corso selezionato al click
-    public void apriCorso(ActionListener listener) {
+    private void apriCorso(ActionListener listener) {
         courseTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

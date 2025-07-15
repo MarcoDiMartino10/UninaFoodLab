@@ -210,15 +210,16 @@ public class Controller {
     
     // Metodo per aggiungere una nuova ricetta
     public void saveRicettaAndIngrediente(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
-    	int idRicetta = ingredienti.get(0).getID_ricetta();
+    	int idRicetta;
 
     	try {
+    		idRicetta = ricettaDAO.nuovoIdRicetta();
     		ricettaDAO.saveRicetta(idRicetta, nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
-    		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
+    		ingredienteDAO.saveIngredienti(ingredienti, idRicetta);
     	} catch (SQLException e) {
     		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA RICETTA O UN INGREDIENTE", e);
     	}
-		aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
+		aggiungiRicettaAllaSessione(nomeRicetta, idRicetta, ingredienti);
     }
     
     // Metodo per aggiungere un nuovo corso
@@ -247,15 +248,17 @@ public class Controller {
     
     // Metodo per aggiungere una sessione in presenza con ricetta e ingredienti
     public void saveSessioneAndRicettaAndIngrediente(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    	int idRicetta;
     	try {
     		sessione_in_presenzaDAO.saveSessioneInPresenza(sessione_in_presenza, corso.getID());
-    		ricettaDAO.saveRicetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
-    		ingredienteDAO.saveIngredienti(ingredienti, ingredienti.get(0).getID_ricetta());
+    		idRicetta = ricettaDAO.nuovoIdRicetta();
+    		ricettaDAO.saveRicetta(idRicetta, nomeRicetta, sessione_in_presenza.getLuogo(), sessione_in_presenza.getOrario_inizio_timestamp());
+    		ingredienteDAO.saveIngredienti(ingredienti, idRicetta);
     	} catch (SQLException e) {
     		throw new EccezioniDatabase("ERRORE DURANTE L'ACCESSO AL DATABASE PER INSERIRE UNA SESSIONE IN PRESENZA O UNA RICETTA O UN INGREDIENTE", e);
     	}
     	aggiungiSessioneAlCorso(sessione_in_presenza);
-    	aggiungiRicettaAllaSessione(nomeRicetta, ingredienti);
+    	aggiungiRicettaAllaSessione(nomeRicetta, idRicetta, ingredienti);
     }
     
     // Metodo per ottenere tutte le informazioni dello chef dal database
@@ -292,12 +295,12 @@ public class Controller {
     /*----------------------------------------- Metodi di modifiche delle dto ------------------------------------------------*/
     
     // Metodo per aggiungere una ricetta alla sessione in presenza
-    private void aggiungiRicettaAllaSessione(String nomeRicetta, LinkedList<Ingrediente> ingredienti) {
+    private void aggiungiRicettaAllaSessione(String nomeRicetta, int idRicetta, LinkedList<Ingrediente> ingredienti) {
         for (Sessione sessione : corso.getSessioni()) {
             if (sessione instanceof Sessione_in_presenza) {
                 Sessione_in_presenza sessioneInPresenza = (Sessione_in_presenza) sessione;
                 if (sessioneInPresenza.getLuogo().equals(sessione_in_presenza.getLuogo()) && sessioneInPresenza.getOrario_inizio_timestamp().equals(sessione_in_presenza.getOrario_inizio_timestamp())) {
-                    sessioneInPresenza.aggiungiRicetta(new Ricetta(ingredienti.get(0).getID_ricetta(), nomeRicetta, ingredienti));
+                    sessioneInPresenza.aggiungiRicetta(new Ricetta(idRicetta, nomeRicetta, ingredienti));
                     return;
                 }
             }

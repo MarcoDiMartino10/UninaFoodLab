@@ -23,7 +23,7 @@ public class IngredienteDAO {
 	        ps.setInt(1, idRicetta);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            while (rs.next()) {
-	                ingredienti.add(new Ingrediente(rs.getInt("id"), rs.getString("Nome"), rs.getBigDecimal("Quantità"), rs.getString("Unità_di_misura"), idRicetta));
+	                ingredienti.add(new Ingrediente(rs.getInt("id"), rs.getString("Nome"), rs.getBigDecimal("Quantità"), rs.getString("Unità_di_misura")));
 	            }
 	        }
 	    }
