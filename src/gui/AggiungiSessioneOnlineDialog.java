@@ -216,6 +216,17 @@ public class AggiungiSessioneOnlineDialog extends JDialog {
             	orarioFineSpinner.requestFocus();
             	return;
             }
+            
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(now);
+            calendar.add(Calendar.YEAR, 1);
+            Timestamp massimoConsentito = new Timestamp(calendar.getTimeInMillis());
+            
+            if (inizio.after(massimoConsentito)) {
+				JOptionPane.showMessageDialog(this, "La data di inizio non può essere oltre un anno dalla data attuale.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+				orarioInizioSpinner.requestFocus();
+				return;
+			}
 
             for (Sessione sessione : controller.getCorsoAttribute().getSessioni()) {
 				if (sessione instanceof Sessione_online) {

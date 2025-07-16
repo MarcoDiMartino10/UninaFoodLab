@@ -381,7 +381,7 @@ public class RegistrazioneFrame extends JFrame {
 				return;
 			}
 		
-	        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoTelefono.getText(), campoBiografia.getText())) {
+	        if(controller.saveChef(campoNome.getText(), campoCognome.getText(), campoEmail.getText().toLowerCase(), new String(campoPassword.getPassword()), campoBiografia.getText(), campoTelefono.getText())) {
 	        	ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Check.png"));
 	        	Image img = originalIcon.getImage();
 	        	Image resizedImg = img.getScaledInstance(32, 32,  java.awt.Image.SCALE_SMOOTH);

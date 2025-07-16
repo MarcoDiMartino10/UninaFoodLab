@@ -283,6 +283,11 @@ public class AggiungiCorsoDialog extends JDialog {
                 JOptionPane.showMessageDialog(this, "La data di inizio non può essere precedente a oggi.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            LocalDate massimoConsentito = LocalDate.now().plusYears(1);
+            if (dataInizio.isAfter(massimoConsentito)) {
+                JOptionPane.showMessageDialog(this, "La data di inizio non può essere oltre un anno dalla data odierna.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Controllo frequenza
             if (frequenza.isEmpty()) {
@@ -301,11 +306,11 @@ public class AggiungiCorsoDialog extends JDialog {
             BigDecimal costo;
             try {
                 costo = new BigDecimal(costoStr);
-                if (costo.compareTo(BigDecimal.ZERO) < 0) {
+                if (costo.compareTo(BigDecimal.ZERO) < 0 || costo.compareTo(BigDecimal.valueOf(1000)) > 0) {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Inserisci un valore numerico valido per il costo.", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Inserisci un valore numerico valido per il costo (compreso tra 0 e 1000).", "Messaggio di errore", JOptionPane.ERROR_MESSAGE);
                 costoField.requestFocus();
                 return;
             }
